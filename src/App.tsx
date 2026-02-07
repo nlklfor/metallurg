@@ -3,6 +3,7 @@ import { EncryptedText } from "./components/ui/encrypted-text";
 import Aurora from "./components/ui/Aurora";
 import { Button } from "./components/ui/button";
 import { Link } from "react-router-dom";
+import { MAIN_PAGE_BTNS } from "./lib/constants";
 
 function App() {
   return (
@@ -16,7 +17,6 @@ function App() {
         />
       </div>
 
-      {/* Spotify Playlist - Top Right */}
       <div className="fixed top-8 right-8 z-40 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-xl p-3 border border-white/20 shadow-lg hover:shadow-xl transition-shadow">
         <iframe
           data-testid="embed-iframe"
@@ -31,7 +31,6 @@ function App() {
         />
       </div>
 
-      {/* Main Content - Center */}
       <div className="relative z-20 flex h-screen flex-col items-center justify-center gap-8">
         <h1 className="text-8xl font-bold text-white drop-shadow-2xl text-center">
           <EncryptedText
@@ -42,32 +41,17 @@ function App() {
           />
         </h1>
 
-        {/* Navigation Buttons - Vertical Stack */}
         <nav className="flex flex-col gap-4 mt-10 items-center">
-          <Link to="/shop" className="w-40">
-            <Button size="lg" className="text-white w-full">
-              Shop
-            </Button>
-          </Link>
-          <div className="w-40">
-            <Button size="lg" className="text-white w-full">
-              Contact
-            </Button>
-          </div>
-          <div className="w-40">
-            <Button size="lg" className="text-white w-full">
-              News
-            </Button>
-          </div>
-          <div className="w-40">
-            <Button size="lg" className="text-white w-full">
-              Orders & Reviews
-            </Button>
-          </div>
+          {MAIN_PAGE_BTNS.map((btn) => (
+            <Link key={btn.label} to={btn.href} className="w-40">
+              <Button size="lg" className="text-white w-full">
+                {btn.label}
+              </Button>
+            </Link>
+          ))}
         </nav>
       </div>
 
-      {/* Text Animation - Bottom Left */}
       <div className="fixed bottom-12 left-8 z-20 flex flex-col">
         <div className="text-white text-md h-8">
           <TypingAnimation>INITIALIZING METALLURG...</TypingAnimation>
