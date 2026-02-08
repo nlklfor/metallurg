@@ -53,6 +53,7 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
   const scrambleCharsRef = useRef<string[]>(
     text ? generateGibberishPreservingSpaces(text, charset).split("") : [],
   );
+  const [displayChars, setDisplayChars] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isInView) return;
@@ -64,9 +65,9 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
     scrambleCharsRef.current = initial.split("");
     startTimeRef.current = performance.now();
     lastFlipTimeRef.current = startTimeRef.current;
-    setRevealCount(0);
 
     let isCancelled = false;
+    let localRevealCount = 0;
 
     const update = (now: number) => {
       if (isCancelled) return;
@@ -78,7 +79,10 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
         Math.floor(elapsedMs / Math.max(1, revealDelayMs)),
       );
 
-      setRevealCount(currentRevealCount);
+      if (currentRevealCount !== localRevealCount) {
+        localRevealCount = currentRevealCount;
+        setRevealCount(currentRevealCount);
+      }
 
       if (currentRevealCount >= totalLength) {
         return;
@@ -111,7 +115,19 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
+     
   }, [isInView, text, revealDelayMs, charset, flipDelayMs]);
+
+  useEffect(() => {
+    if (!text) return;
+    const chars = text.split("").map((char, index) => {
+      const isRevealed = index < revealCount;
+      if (isRevealed) return char;
+      if (char === " ") return " ";
+      return scrambleCharsRef.current[index] ?? generateRandomCharacter(charset);
+    });
+    setDisplayChars(chars);
+  }, [text, revealCount, charset]);
 
   if (!text) return null;
 
@@ -122,15 +138,8 @@ export const EncryptedText: React.FC<EncryptedTextProps> = ({
       aria-label={text}
       role="text"
     >
-      {text.split("").map((char, index) => {
+      {displayChars.map((displayChar, index) => {
         const isRevealed = index < revealCount;
-        const displayChar = isRevealed
-          ? char
-          : char === " "
-            ? " "
-            : (scrambleCharsRef.current[index] ??
-              generateRandomCharacter(charset));
-
         return (
           <span
             key={index}
