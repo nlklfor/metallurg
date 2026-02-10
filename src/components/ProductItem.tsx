@@ -1,18 +1,14 @@
 import type { ProductType } from "@/interfaces";
-import { useState } from "react";
 
 interface ProductItemProps {
   product: ProductType;
 }
 
 export default function ProductItem({ product }: ProductItemProps) {
-  const [isHovering, setIsHovering] = useState(false);
   console.log("Rendering ProductItem:", product);
   return (
     <div
       className="bg-white rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-2xl hover:scale-105"
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
     >
       {/* Image Container */}
       <div className="relative w-full h-64 bg-gray-100 overflow-hidden">

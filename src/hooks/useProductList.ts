@@ -12,8 +12,12 @@ export const useProductList = () => {
       setIsLoading(true);
       const data = await getProducts();
       setProducts(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch products");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to fetch products");
+      }
     } finally {
       setIsLoading(false);
     }
