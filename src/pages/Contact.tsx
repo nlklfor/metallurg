@@ -16,9 +16,7 @@ export default function Contact() {
         </p>
       </div>
 
-      {/* Social Links & Phone */}
       <div className="px-8 pb-16 flex flex-col items-center">
-        {/* Social Icons */}
         <div className="flex gap-6 mb-8">
           <a
             href="https://instagram.com/metallurg.tm"
@@ -38,7 +36,6 @@ export default function Contact() {
           </a>
         </div>
 
-        {/* Phone */}
         <div className="w-[434px] dark">
           <Iphone src={phone} />
         </div>
