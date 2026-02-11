@@ -1,5 +1,5 @@
-import { Footer } from "@/components";
-import { Navbar } from "@/components";
+import { Footer, Navbar } from "@/components";
+import ProductList from "@/components/ProductList";
 
 export default function Shop() {
   return (
@@ -14,14 +14,8 @@ export default function Shop() {
         </p>
       </div>
 
-      {/* Content Area */}
-      <div className="px-8 pb-16">
-        {/* Placeholder for filters and cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Filters will go here */}
-          {/* Cards will go here */}
-        </div>
-      </div>
+      <ProductList />
+
       <Footer />
     </div>
   );
