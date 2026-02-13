@@ -1,6 +1,6 @@
 export default function ProductSkeleton() {
   return (
-    <div className="bg-gray-200 rounded-sm overflow-hidden w-62 h-96 flex flex-col">
+    <div className="bg-gray-200 rounded-sm overflow-hidden w-72 h-106 flex flex-col">
       {/* Image Skeleton - 2/4 of card */}
       <div className="relative w-full h-1/2 bg-gray-200 animate-pulse mt-6" />
       

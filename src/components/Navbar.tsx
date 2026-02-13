@@ -51,13 +51,12 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             <Search size={20} className={textColor} />
           </button>
           <button className={`p-2 ${hoverBg} rounded-md transition`}>
-            <Globe size={20} className={textColor} />
+            UAH / UA
           </button>
           <button
             className={`flex items-center gap-2 p-2 ${hoverBg} rounded-md transition`}
           >
-            <ShoppingCart size={20} className={textColor} />
-            <span className={`text-sm font-medium ${textColor}`}>(0)</span>
+            <span className={`text-sm font-medium ${textColor}`}>cart (0)</span>
           </button>
         </div>
       </div>
