@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Search, Globe, ShoppingCart } from "lucide-react";
+import { Search } from "lucide-react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import type { NavbarProps } from "@/interfaces";
 import { NAV_LINKS } from "@/lib/constants";

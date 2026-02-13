@@ -3,7 +3,7 @@ import type { FilterOptions, ProductType } from '@/interfaces'
 export function filterProducts(products: ProductType[], filters: FilterOptions | null): ProductType[] {
   if (!filters) return products
 
-  let filtered = products.filter((product) => {
+  const filtered = products.filter((product) => {
     if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) return false
     return true
   })
