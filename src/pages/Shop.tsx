@@ -1,7 +1,12 @@
 import { Footer, Navbar } from "@/components";
 import ProductList from "@/components/ProductList";
+import ProductFilters from "@/components/ProductFilters";
+import { useFilters } from '@/hooks/useFilters';
 
 export default function Shop() {
+ const {filters , updateFilters, clearFilters} = useFilters()
+
+
   return (
     <div className="w-full min-h-screen bg-white">
       <Navbar variant="light" />
@@ -13,9 +18,10 @@ export default function Shop() {
           fashion. Carefully curated pieces designed for the modern individual.
         </p>
       </div>
-
-      <ProductList />
-
+    
+      <ProductFilters filters={filters} onFilterChange={updateFilters} onClearFilters={clearFilters}/>
+      <ProductList filters={filters} />
+      
       <Footer />
     </div>
   );

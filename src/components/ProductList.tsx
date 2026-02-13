@@ -1,9 +1,13 @@
 import { useProductList } from "@/hooks/useProductList";
 import ProductItem from "./ProductItem";
 import ProductSkeleton from "./ProductSkeleton";
+import { filterProducts } from "@/utils/filterUtils";
+import type { FilterOptions } from "@/interfaces";
 
-export default function ProductList() {
+export default function ProductList({ filters }: { filters: FilterOptions | null }) {
   const { products, error, isLoading } = useProductList();
+
+  const filteredProducts = filterProducts(products, filters);
 
   if (isLoading) return (
     <div className="px-8 py-16">
@@ -22,11 +26,15 @@ export default function ProductList() {
   return (
     <div className="px-8 py-16">
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <li key={product.id}>
-            <ProductItem product={product} />
-          </li>
-        ))}
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <li key={product.id}>
+              <ProductItem product={product} />
+            </li>
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500">No products found</p>
+        )}
       </ul>
     </div>
   );
