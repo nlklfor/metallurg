@@ -1,6 +1,10 @@
+////// NAVBAR PROPS ////////
+
 export interface NavbarProps {
   variant?: "light" | "dark";
 }
+
+////////// PRODUCT TYPES ////////
 
 export interface ProductType {
   createdAt: string;
@@ -16,8 +20,24 @@ export interface ProductType {
   model_3d_url?: string;
 }
 
+//////// FILTER OPTIONS ////////
+
 export interface FilterOptions {
-  sortBy: 'price-asc' | 'price-desc' | 'newest'
-  sizes: string[]
-  priceRange: [number, number]
+  sortBy: "price-asc" | "price-desc" | "newest";
+  sizes: string[];
+  priceRange: [number, number];
+}
+
+//////// CART TYPES ////////
+
+export interface CartItem extends ProductType {
+  selectedSize: number;
+}
+
+export interface CartState {
+  items: CartItem[];
+  addToCart: (product: ProductType, size: number) => void;
+  removeFromCart: (productId: number, size: number) => void;
+  clearCart: () => void;
+  totalPrice: () => number;
 }
