@@ -3,15 +3,21 @@ import type { FilterOptions } from "@/interfaces";
 export const MAIN_PAGE_BTNS = [
   { label: "Shop", href: "/shop" },
   { label: "Contact", href: "/contact" },
-  { label: "News", href: "/news" },
+  { label: "About", href: "/about" },
   { label: "Orders & Reviews", href: "/orders" },
 ];
 
+export const MAIN_PAGE_LINKS = [
+  { href: "https://www.instagram.com/metallurg_official/", label: "Instagram" },
+  { href: "https://telegram.me/metallurg_official", label: "Telegram" },
+  { href: "https://linkbio.link/metallurg", label: "Linktree" },
+  { href: "https://spotify.com/metallurg", label: "Spotify" },
+];
+
 export const NAV_LINKS = [
-  { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
   { label: "Contact", href: "/contact" },
-  { label: "News", href: "/news" },
+  { label: "About", href: "/about" },
   { label: "Orders & Reviews", href: "/orders" },
 ];
 
@@ -24,7 +30,6 @@ export const FOOTER_LINKS = {
   shop: [
     { label: "All Products", href: "/shop" },
     { label: "New Arrivals", href: "/shop?filter=new" },
-    { label: "Sale", href: "/shop?filter=sale" },
   ],
   legal: [
     { label: "Privacy & Policy", href: "/privacy" },

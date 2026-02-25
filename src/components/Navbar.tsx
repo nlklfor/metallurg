@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import type { NavbarProps } from "@/interfaces";
 import { NAV_LINKS } from "@/lib/constants";
+import { useCartStore } from "@/stores/useCartStore";
 
 export default function Navbar({ variant = "light" }: NavbarProps) {
   const bgColor = variant === "light" ? "bg-white" : "bg-black";
@@ -16,6 +17,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
     variant === "light" ? "hover:bg-gray-100" : "hover:bg-gray-900";
   const logoEncrypted = variant === "light" ? "text-gray-400" : "text-gray-600";
 
+  const cartItems = useCartStore((state) => state.items);
   return (
     <nav
       className={`sticky top-0 z-50 ${bgColor} border-b ${borderColor} w-full`}
@@ -56,7 +58,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
           <button
             className={`flex items-center gap-2 p-2 ${hoverBg} rounded-md transition`}
           >
-            <span className={`text-sm font-medium ${textColor}`}>cart (0)</span>
+            <span className={`text-sm font-medium ${textColor}`}>cart ({cartItems.length})</span>
           </button>
         </div>
       </div>
