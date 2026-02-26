@@ -9,6 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "./ui/slider";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface ProductFiltersProps {
   filters: FilterOptions;
@@ -21,18 +23,24 @@ export default function ProductFilters({
   onFilterChange,
   onClearFilters,
 }: ProductFiltersProps) {
+  const [localPrice, setLocalPrice] = useState<number>(filters.priceRange[1]);
+  const debouncedPrice = useDebounce(localPrice, 500);
 
   const handleSortChange = (value: FilterOptions["sortBy"]) => {
     onFilterChange({ sortBy: value });
   };
 
   const handlePriceChange = (value: number[]) => {
-    onFilterChange({ priceRange: [0, value[0]] });
+    setLocalPrice(value[0]);
   };
 
   const handleClearFilters = () => {
     onClearFilters();
   };
+
+  useEffect(() => {
+    onFilterChange({ priceRange: [0, debouncedPrice] });
+  }, [debouncedPrice]);
 
   return (
     <div className="px-8 py-6 border-b border-gray-200 flex items-center gap-4">
@@ -52,11 +60,11 @@ export default function ProductFilters({
 
       <div className="flex items-center gap-3">
         <Slider
-          value={[filters.priceRange[1]]}
+          value={[localPrice]}
           onValueChange={handlePriceChange}
           max={50000}
           min={0}
-          step={100}
+          step={1000}
           className="w-40"
         />
         <span className="text-sm font-medium whitespace-nowrap">
