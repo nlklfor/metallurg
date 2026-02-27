@@ -83,5 +83,5 @@ export const REVIEW_ITEMS = [
 export const DEFAULT_FILTERS: FilterOptions = {
   sortBy: "newest",
   sizes: [],
-  priceRange: [0, 50000],
+  priceRange: [0, 10000],
 };

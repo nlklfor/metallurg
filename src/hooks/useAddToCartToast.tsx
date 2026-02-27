@@ -1,6 +1,8 @@
 import type { ProductType } from "@/interfaces";
 import toast from "react-hot-toast";
 
+// TODO: edit the toas to be more reusable and customizable, maybe add different types of toasts for different actions (e.g. added to cart, removed from cart, error, etc.)
+
 export function useAddToCartToast() {
   const showAddedToast = (product: ProductType, selectedSize: number) => {
     toast.custom(
