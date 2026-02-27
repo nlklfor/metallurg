@@ -7,6 +7,7 @@ import Shop from "./pages/Shop";
 import Contact from "./pages/Contact";
 import Orders from "./pages/Orders";
 import ProductDetails from "./pages/ProductDetails.tsx";
+import Cart from "./pages/Cart.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
@@ -15,6 +16,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/shop" element={<Shop />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/product/:id" element={<ProductDetails />} />
       </Routes>
     </BrowserRouter>

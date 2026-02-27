@@ -32,7 +32,7 @@ function App() {
       </div>
 
       <div className="relative z-20 flex h-screen flex-col items-center justify-center gap-8">
-        <h1 className="text-8xl font-bold text-white drop-shadow-2xl text-center">
+        <h1 className="text-8xl font-bold tracking-tighter text-white drop-shadow-2xl text-center">
           <EncryptedText
             text="METALLURG™"
             encryptedClassName="text-neutral-500"
