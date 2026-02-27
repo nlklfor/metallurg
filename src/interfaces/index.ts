@@ -18,6 +18,7 @@ export interface ProductType {
   slug: string;
   image_url: string[];
   model_3d_url?: string;
+  // TODO add quantity field to the product type, but it should be managed in the cart store, not in the product type itself.
 }
 
 //////// FILTER OPTIONS ////////

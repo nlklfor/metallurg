@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import type { NavbarProps } from "@/interfaces";
 import { NAV_LINKS } from "@/lib/constants";
@@ -13,8 +13,6 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
     variant === "light" ? "border-gray-200" : "border-gray-800";
   const hoverColor =
     variant === "light" ? "hover:text-gray-600" : "hover:text-gray-400";
-  const hoverBg =
-    variant === "light" ? "hover:bg-gray-100" : "hover:bg-gray-900";
   const logoEncrypted = variant === "light" ? "text-gray-400" : "text-gray-600";
 
   const cartItems = useCartStore((state) => state.items);
@@ -51,9 +49,11 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         <div className="flex items-center gap-6">
           <Button variant="link" className={`${textColor} ${hoverColor} p-0`}>
             search
+            {/* // TODO add search workflow */}
           </Button>
           <Button variant="link" className={`${textColor} ${hoverColor} p-0`}>
             UAH / UA
+            {/* // TODO add currency and language switcher components */}
           </Button>
           <Link to="/cart">
             <Button variant="link" className={`${textColor} ${hoverColor} p-0`}>

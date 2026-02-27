@@ -8,6 +8,8 @@ const Cart = () => {
   const cartItems = useCartStore((state) => state.items);
   const totalPrice = useCartStore((state) => state.totalPrice);
 
+  // TOOD: maybe add loading and skeletons for cart items, and also add some error handling for edge cases (e.g. if the cart is empty, if the product is out of stock, etc.)
+
   return (
     <div className="bg-[#fafafa] min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
