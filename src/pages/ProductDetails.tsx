@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useProductDetails } from "@/hooks/useProductDetails";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductDetailsSkeleton from "@/components/ProductDetailsSkeleton";
@@ -27,7 +27,7 @@ export default function ProductDetails() {
     );
   }
 
-  return <ProductDetailsContent id={id} />;
+  return <ProductDetailsContent key={id} id={id} />;
 }
 
 function ProductDetailsContent({ id }: { id: string }) {
@@ -41,10 +41,6 @@ function ProductDetailsContent({ id }: { id: string }) {
   const theme = getThemeColors("dark");
 
   const isOutOfStock = product?.stock_status === "out_of_stock";
-
-  useEffect(() => {
-    setSelectedSize(null);
-  }, [id]);
 
   const handleAddToCart = () => {
     if (isOutOfStock) {
