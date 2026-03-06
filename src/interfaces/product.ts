@@ -1,14 +1,15 @@
 export interface ProductType {
   createdAt: string;
-  id: number;
+  id: string;
   name: string;
   description?: string;
   price: number;
-  sizes: number[];
+  sizes: number[] | string[];
   stock_status: "in_stock" | "out_of_stock" | "pre_order";
   is_new: boolean;
   slug: string;
   image_url: string[];
+  materials?: string;
+  weight?: number;
   model_3d_url?: string;
-  // TODO add quantity field to the product type, but it should be managed in the cart store, not in the product type itself.
 }

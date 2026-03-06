@@ -1,5 +1,6 @@
 import type { ProductType } from "@/interfaces";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface ProductItemProps {
   product: ProductType;
@@ -7,9 +8,13 @@ interface ProductItemProps {
 
 export default function ProductItem({ product }: ProductItemProps) {
   const [isHovering, setIsHovering] = useState(false);
-  return (
+  const isOutOfStock = product.stock_status === "out_of_stock";
+
+  const content = (
     <div
-      className="overflow-hidden w-72 h-106 flex flex-col gap-10"
+      className={`overflow-hidden w-72 h-106 flex flex-col gap-10 transition-all duration-300 ${
+        isOutOfStock ? "opacity-40 grayscale cursor-not-allowed" : ""
+      }`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -18,32 +23,49 @@ export default function ProductItem({ product }: ProductItemProps) {
           src={product.image_url[0]}
           alt={product.name}
           className={`absolute w-full h-full object-contain transition-opacity duration-500 ease-in-out ${
-            isHovering ? 'opacity-0' : 'opacity-100'
-          }`}
+            isHovering ? "opacity-0" : "opacity-100"
+          }${isOutOfStock ? " blur-[1px]" : ""}`}
         />
         <img
           src={product.image_url[1]}
           alt={product.name}
           className={`absolute w-full h-full object-contain transition-opacity duration-500 ease-in-out ${
-            isHovering ? 'opacity-100' : 'opacity-0'
+            isHovering ? "opacity-100" : "opacity-0"
           }`}
         />
+
+        {isOutOfStock && (
+          <>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <p className="text-gray-800 font-black text-sm uppercase tracking-[0.2em]">
+                OUT_OF_STOCK
+              </p>
+            </div>
+          </>
+        )}
       </div>
-      
+
       <div className="p-3 space-y-2 flex flex-col justify-start flex-1 bg-white">
-        <h3 className="font-archivo-black text-sm text-black line-clamp-2">{product.name}</h3>
+        <h3 className="font-archivo-black text-sm text-black line-clamp-2">
+          {product.name}
+        </h3>
         {product.price && (
           <p className="font-ibm-mono text-sm font-semibold text-black">
             {product.price} UAH
           </p>
         )}
-        
-        {product.sizes && (
-          <div className={`flex gap-2 flex-wrap transition-opacity duration-500 ease-in-out ${
-            isHovering ? 'opacity-100' : 'opacity-0'
-          }`}>
+
+        {product.sizes && !isOutOfStock && (
+          <div
+            className={`flex gap-2 flex-wrap transition-opacity duration-500 ease-in-out ${
+              isHovering ? "opacity-100" : "opacity-0"
+            }`}
+          >
             {product.sizes.map((size) => (
-              <span key={size} className="font-ibm-mono text-xs text-black px-2 py-1">
+              <span
+                key={size}
+                className="font-ibm-mono text-xs text-black px-2 py-1"
+              >
                 {size}
               </span>
             ))}
@@ -52,4 +74,8 @@ export default function ProductItem({ product }: ProductItemProps) {
       </div>
     </div>
   );
+
+  if (isOutOfStock) return content;
+
+  return <Link to={`/product/${product.id}`}>{content}</Link>;
 }

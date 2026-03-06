@@ -6,6 +6,7 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+
       addToCart: (product, size) =>
         set((state) => {
           const isItemExist = state.items.find(
@@ -13,13 +14,7 @@ export const useCartStore = create<CartState>()(
           );
 
           if (isItemExist) {
-            return {
-              items: state.items.map((item) =>
-                item.id === product.id && item.selectedSize === size
-                  ? { ...item }
-                  : item,
-              ),
-            };
+            return { items: state.items };
           }
 
           return {
