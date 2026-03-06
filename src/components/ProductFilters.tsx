@@ -1,4 +1,4 @@
-import type { FilterOptions } from "@/interfaces";
+import type { FilterOptions, ProductFiltersProps } from "@/interfaces";
 import {
   Select,
   SelectContent,
@@ -11,12 +11,7 @@ import {
 import { Slider } from "./ui/slider";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
-
-interface ProductFiltersProps {
-  filters: FilterOptions;
-  onFilterChange: (updates: Partial<FilterOptions>) => void;
-  onClearFilters: () => void;
-}
+import { Button } from "./ui/button";
 
 export default function ProductFilters({
   filters,
@@ -72,12 +67,12 @@ export default function ProductFilters({
         </span>
       </div>
 
-      <button
+      <Button
         onClick={handleClearFilters}
         className="ml-auto px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium transition"
       >
         Clear Filters
-      </button>
+      </Button>
     </div>
   );
 }

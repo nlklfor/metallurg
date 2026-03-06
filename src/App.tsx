@@ -10,7 +10,7 @@ function App() {
     <div className="h-screen w-screen overflow-hidden bg-black">
       <div className="absolute inset-0 z-0">
         <Aurora
-          colorStops={["#ffffff", "#919191", "#444444"]}
+          colorStops={["#ffffff", "#919191", "#111111"]}
           blend={0.5}
           amplitude={1.0}
           speed={1}
@@ -40,30 +40,28 @@ function App() {
             revealDelayMs={150}
           />
         </h1>
-
         <nav className="flex flex-col gap-4 mt-10 items-center">
           {MAIN_PAGE_BTNS.map((btn) => (
             <Link key={btn.label} to={btn.href} className="w-40">
-              <Button size="lg" className="text-white w-full">
+              <Button size="lg" variant={"link"} className="text-white w-full">
                 {btn.label}
               </Button>
             </Link>
           ))}
-        </nav>
+        </nav>{" "}
+        {/* TODO add icons of spotify ins tg ... */}
       </div>
 
       <div className="fixed bottom-12 left-8 z-20 flex flex-col">
         <div className="text-white text-md h-8">
-          <TypingAnimation>INITIALIZING METALLURG...</TypingAnimation>
+          <TypingAnimation>// ACCESSING_ARCHIVE_2026... OK</TypingAnimation>
         </div>
         <div className="text-white text-md h-8">
-          <TypingAnimation delay={3000}>
-            FORGING NEW-AGE STREETWEAR.
-          </TypingAnimation>
+          <TypingAnimation delay={3000}>// STATUS: OPERATIONAL</TypingAnimation>
         </div>
         <div className="text-white text-md h-8">
           <TypingAnimation delay={6000}>
-            NO IMPURITIES. ONLY HEAT.
+            // WELCOME TO MTL_NETWORK
           </TypingAnimation>
         </div>
       </div>

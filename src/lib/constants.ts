@@ -1,24 +1,24 @@
 import type { FilterOptions } from "@/interfaces";
 
 export const MAIN_PAGE_BTNS = [
-  { label: "Shop", href: "/shop" },
-  { label: "Contact", href: "/contact" },
-  { label: "About", href: "/about" },
-  { label: "Orders & Reviews", href: "/orders" },
+  { label: "SHOP", href: "/shop" },
+  { label: "CONTACT", href: "/contact" },
+  { label: "ABOUT", href: "/about" },
+  { label: "ORDERS & REVIEWS", href: "/orders" },
 ];
 
 export const MAIN_PAGE_LINKS = [
-  { href: "https://www.instagram.com/metallurg_official/", label: "Instagram" },
-  { href: "https://telegram.me/metallurg_official", label: "Telegram" },
-  { href: "https://linkbio.link/metallurg", label: "Linktree" },
-  { href: "https://spotify.com/metallurg", label: "Spotify" },
+  { href: "https://www.instagram.com/metallurg_official/", label: "INSTAGRAM" },
+  { href: "https://telegram.me/metallurg_official", label: "TELEGRAM" },
+  { href: "https://linkbio.link/metallurg", label: "LINKTREE" },
+  { href: "https://spotify.com/metallurg", label: "SPOTIFY" },
 ];
 
 export const NAV_LINKS = [
-  { label: "Shop", href: "/shop" },
-  { label: "Contact", href: "/contact" },
-  { label: "About", href: "/about" },
-  { label: "Orders & Reviews", href: "/orders" },
+  { label: "SHOP", href: "/shop" },
+  { label: "CONTACT", href: "/contact" },
+  { label: "ABOUT", href: "/about" },
+  { label: "ORDERS & REVIEWS", href: "/orders" },
 ];
 
 export const FOOTER_LINKS = {

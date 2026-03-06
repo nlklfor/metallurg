@@ -2,28 +2,27 @@ import { ArrowLeft, MoveRight } from "lucide-react";
 import { useCartStore } from "@/stores/useCartStore";
 import CartItemCard from "@/components/CartItemCard";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Cart = () => {
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.items);
   const totalPrice = useCartStore((state) => state.totalPrice);
 
-  // TOOD: maybe add loading and skeletons for cart items, and also add some error handling for edge cases (e.g. if the cart is empty, if the product is out of stock, etc.)
-
   return (
     <div className="bg-[#fafafa] min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Navigation */}
         <div className="flex items-center gap-4 mb-12">
-          <button
+          <Button
             onClick={() => navigate(-1)}
-            className="p-3 bg-white hover:shadow-md rounded-full transition-all border border-gray-100 group"
+            className="p-4 bg-gray-400 hover:shadow-md rounded-full transition-all border border-gray-100 group"
           >
             <ArrowLeft
               size={20}
               className="group-hover:-translate-x-1 transition-transform"
             />
-          </button>
+          </Button>
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Your Cart
@@ -39,16 +38,15 @@ const Cart = () => {
             <p className="text-gray-400 font-medium text-lg mb-8 uppercase tracking-widest">
               // empty_state
             </p>
-            <button
+            <Button
               onClick={() => navigate("/")}
-              className="bg-black text-white px-12 py-5 rounded-2xl font-bold hover:bg-gray-800 transition-all shadow-xl shadow-black/10"
+              className="bg-black text-white px-12 py-6 rounded-md font-bold hover:bg-gray-800 transition-all shadow-xl shadow-black/10"
             >
               Start Shopping
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            {/* LEFT: Items List */}
             <div className="lg:col-span-8 space-y-4">
               {cartItems.map((item) => (
                 <CartItemCard
@@ -58,7 +56,6 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* RIGHT: Order Summary */}
             <div className="lg:col-span-4">
               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm sticky top-24">
                 <h2 className="text-2xl font-bold mb-8 tracking-tight text-gray-900 italic">
@@ -92,19 +89,18 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {/* Promo */}
                 <div className="relative mb-8">
                   <input
                     type="text"
                     placeholder="PROMO CODE"
                     className="w-full bg-gray-50 border border-transparent px-5 py-4 rounded-2xl text-sm font-bold focus:bg-white focus:border-gray-200 outline-none transition-all placeholder:text-gray-300"
                   />
-                  <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase hover:text-black text-gray-400 transition-colors">
+                  <Button className="absolute right-4 top-1/2 -translate-y-1/2 rounded-md text-[10px] font-black uppercase hover:text-white text-gray-400 transition-colors">
                     Apply
-                  </button>
+                  </Button>
                 </div>
 
-                <button className="w-full bg-black text-white py-6 rounded-[24px] font-bold flex items-center justify-center gap-4 hover:bg-gray-800 transition-all transform active:scale-[0.98] shadow-2xl shadow-black/20 group">
+                <Button className="w-full bg-black text-white py-6 rounded-md font-bold flex items-center justify-center gap-4 hover:bg-gray-800 transition-all transform active:scale-[0.98] shadow-2xl shadow-black/20 group">
                   <span className="uppercase tracking-tighter italic">
                     Checkout Now
                   </span>
@@ -112,7 +108,9 @@ const Cart = () => {
                     size={20}
                     className="group-hover:translate-x-1 transition-transform"
                   />
-                </button>
+                </Button>
+
+                {/* // TODO add workflow of adding the order to a supabase table, and also add some kind of order confirmation popup and request to a tg bot with the order details for easier order management on the admin side. */}
 
                 <div className="mt-8 grid grid-cols-2 gap-4 border-t border-gray-50 pt-8">
                   <div className="text-[10px] text-gray-400 uppercase font-bold tracking-widest leading-tight">
