@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
 
 interface ErrorStateProps {
   error?: string | null;
@@ -16,12 +17,12 @@ export default function ErrorState({ error }: ErrorStateProps) {
         <p className="text-gray-400 text-sm mb-6">
           {error || "COMPONENT_NOT_FOUND"}
         </p>
-        <button
+        <Button
           onClick={() => navigate("/")}
           className="text-white border border-gray-600 px-6 py-2 hover:bg-white hover:text-black transition-all"
         >
           RETURN_TO_BASE
-        </button>
+        </Button>
       </div>
     </div>
   );
