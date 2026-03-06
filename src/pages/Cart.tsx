@@ -12,7 +12,6 @@ const Cart = () => {
   return (
     <div className="bg-[#fafafa] min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Navigation */}
         <div className="flex items-center gap-4 mb-12">
           <Button
             onClick={() => navigate(-1)}
