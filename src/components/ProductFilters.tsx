@@ -35,7 +35,7 @@ export default function ProductFilters({
 
   useEffect(() => {
     onFilterChange({ priceRange: [0, debouncedPrice] });
-  }, [debouncedPrice]);
+  }, [debouncedPrice, onFilterChange]);
 
   return (
     <div className="px-8 py-6 border-b border-gray-200 flex items-center gap-4">

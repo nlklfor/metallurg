@@ -66,8 +66,10 @@ export function useCheckout() {
 
       setOrderNumber(order_number);
       setStep("success");
-    } catch (err: any) {
-      setErrorMsg(err?.message ?? "Unknown error occurred.");
+    } catch (err: unknown) {
+      setErrorMsg(
+        (err as { message?: string })?.message ?? "Unknown error occurred.",
+      );
       setStep("error");
     }
   };
