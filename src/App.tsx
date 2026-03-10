@@ -1,38 +1,30 @@
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { EncryptedText } from "./components/ui/encrypted-text";
-import Aurora from "./components/ui/Aurora";
 import { Button } from "./components/ui/button";
 import { Link } from "react-router-dom";
-import { MAIN_PAGE_BTNS } from "./lib/constants";
+import { MAIN_PAGE_BTNS } from "@/lib/constants/navigation";
+import subwayVideo from "@/assets/videos/subway.mp4";
 
 function App() {
   return (
     <div className="h-screen w-screen overflow-hidden bg-black">
-      <div className="absolute inset-0 z-0">
-        <Aurora
-          colorStops={["#ffffff", "#919191", "#111111"]}
-          blend={0.5}
-          amplitude={1.0}
-          speed={1}
-        />
-      </div>
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 z-0 w-full h-full object-cover"
+      >
+        <source src={subwayVideo} type="video/mp4" />
+      </video>
 
-      <div className="fixed top-8 right-8 z-40 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-xl p-3 border border-white/20 shadow-lg hover:shadow-xl transition-shadow">
-        <iframe
-          data-testid="embed-iframe"
-          style={{ borderRadius: "12px" }}
-          src="https://open.spotify.com/embed/playlist/2g4MwiVghEPSOBAnUAGxPH?utm_source=generator"
-          width="340"
-          height="80"
-          frameBorder="0"
-          allowFullScreen
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"
-        />
-      </div>
+      <div className="absolute inset-0 z-10 bg-black/50" />
 
       <div className="relative z-20 flex h-screen flex-col items-center justify-center gap-8">
-        <h1 className="text-8xl font-bold tracking-tighter text-white drop-shadow-2xl text-center">
+        <h1
+          className="text-8xl tracking-tighter text-white drop-shadow-2xl text-center"
+          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
+        >
           <EncryptedText
             text="METALLURG™"
             encryptedClassName="text-neutral-500"
@@ -48,13 +40,18 @@ function App() {
               </Button>
             </Link>
           ))}
-        </nav>{" "}
-        {/* TODO add icons of spotify ins tg ... */}
+        </nav>
       </div>
 
       <div className="fixed bottom-12 left-8 z-20 flex flex-col">
         <div className="text-white text-md h-8">
-          <TypingAnimation>// ACCESSING_ARCHIVE_2026... OK</TypingAnimation>
+          <TypingAnimation>// ACCESSING_ARCHIVE_2026... </TypingAnimation>
+          <TypingAnimation
+            delay={2700}
+            className="text-green-400 animate-pulse"
+          >
+            OK
+          </TypingAnimation>
         </div>
         <div className="text-white text-md h-8">
           <TypingAnimation delay={3000}>// STATUS: OPERATIONAL</TypingAnimation>
@@ -64,6 +61,12 @@ function App() {
             // WELCOME TO MTL_NETWORK
           </TypingAnimation>
         </div>
+      </div>
+
+      {/* Location */}
+      <div className="fixed bottom-12 right-8 z-20 text-white/30 text-[10px] font-mono tracking-[0.3em] uppercase text-right space-y-1">
+        <p>50.4501° N, 30.5234° E</p>
+        <p>KYIV, UKRAINE</p>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { CartState } from "@/interfaces";
+import { computeTotal } from "@/utils/computeTotal";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -31,8 +32,7 @@ export const useCartStore = create<CartState>()(
 
       clearCart: () => set({ items: [] }),
 
-      totalPrice: () =>
-        get().items.reduce((total, item) => total + item.price, 0),
+      totalPrice: () => computeTotal(get().items),
     }),
     {
       name: "metallurg-cart-storage",

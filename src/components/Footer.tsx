@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { Button } from "./ui/button";
-import { FOOTER_LINKS, SITE_CONFIG } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants/site";
+import { FOOTER_LINKS } from "@/lib/constants/navigation";
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-10 px-8">
       <div className="max-w-7xl mx-auto flex justify-between items-start gap-16">
         <div className="flex-shrink-0 mt-8">
-          <Link to="/" className="text-2xl font-bold text-white">
+          <Link
+            to="/"
+            className="text-2xl font-bold text-white"
+            style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
+          >
             <EncryptedText
               text="METALLURG™"
               encryptedClassName="text-gray-600"
