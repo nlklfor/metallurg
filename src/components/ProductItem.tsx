@@ -15,33 +15,33 @@ export default function ProductItem({ product }: ProductItemProps) {
       className={`overflow-hidden w-72 h-106 flex flex-col gap-10 transition-all duration-300 ${
         isOutOfStock ? "opacity-40 grayscale cursor-not-allowed" : ""
       }`}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseEnter={() => !isOutOfStock && setIsHovering(true)}
+      onMouseLeave={() => !isOutOfStock && setIsHovering(false)}
     >
       <div className="relative w-full h-2/3 bg-gray-100 overflow-hidden">
         <img
           src={product.image_url[0]}
           alt={product.name}
           className={`absolute w-full h-full object-contain transition-opacity duration-500 ease-in-out ${
-            isHovering ? "opacity-0" : "opacity-100"
-          }${isOutOfStock ? " blur-[1px]" : ""}`}
+            isHovering && !isOutOfStock ? "opacity-0" : "opacity-100"
+          }${isOutOfStock ? " blur-[2px]" : ""}`}
         />
         <img
           src={product.image_url[1]}
           alt={product.name}
           className={`absolute w-full h-full object-contain transition-opacity duration-500 ease-in-out ${
-            isHovering ? "opacity-100" : "opacity-0"
-          }`}
+            isHovering && !isOutOfStock ? "opacity-100" : "opacity-0"
+          }${isOutOfStock ? " blur-[2px]" : ""}`}
         />
 
         {isOutOfStock && (
-          <>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p className="text-gray-800 font-black text-sm uppercase tracking-[0.2em]">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-gray-600/80 px-5 py-2">
+              <p className="text-white font-black text-xs uppercase tracking-[0.25em]">
                 OUT_OF_STOCK
               </p>
             </div>
-          </>
+          </div>
         )}
       </div>
 

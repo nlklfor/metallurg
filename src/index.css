@@ -205,3 +205,14 @@ h1 {
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: "TheNeue";
+  src:
+    url("@/assets/fonts/TheNeue-Black.woff2") format("woff2"),
+    url("@/assets/fonts/TheNeue-Black.woff") format("woff"),
+    url("@/assets/fonts/TheNeue-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

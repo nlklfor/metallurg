@@ -3,7 +3,6 @@ import ProductItem from "./ProductItem";
 import ProductSkeleton from "./ProductSkeleton";
 import { filterProducts } from "@/utils/filterUtils";
 import type { FilterOptions } from "@/interfaces";
-import { Link } from "react-router";
 
 export default function ProductList({
   filters,
@@ -38,12 +37,7 @@ export default function ProductList({
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <li key={product.id}>
-              <Link
-                to={`/product/${product.id}`}
-                className="block h-full group"
-              >
-                <ProductItem product={product} />
-              </Link>
+              <ProductItem product={product} />
             </li>
           ))
         ) : (

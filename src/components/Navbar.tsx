@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import type { NavbarProps } from "@/interfaces";
-import { NAV_LINKS } from "@/lib/constants";
+import { NAV_LINKS } from "@/lib/constants/navigation";
 import { useCartStore } from "@/stores/useCartStore";
 import { getThemeColors, type ThemeVariant } from "@/config/theme";
 
@@ -31,6 +31,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         <Link
           to="/"
           className={`absolute left-1/2 transform -translate-x-1/2 text-xl font-bold ${theme.text}`}
+          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
         >
           <EncryptedText
             text="METALLURG™"
@@ -48,7 +49,10 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             UAH / UA
           </Button>
           <Link to="/cart">
-            <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
+            <Button
+              variant="link"
+              className={`${theme.text} ${theme.hover} p-0`}
+            >
               <span className={`text-sm font-medium ${theme.text}`}>
                 cart ({cartItems.length})
               </span>
