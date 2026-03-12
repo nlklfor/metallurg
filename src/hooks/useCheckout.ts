@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import supabase from "@/lib/supabase";
 import { useCartStore } from "@/stores/useCartStore";
 import { generateOrderNumber, serializeCartItems } from "@/utils";
@@ -7,8 +7,10 @@ import type { OrderStep, ShippingZone } from "@/interfaces";
 
 export function useCheckout() {
   const items = useCartStore((state) => state.items);
-  const totalPrice = useCartStore((state) => state.totalPrice);
+  const totalPriceFn = useCartStore((state) => state.totalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
+
+  const total = useMemo(() => totalPriceFn(), [items, totalPriceFn]);
 
   const [step, setStep] = useState<OrderStep>("form");
   const [orderNumber, setOrderNumber] = useState("");
@@ -38,7 +40,6 @@ export function useCheckout() {
     setStep("submitting");
 
     const order_number = generateOrderNumber();
-    const total = totalPrice();
     const serializedItems = serializeCartItems(items);
 
     const payload = {
@@ -67,7 +68,8 @@ export function useCheckout() {
       setOrderNumber(order_number);
       setStep("success");
     } catch (err: unknown) {
-      setErrorMsg((err as { message?: string })?.message ?? "Unknown error occurred.");
+      const message = err instanceof Error ? err.message : "Unknown error occurred.";
+      setErrorMsg(message);
       setStep("error");
     }
   };
@@ -85,7 +87,7 @@ export function useCheckout() {
     setZone,
     isFormValid,
     items,
-    totalPrice,
+    total,
     handleSubmit,
     handleClose,
   };

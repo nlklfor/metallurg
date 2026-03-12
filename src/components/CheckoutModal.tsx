@@ -17,7 +17,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setZone,
     isFormValid,
     items,
-    totalPrice,
+    total,
     handleSubmit,
     handleClose,
   } = useCheckout();
@@ -73,7 +73,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     ))}
                     <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between text-sm font-archivo-black">
                       <span>TOTAL</span>
-                      <span>{totalPrice()} UAH</span>
+                      <span>{total.toLocaleString()} UAH</span>
                     </div>
                   </div>
 

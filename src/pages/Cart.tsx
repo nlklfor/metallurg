@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 const Cart = () => {
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.items);
-  const totalPrice = useCartStore((state) => state.totalPrice);
+  const totalPriceFn = useCartStore((state) => state.totalPrice);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [trackOpen, setTrackOpen] = useState(false);
 
@@ -111,7 +111,7 @@ const Cart = () => {
                         // subtotal
                       </span>
                       <span className="text-sm text-black">
-                        {totalPrice().toLocaleString()} UAH
+                        {totalPriceFn().toLocaleString()} UAH
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -130,7 +130,7 @@ const Cart = () => {
                   <div className="flex justify-between items-baseline">
                     <span className="text-sm font-bold uppercase tracking-wider">Total</span>
                     <span className="text-2xl font-black italic tracking-tight">
-                      {totalPrice().toLocaleString()}{" "}
+                      {totalPriceFn().toLocaleString()}{" "}
                       <span className="text-sm font-normal text-gray-400">UAH</span>
                     </span>
                   </div>
