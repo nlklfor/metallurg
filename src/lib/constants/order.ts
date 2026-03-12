@@ -1,22 +1,9 @@
 import type { ShippingZone, TrackStepDefinition } from "@/interfaces";
-import {
-  Package,
-  Wrench,
-  Truck,
-  Globe,
-  MapPin,
-  CheckCircle,
-  Archive,
-  Clock,
-} from "lucide-react";
+import { Package, Wrench, Truck, Globe, MapPin, CheckCircle, Archive, Clock } from "lucide-react";
 
 // ─── Shipping ─────────────────────────────────────────────────────────────────
 
-export const SHIPPING_ZONES: ShippingZone[] = [
-  "Ukraine",
-  "Switzerland",
-  "International",
-];
+export const SHIPPING_ZONES: ShippingZone[] = ["Ukraine", "Switzerland", "International"];
 
 // ─── Tracking Routes ──────────────────────────────────────────────────────────
 
@@ -90,16 +77,10 @@ export const EDGE_FUNCTION_URL =
   "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/notify-telegram";
 
 // Navigation
-export {
-  MAIN_PAGE_BTNS,
-  MAIN_PAGE_LINKS,
-  NAV_LINKS,
-  FOOTER_LINKS,
-} from "./navigation";
+export { MAIN_PAGE_BTNS, MAIN_PAGE_LINKS, NAV_LINKS, FOOTER_LINKS } from "./navigation";
 
 // Site
 export { SITE_CONFIG } from "./site";
 
 // Filters
 export { DEFAULT_FILTERS } from "./filters";
-

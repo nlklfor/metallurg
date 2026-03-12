@@ -8,7 +8,7 @@ export default function ErrorPage() {
   return (
     <div className="w-full min-h-screen bg-black text-white flex flex-col">
       <Navbar variant="dark" />
-      
+
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="text-center max-w-md border border-gray-700 bg-gray-950 p-8">
           <h2 className="text-white font-bold mb-2 uppercase tracking-widest">

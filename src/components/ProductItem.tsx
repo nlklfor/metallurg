@@ -46,13 +46,9 @@ export default function ProductItem({ product }: ProductItemProps) {
       </div>
 
       <div className="p-3 space-y-2 flex flex-col justify-start flex-1 bg-white">
-        <h3 className="font-archivo-black text-sm text-black line-clamp-2">
-          {product.name}
-        </h3>
+        <h3 className="font-archivo-black text-sm text-black line-clamp-2">{product.name}</h3>
         {product.price && (
-          <p className="font-ibm-mono text-sm font-semibold text-black">
-            {product.price} UAH
-          </p>
+          <p className="font-ibm-mono text-sm font-semibold text-black">{product.price} UAH</p>
         )}
 
         {product.sizes && !isOutOfStock && (
@@ -62,10 +58,7 @@ export default function ProductItem({ product }: ProductItemProps) {
             }`}
           >
             {product.sizes.map((size) => (
-              <span
-                key={size}
-                className="font-ibm-mono text-xs text-black px-2 py-1"
-              >
+              <span key={size} className="font-ibm-mono text-xs text-black px-2 py-1">
                 {size}
               </span>
             ))}

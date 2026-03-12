@@ -34,9 +34,7 @@ export default function Contact() {
           {/* Left — Contact Info */}
           <div className="space-y-10">
             <div className="space-y-6">
-              <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase">
-                // CHANNELS
-              </p>
+              <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase">// CHANNELS</p>
 
               <a
                 href="https://instagram.com/metallurg.tm"
@@ -48,12 +46,8 @@ export default function Contact() {
                   <Instagram size={20} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-black uppercase tracking-wider">
-                    Instagram
-                  </p>
-                  <p className="text-[10px] text-gray-400 tracking-[0.2em]">
-                    @metallurg.tm
-                  </p>
+                  <p className="text-sm font-bold text-black uppercase tracking-wider">Instagram</p>
+                  <p className="text-[10px] text-gray-400 tracking-[0.2em]">@metallurg.tm</p>
                 </div>
                 <span className="ml-auto text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all">
                   →
@@ -70,12 +64,8 @@ export default function Contact() {
                   <Send size={20} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-black uppercase tracking-wider">
-                    Telegram
-                  </p>
-                  <p className="text-[10px] text-gray-400 tracking-[0.2em]">
-                    METALLURG_COMMUNITY
-                  </p>
+                  <p className="text-sm font-bold text-black uppercase tracking-wider">Telegram</p>
+                  <p className="text-[10px] text-gray-400 tracking-[0.2em]">METALLURG_COMMUNITY</p>
                 </div>
                 <span className="ml-auto text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all">
                   →
@@ -88,9 +78,8 @@ export default function Contact() {
                 // RESPONSE_TIME
               </p>
               <p className="text-sm text-gray-500 leading-relaxed">
-                We typically respond within{" "}
-                <span className="text-black font-bold">24 hours</span>. For
-                urgent inquiries, reach us via Telegram.
+                We typically respond within <span className="text-black font-bold">24 hours</span>.
+                For urgent inquiries, reach us via Telegram.
               </p>
               <div className="flex items-center gap-2 pt-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />

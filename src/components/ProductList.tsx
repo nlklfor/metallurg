@@ -4,11 +4,7 @@ import ProductSkeleton from "./ProductSkeleton";
 import { filterProducts } from "@/utils/filterUtils";
 import type { FilterOptions } from "@/interfaces";
 
-export default function ProductList({
-  filters,
-}: {
-  filters: FilterOptions | null;
-}) {
+export default function ProductList({ filters }: { filters: FilterOptions | null }) {
   const { products, error, isLoading } = useProductList();
 
   const filteredProducts = filterProducts(products, filters);
@@ -26,10 +22,7 @@ export default function ProductList({
       </div>
     );
 
-  if (error)
-    return (
-      <div className="px-8 py-16 text-center text-red-600">Error: {error}</div>
-    );
+  if (error) return <div className="px-8 py-16 text-center text-red-600">Error: {error}</div>;
 
   return (
     <div className="px-8 py-16">
@@ -41,9 +34,7 @@ export default function ProductList({
             </li>
           ))
         ) : (
-          <p className="col-span-full text-center text-gray-500">
-            No_units_found
-          </p>
+          <p className="col-span-full text-center text-gray-500">No_units_found</p>
         )}
       </ul>
     </div>

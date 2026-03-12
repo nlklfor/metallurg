@@ -26,8 +26,7 @@ const VALUES = [
   {
     label: "AUTHENTICATION",
     value: "100%",
-    description:
-      "Every item verified. We stake our reputation on authenticity — no exceptions.",
+    description: "Every item verified. We stake our reputation on authenticity — no exceptions.",
   },
   {
     label: "SOURCING_NETWORK",
@@ -98,9 +97,8 @@ export default function About() {
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6">
           <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
-            An inventory of heavy luxury and rare streetwear. Strict selection,
-            transparent logistics, and access to items impossible to find in the
-            public domain.
+            An inventory of heavy luxury and rare streetwear. Strict selection, transparent
+            logistics, and access to items impossible to find in the public domain.
           </p>
         </div>
       </div>
@@ -142,10 +140,8 @@ export default function About() {
               >
                 We don't design clothes.
                 <br />
-                We{" "}
-                <span className="italic text-gray-400">find</span> them —
-                source the unreachable, verify the authentic, deliver the
-                impossible.
+                We <span className="italic text-gray-400">find</span> them — source the unreachable,
+                verify the authentic, deliver the impossible.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0, y: 12 }}
@@ -154,10 +150,9 @@ export default function About() {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="text-sm text-gray-400 leading-relaxed max-w-xl"
               >
-                METALLURG™ operates at the intersection of private sourcing and
-                public access. We connect you to pieces that don't exist on
-                shelves — archived collections, limited collaborations, and
-                one-of-one grails that surface only through trusted networks.
+                METALLURG™ operates at the intersection of private sourcing and public access. We
+                connect you to pieces that don't exist on shelves — archived collections, limited
+                collaborations, and one-of-one grails that surface only through trusted networks.
               </motion.p>
             </div>
           </div>
@@ -187,17 +182,13 @@ export default function About() {
                 className="border border-gray-200 p-8 hover:border-black transition-all group -ml-px -mt-px first:ml-0 first:mt-0"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-[9px] text-gray-300 tracking-[0.2em]">
-                    0{i + 1}
-                  </span>
+                  <span className="text-[9px] text-gray-300 tracking-[0.2em]">0{i + 1}</span>
                   <div className="flex-1 h-px bg-gray-200 group-hover:bg-black transition-colors" />
                 </div>
                 <p className="text-sm font-black uppercase tracking-[0.15em] text-black mb-4">
                   {pillar.title}
                 </p>
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  {pillar.description}
-                </p>
+                <p className="text-xs text-gray-400 leading-relaxed">{pillar.description}</p>
               </motion.div>
             ))}
           </div>
@@ -232,9 +223,7 @@ export default function About() {
                 <p className="text-4xl font-black text-black italic tracking-tight mb-3 group-hover:scale-105 transition-transform origin-left">
                   {item.value}
                 </p>
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  {item.description}
-                </p>
+                <p className="text-xs text-gray-400 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -249,9 +238,7 @@ export default function About() {
       {/* Timeline */}
       <section className="px-8 py-16">
         <div className="max-w-5xl mx-auto">
-          <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">
-            // TIMELINE
-          </p>
+          <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">// TIMELINE</p>
           <div className="space-y-0">
             {TIMELINE.map((item, i) => (
               <motion.div
@@ -274,18 +261,14 @@ export default function About() {
                   </p>
                 </div>
                 <div className="col-span-7">
-                  <p className="text-sm text-gray-400 leading-relaxed">
-                    {item.description}
-                  </p>
+                  <p className="text-sm text-gray-400 leading-relaxed">{item.description}</p>
                 </div>
               </motion.div>
             ))}
             {/* Future */}
             <div className="grid grid-cols-12 gap-6 border-t border-gray-200 py-10">
               <div className="col-span-2">
-                <p className="text-3xl font-black text-gray-200 italic tracking-tight">
-                  ????
-                </p>
+                <p className="text-3xl font-black text-gray-200 italic tracking-tight">????</p>
               </div>
               <div className="col-span-3">
                 <p className="text-sm font-black uppercase tracking-[0.2em] text-gray-300">
@@ -295,9 +278,7 @@ export default function About() {
               <div className="col-span-7">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    Sourcing in progress...
-                  </p>
+                  <p className="text-sm text-gray-300 leading-relaxed">Sourcing in progress...</p>
                 </div>
               </div>
             </div>
@@ -333,9 +314,7 @@ export default function About() {
             </blockquote>
             <div className="mt-8 flex items-center justify-center gap-3">
               <div className="w-8 h-px bg-gray-300" />
-              <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase">
-                METALLURG™
-              </p>
+              <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase">METALLURG™</p>
               <div className="w-8 h-px bg-gray-300" />
             </div>
           </motion.div>

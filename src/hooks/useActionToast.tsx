@@ -31,11 +31,7 @@ export function useActionToast() {
     return styles[type];
   };
 
-  const showToast = (
-    type: ToastType,
-    config: ToastConfig,
-    duration: number = 3000,
-  ) => {
+  const showToast = (type: ToastType, config: ToastConfig, duration: number = 3000) => {
     const styles = getToastStyles(type);
     const { product, selectedSize, message } = config;
 
@@ -55,18 +51,14 @@ export function useActionToast() {
           )}
 
           <div className="flex-1">
-            <p
-              className={`font-black uppercase tracking-widest text-xs opacity-70`}
-            >
+            <p className={`font-black uppercase tracking-widest text-xs opacity-70`}>
               {styles.label}
             </p>
 
             {product && (
               <>
                 <p className="font-bold uppercase text-sm">{product.name}</p>
-                {selectedSize && (
-                  <p className={`text-xs opacity-75`}>Size: {selectedSize}</p>
-                )}
+                {selectedSize && <p className={`text-xs opacity-75`}>Size: {selectedSize}</p>}
               </>
             )}
 
@@ -76,7 +68,7 @@ export function useActionToast() {
           <span className="text-2xl font-black">{styles.icon}</span>
         </div>
       ),
-      { duration },
+      { duration }
     );
   };
 

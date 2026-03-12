@@ -3,7 +3,7 @@ export default function ProductDetailsSkeleton() {
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
       <div className="space-y-4">
         <div className="aspect-[3/4] bg-gray-900 border border-gray-800 rounded animate-pulse" />
-        
+
         <div className="grid grid-cols-4 gap-4">
           {[...Array(4)].map((_, idx) => (
             <div

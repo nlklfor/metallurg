@@ -14,9 +14,7 @@ export default function CartItemCard({ item }: CartItemCardProps) {
   return (
     <div
       className={`group flex gap-6 p-5 border border-gray-200 transition-all duration-300 ${
-        isOutOfStock
-          ? "opacity-30 grayscale blur-[1px]"
-          : "hover:border-gray-400"
+        isOutOfStock ? "opacity-30 grayscale blur-[1px]" : "hover:border-gray-400"
       }`}
     >
       {/* IMAGE */}
@@ -40,12 +38,9 @@ export default function CartItemCard({ item }: CartItemCardProps) {
       <div className="flex flex-col justify-between flex-grow py-1">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-bold text-black tracking-tight uppercase">
-              {item.name}
-            </h3>
+            <h3 className="text-lg font-bold text-black tracking-tight uppercase">{item.name}</h3>
             <p className="text-[10px] text-gray-400 mt-1 tracking-[0.2em]">
-              // SIZE:{" "}
-              <span className="text-gray-600">{item.selectedSize}</span>
+              // SIZE: <span className="text-gray-600">{item.selectedSize}</span>
             </p>
           </div>
           <p className="text-lg font-black text-black italic">
@@ -65,10 +60,7 @@ export default function CartItemCard({ item }: CartItemCardProps) {
             onClick={() => removeFromCart(item.id, item.selectedSize)}
             className="flex items-center gap-2 text-gray-300 hover:text-red-500 transition-colors text-[10px] font-bold uppercase tracking-[0.2em] ml-auto group/btn"
           >
-            <Trash2
-              size={14}
-              className="group-hover/btn:rotate-12 transition-transform"
-            />
+            <Trash2 size={14} className="group-hover/btn:rotate-12 transition-transform" />
             <span>Remove</span>
           </button>
         </div>

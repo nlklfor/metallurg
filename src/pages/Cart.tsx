@@ -20,10 +20,7 @@ const Cart = () => {
     <div className="bg-white text-black min-h-screen flex flex-col">
       <Navbar variant="light" />
 
-      <CheckoutModal
-        isOpen={checkoutOpen}
-        onClose={() => setCheckoutOpen(false)}
-      />
+      <CheckoutModal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 
       <div className="flex-1 max-w-7xl mx-auto w-full px-8 py-16">
@@ -40,9 +37,7 @@ const Cart = () => {
               />
             </button>
             <div>
-              <h1 className="text-5xl font-black uppercase tracking-tighter italic">
-                Cart
-              </h1>
+              <h1 className="text-5xl font-black uppercase tracking-tighter italic">Cart</h1>
               <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase mt-1">
                 // ITEMS_IN_BAG: {cartItems.length}
               </p>
@@ -60,9 +55,7 @@ const Cart = () => {
         {cartItems.length === 0 ? (
           /* Empty State */
           <div className="border border-gray-200 p-20 text-center">
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">
-              // STATUS
-            </p>
+            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">// STATUS</p>
             <p className="text-gray-400 font-bold text-lg uppercase tracking-[0.2em] mb-10">
               CART_EMPTY
             </p>
@@ -81,10 +74,7 @@ const Cart = () => {
                 // CART_ITEMS
               </p>
               {cartItems.map((item) => (
-                <CartItemCard
-                  key={`${item.id}-${item.selectedSize}`}
-                  item={item}
-                />
+                <CartItemCard key={`${item.id}-${item.selectedSize}`} item={item} />
               ))}
             </div>
 
@@ -96,28 +86,18 @@ const Cart = () => {
                   <span className="text-[10px] text-gray-400 tracking-[0.3em] uppercase">
                     METALLURG // SUMMARY
                   </span>
-                  <span className="text-[8px] text-gray-300 tracking-widest">
-                    V2.0
-                  </span>
+                  <span className="text-[8px] text-gray-300 tracking-widest">V2.0</span>
                 </div>
 
                 <div className="px-6 py-8 space-y-6">
                   {/* Line Items */}
                   <div className="space-y-3">
                     {cartItems.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex justify-between text-xs text-gray-500"
-                      >
+                      <div key={i} className="flex justify-between text-xs text-gray-500">
                         <span className="truncate max-w-[60%]">
-                          {item.name}{" "}
-                          <span className="text-gray-300">
-                            SZ_{item.selectedSize}
-                          </span>
+                          {item.name} <span className="text-gray-300">SZ_{item.selectedSize}</span>
                         </span>
-                        <span className="text-black">
-                          {item.price.toLocaleString()}
-                        </span>
+                        <span className="text-black">{item.price.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
@@ -148,14 +128,10 @@ const Cart = () => {
 
                   {/* Total */}
                   <div className="flex justify-between items-baseline">
-                    <span className="text-sm font-bold uppercase tracking-wider">
-                      Total
-                    </span>
+                    <span className="text-sm font-bold uppercase tracking-wider">Total</span>
                     <span className="text-2xl font-black italic tracking-tight">
                       {totalPrice().toLocaleString()}{" "}
-                      <span className="text-sm font-normal text-gray-400">
-                        UAH
-                      </span>
+                      <span className="text-sm font-normal text-gray-400">UAH</span>
                     </span>
                   </div>
 
@@ -186,12 +162,8 @@ const Cart = () => {
 
                 {/* Summary Footer */}
                 <div className="border-t border-gray-200 px-6 py-3 flex justify-between">
-                  <span className="text-[8px] text-gray-300 tracking-widest">
-                    SECURE_CHECKOUT
-                  </span>
-                  <span className="text-[8px] text-gray-300 tracking-widest">
-                    MTL_STORE_2026
-                  </span>
+                  <span className="text-[8px] text-gray-300 tracking-widest">SECURE_CHECKOUT</span>
+                  <span className="text-[8px] text-gray-300 tracking-widest">MTL_STORE_2026</span>
                 </div>
               </div>
             </div>

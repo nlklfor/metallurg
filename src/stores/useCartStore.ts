@@ -11,7 +11,7 @@ export const useCartStore = create<CartState>()(
       addToCart: (product, size) =>
         set((state) => {
           const isItemExist = state.items.find(
-            (item) => item.id === product.id && item.selectedSize === size,
+            (item) => item.id === product.id && item.selectedSize === size
           );
 
           if (isItemExist) {
@@ -26,7 +26,7 @@ export const useCartStore = create<CartState>()(
       removeFromCart: (productId, size) =>
         set((state) => ({
           items: state.items.filter(
-            (item) => !(item.id === productId && item.selectedSize === size),
+            (item) => !(item.id === productId && item.selectedSize === size)
           ),
         })),
 
@@ -36,6 +36,6 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "metallurg-cart-storage",
-    },
-  ),
+    }
+  )
 );
