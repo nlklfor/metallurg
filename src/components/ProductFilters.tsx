@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "./ui/slider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "./ui/button";
 
@@ -20,6 +20,7 @@ export default function ProductFilters({
 }: ProductFiltersProps) {
   const [localPrice, setLocalPrice] = useState<number>(filters.priceRange[1]);
   const debouncedPrice = useDebounce(localPrice, 500);
+  const prevDebouncedPrice = useRef(debouncedPrice);
 
   const handleSortChange = (value: FilterOptions["sortBy"]) => {
     onFilterChange({ sortBy: value });
@@ -30,11 +31,15 @@ export default function ProductFilters({
   };
 
   const handleClearFilters = () => {
+    setLocalPrice(filters.priceRange[1]);
     onClearFilters();
   };
 
   useEffect(() => {
-    onFilterChange({ priceRange: [0, debouncedPrice] });
+    if (prevDebouncedPrice.current !== debouncedPrice) {
+      prevDebouncedPrice.current = debouncedPrice;
+      onFilterChange({ priceRange: [0, debouncedPrice] });
+    }
   }, [debouncedPrice, onFilterChange]);
 
   return (
@@ -62,7 +67,9 @@ export default function ProductFilters({
           step={1000}
           className="w-40"
         />
-        <span className="text-sm font-medium whitespace-nowrap">UAH {filters.priceRange[1]}</span>
+        <span className="text-sm font-medium whitespace-nowrap">
+          UAH {localPrice.toLocaleString()}
+        </span>
       </div>
 
       <Button
