@@ -64,15 +64,9 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       // ORDER_SUMMARY
                     </p>
                     {items.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex justify-between text-xs font-ibm-mono"
-                      >
+                      <div key={i} className="flex justify-between text-xs font-ibm-mono">
                         <span className="text-gray-600 truncate max-w-[60%]">
-                          {item.name}{" "}
-                          <span className="text-gray-400">
-                            SZ_{item.selectedSize}
-                          </span>
+                          {item.name} <span className="text-gray-400">SZ_{item.selectedSize}</span>
                         </span>
                         <span>{item.price.toLocaleString()} UAH</span>
                       </div>
@@ -139,9 +133,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     className="w-full bg-black text-white py-4 font-archivo-black text-[11px] uppercase tracking-[0.4em] hover:bg-gray-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {step === "submitting" ? (
-                      <span className="animate-pulse font-ibm-mono">
-                        PROCESSING_ORDER...
-                      </span>
+                      <span className="animate-pulse font-ibm-mono">PROCESSING_ORDER...</span>
                     ) : (
                       "CONFIRM_ORDER →"
                     )}
@@ -175,10 +167,9 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   </div>
 
                   <p className="text-[10px] font-ibm-mono text-gray-400 leading-relaxed">
-                    USE{" "}
-                    <span className="text-black font-bold">{orderNumber}</span>{" "}
-                    IN THE <span className="text-black">TRACK_MY_ORDER</span>{" "}
-                    SECTION TO CHECK YOUR DELIVERY STATUS.
+                    USE <span className="text-black font-bold">{orderNumber}</span> IN THE{" "}
+                    <span className="text-black">TRACK_MY_ORDER</span> SECTION TO CHECK YOUR
+                    DELIVERY STATUS.
                   </p>
 
                   <button

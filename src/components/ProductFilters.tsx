@@ -62,9 +62,7 @@ export default function ProductFilters({
           step={1000}
           className="w-40"
         />
-        <span className="text-sm font-medium whitespace-nowrap">
-          UAH {filters.priceRange[1]}
-        </span>
+        <span className="text-sm font-medium whitespace-nowrap">UAH {filters.priceRange[1]}</span>
       </div>
 
       <Button

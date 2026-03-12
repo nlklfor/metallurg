@@ -18,7 +18,7 @@ export function useTrackOrder() {
     const { data, error: sbError } = await supabase
       .from("orders")
       .select(
-        "order_number, customer_name, shipping_zone, total_price, status, current_status_index, is_international, tracking_number, created_at, items",
+        "order_number, customer_name, shipping_zone, total_price, status, current_status_index, is_international, tracking_number, created_at, items"
       )
       .eq("order_number", trimmed)
       .single();

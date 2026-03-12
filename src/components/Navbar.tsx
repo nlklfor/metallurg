@@ -11,17 +11,12 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
   const cartItems = useCartStore((state) => state.items);
 
   return (
-    <nav
-      className={`sticky top-0 z-50 ${theme.bg} border-b ${theme.border} w-full`}
-    >
+    <nav className={`sticky top-0 z-50 ${theme.bg} border-b ${theme.border} w-full`}>
       <div className="flex items-center justify-between px-8 py-4">
         <div className="flex gap-6">
           {NAV_LINKS.map((link) => (
             <Link key={link.label} to={link.href}>
-              <Button
-                variant="link"
-                className={`${theme.text} ${theme.hover} p-0`}
-              >
+              <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
                 {link.label}
               </Button>
             </Link>
@@ -49,13 +44,8 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             UAH / UA
           </Button>
           <Link to="/cart">
-            <Button
-              variant="link"
-              className={`${theme.text} ${theme.hover} p-0`}
-            >
-              <span className={`text-sm font-medium ${theme.text}`}>
-                cart ({cartItems.length})
-              </span>
+            <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
+              <span className={`text-sm font-medium ${theme.text}`}>cart ({cartItems.length})</span>
             </Button>
           </Link>
         </div>

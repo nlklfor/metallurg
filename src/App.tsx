@@ -46,10 +46,7 @@ function App() {
       <div className="fixed bottom-12 left-8 z-20 flex flex-col">
         <div className="text-white text-md h-8">
           <TypingAnimation>// ACCESSING_ARCHIVE_2026... </TypingAnimation>
-          <TypingAnimation
-            delay={2700}
-            className="text-green-400 animate-pulse"
-          >
+          <TypingAnimation delay={2700} className="text-green-400 animate-pulse">
             OK
           </TypingAnimation>
         </div>
@@ -57,9 +54,7 @@ function App() {
           <TypingAnimation delay={3000}>// STATUS: OPERATIONAL</TypingAnimation>
         </div>
         <div className="text-white text-md h-8">
-          <TypingAnimation delay={6000}>
-            // WELCOME TO MTL_NETWORK
-          </TypingAnimation>
+          <TypingAnimation delay={6000}>// WELCOME TO MTL_NETWORK</TypingAnimation>
         </div>
       </div>
 

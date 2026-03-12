@@ -54,8 +54,7 @@ export default function Orders() {
               Track Your Order
             </h3>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Enter your order ID to see real-time delivery status and tracking
-              information.
+              Enter your order ID to see real-time delivery status and tracking information.
             </p>
           </button>
 
@@ -69,15 +68,12 @@ export default function Orders() {
                 COMING_SOON
               </span>
             </div>
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">
-              // REVIEWS
-            </p>
+            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">// REVIEWS</p>
             <h3 className="text-xl font-black text-gray-300 uppercase tracking-tight mb-2">
               Customer Reviews
             </h3>
             <p className="text-sm text-gray-300 leading-relaxed">
-              Share your experience and read what others think about METALLURG™
-              products.
+              Share your experience and read what others think about METALLURG™ products.
             </p>
 
             {/* Diagonal line overlay */}

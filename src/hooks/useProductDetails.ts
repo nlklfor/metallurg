@@ -28,7 +28,7 @@ export const useProductDetails = (id: string | undefined) => {
     };
 
     fetchProduct();
-  }, [id]); 
+  }, [id]);
 
   return { product, isLoading, error };
 };

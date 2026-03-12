@@ -26,8 +26,8 @@ export default function Shop() {
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6">
           <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
-            Discover our premium collection of streetwear and contemporary
-            fashion. Carefully curated pieces designed for the modern individual.
+            Discover our premium collection of streetwear and contemporary fashion. Carefully
+            curated pieces designed for the modern individual.
           </p>
         </div>
       </div>

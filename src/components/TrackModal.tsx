@@ -5,10 +5,7 @@ import { INTERNATIONAL_ROUTE, LOCAL_ROUTE } from "@/lib/constants/index";
 import TrackStep from "@/components/TrackStep";
 import type { TrackOrderModalProps, TrackStepDefinition } from "@/interfaces";
 
-export default function TrackOrderModal({
-  isOpen,
-  onClose,
-}: TrackOrderModalProps) {
+export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProps) {
   const [input, setInput] = useState("");
   const { order, isLoading, error, trackOrder, reset } = useTrackOrder();
 
@@ -141,9 +138,7 @@ export default function TrackOrderModal({
                           ROUTE_TYPE
                         </p>
                         <p className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider mt-0.5">
-                          {order.is_international
-                            ? "🌍 INTERNATIONAL"
-                            : "🇺🇦 LOCAL"}
+                          {order.is_international ? "🌍 INTERNATIONAL" : "🇺🇦 LOCAL"}
                         </p>
                       </div>
                       <div>

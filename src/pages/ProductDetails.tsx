@@ -32,9 +32,7 @@ export default function ProductDetails() {
 
 function ProductDetailsContent({ id }: { id: string }) {
   const { product, isLoading, error } = useProductDetails(id);
-  const [selectedSize, setSelectedSize] = useState<string | number | null>(
-    null,
-  );
+  const [selectedSize, setSelectedSize] = useState<string | number | null>(null);
   const { items } = useCartStore((state) => state);
   const addItem = useCartStore((state) => state.addToCart);
   const { showSuccess, showError } = useActionToast();
@@ -53,11 +51,7 @@ function ProductDetailsContent({ id }: { id: string }) {
       return;
     }
 
-    if (
-      items.some(
-        (item) => item.id === product?.id && item.selectedSize === selectedSize,
-      )
-    ) {
+    if (items.some((item) => item.id === product?.id && item.selectedSize === selectedSize)) {
       showError({ message: "Product_already_in_cart" });
       return;
     }
@@ -97,9 +91,7 @@ function ProductDetailsContent({ id }: { id: string }) {
   }
 
   return (
-    <div
-      className={`w-full min-h-screen ${theme.bg} ${theme.text} flex flex-col`}
-    >
+    <div className={`w-full min-h-screen ${theme.bg} ${theme.text} flex flex-col`}>
       <Navbar variant="dark" />
       <Toaster position="bottom-right" />
 
@@ -115,9 +107,7 @@ function ProductDetailsContent({ id }: { id: string }) {
                 src={product.image_url[0]}
                 alt={product.name}
                 className={`w-full h-full object-cover transition-all duration-700 ${
-                  !isOutOfStock
-                    ? "group-hover:scale-105"
-                    : "blur-[1px] grayscale"
+                  !isOutOfStock ? "group-hover:scale-105" : "blur-[1px] grayscale"
                 }`}
               />
               <div
@@ -165,13 +155,9 @@ function ProductDetailsContent({ id }: { id: string }) {
                 <h1 className="text-6xl font-black uppercase tracking-tighter italic">
                   {product.name}
                 </h1>
-                <span className={`${theme.textSecondary} text-xs`}>
-                  VER. 2026.01
-                </span>
+                <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
               </div>
-              <p className={`text-2xl ${theme.text}`}>
-                {product.price.toLocaleString()} UAH
-              </p>
+              <p className={`text-2xl ${theme.text}`}>{product.price.toLocaleString()} UAH</p>
             </header>
 
             <section className={`border-y ${theme.border} py-8 my-8 space-y-6`}>
@@ -181,33 +167,21 @@ function ProductDetailsContent({ id }: { id: string }) {
                 >
                   // description
                 </h3>
-                <p
-                  className={`${theme.textSecondary} leading-relaxed max-w-lg`}
-                >
+                <p className={`${theme.textSecondary} leading-relaxed max-w-lg`}>
                   {product.description}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <h3
-                    className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}
-                  >
+                  <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>
                     // material
                   </h3>
-                  <p className={`text-sm ${theme.textSecondary}`}>
-                    {product.materials}
-                  </p>
+                  <p className={`text-sm ${theme.textSecondary}`}>{product.materials}</p>
                 </div>
                 <div>
-                  <h3
-                    className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}
-                  >
-                    // weight
-                  </h3>
-                  <p className={`text-sm ${theme.textSecondary}`}>
-                    {product.weight} KG
-                  </p>
+                  <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>// weight</h3>
+                  <p className={`text-sm ${theme.textSecondary}`}>{product.weight} KG</p>
                 </div>
               </div>
             </section>
@@ -252,9 +226,7 @@ function ProductDetailsContent({ id }: { id: string }) {
               ) : selectedSize ? (
                 <div className="flex items-center gap-2">
                   <span>Initiate_Order</span>
-                  <span className="group-hover:translate-x-2 transition-transform">
-                    →
-                  </span>
+                  <span className="group-hover:translate-x-2 transition-transform">→</span>
                 </div>
               ) : (
                 <span>Select_size_to_order</span>

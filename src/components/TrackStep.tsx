@@ -28,11 +28,7 @@ export default function TrackStep({
                 }
               : {}
           }
-          transition={
-            isActive
-              ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" }
-              : {}
-          }
+          transition={isActive ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" } : {}}
           className={`w-8 h-8 flex items-center justify-center border transition-all duration-500 ${
             isActive
               ? "border-white bg-black"
@@ -43,13 +39,7 @@ export default function TrackStep({
         >
           <Icon
             size={14}
-            className={
-              isActive
-                ? "text-white"
-                : isCompleted
-                  ? "text-zinc-600"
-                  : "text-zinc-900"
-            }
+            className={isActive ? "text-white" : isCompleted ? "text-zinc-600" : "text-zinc-900"}
           />
         </motion.div>
 
@@ -75,17 +65,9 @@ export default function TrackStep({
                 }
               : {}
           }
-          transition={
-            isActive
-              ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" }
-              : {}
-          }
+          transition={isActive ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" } : {}}
           className={`text-xs font-bold tracking-[0.2em] uppercase transition-all duration-500 ${
-            isActive
-              ? "text-white"
-              : isCompleted
-                ? "text-zinc-700"
-                : "text-zinc-900"
+            isActive ? "text-white" : isCompleted ? "text-zinc-700" : "text-zinc-900"
           }`}
           style={isFuture ? { opacity: 0.05 } : {}}
         >
