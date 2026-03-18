@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
+import ProductImageSlider from "@/components/ProductImageSlider";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -45,24 +46,17 @@ function ProductDetailsContent({ id }: { id: string }) {
       showError({ message: "Product_is_out_of_stock" });
       return;
     }
-
     if (!selectedSize) {
       showError({ message: "Please_select_a_size" });
       return;
     }
-
     if (items.some((item) => item.id === product?.id && item.selectedSize === selectedSize)) {
       showError({ message: "Product_already_in_cart" });
       return;
     }
-
     if (product) {
       addItem(product, selectedSize);
-      showSuccess({
-        product,
-        selectedSize,
-        message: "product_added_to_cart",
-      });
+      showSuccess({ product, selectedSize, message: "product_added_to_cart" });
     }
   };
 
@@ -97,58 +91,16 @@ function ProductDetailsContent({ id }: { id: string }) {
 
       <div className="flex-1 p-6 md:p-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div className="space-y-4">
-            <div
-              className={`aspect-[3/4] ${theme.bg} border ${theme.border} overflow-hidden relative group ${
-                isOutOfStock ? "opacity-40" : ""
-              }`}
-            >
-              <img
-                src={product.image_url[0]}
-                alt={product.name}
-                className={`w-full h-full object-cover transition-all duration-700 ${
-                  !isOutOfStock ? "group-hover:scale-105" : "blur-[1px] grayscale"
-                }`}
-              />
-              <div
-                className={`absolute top-4 left-4 ${theme.bg} bg-opacity-80 px-2 py-1 text-[10px] ${theme.textSecondary} border ${theme.border}`}
-              >
-                SPEC_SHR_IMG_01
-              </div>
-
-              {isOutOfStock && (
-                <>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <p
-                      className={`${theme.textSecondary} font-black text-2xl md:text-3xl uppercase tracking-[0.3em]`}
-                    >
-                      OUT_OF_STOCK
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="grid grid-cols-4 gap-4">
-              {product.image_url.slice(1).map((url, idx) => (
-                <div
-                  key={idx}
-                  className={`aspect-square ${theme.bg} border ${theme.border} hover:border-gray-500 cursor-pointer overflow-hidden ${
-                    isOutOfStock ? "opacity-40" : ""
-                  }`}
-                >
-                  <img
-                    src={url}
-                    alt={`${product.name} view ${idx + 2}`}
-                    className={`w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity ${
-                      isOutOfStock ? "blur-[1px] grayscale" : ""
-                    }`}
-                  />
-                </div>
-              ))}
-            </div>
+          {/* ── Left: SNS-style vertical slider ── */}
+          <div className={isOutOfStock ? "opacity-40" : ""}>
+            <ProductImageSlider
+              images={product.image_url}
+              productName={product.name}
+              isOutOfStock={isOutOfStock}
+            />
           </div>
 
+          {/* ── Right: product info ── */}
           <div className="flex flex-col">
             <header className="mb-8">
               <div className="flex justify-between items-baseline mb-2">
