@@ -13,3 +13,9 @@ export interface ProductType {
   weight?: number;
   model_3d_url?: string;
 }
+
+export interface ProductImageSliderProps {
+  images: string[];
+  productName: string;
+  isOutOfStock?: boolean;
+}
