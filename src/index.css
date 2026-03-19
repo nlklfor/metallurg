@@ -32,6 +32,36 @@
   animation: leave 0.15s ease-in forwards;
 }
 
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(100% + 24px));
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(100% + 24px));
+  }
+}
+
+@utility animate-toast-in {
+  animation: toast-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility animate-toast-out {
+  animation: toast-out 0.25s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

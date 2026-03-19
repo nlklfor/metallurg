@@ -7,24 +7,24 @@ export function useActionToast() {
   const getToastStyles = (type: ToastType) => {
     const styles = {
       success: {
-        bg: "bg-white",
-        text: "text-black",
-        border: "border-white",
+        accent: "bg-white",
+        accentBorder: "border-white/20",
         icon: "✓",
-        label: "// success",
+        iconColor: "text-white",
+        label: "// status: added",
       },
       error: {
-        bg: "bg-red-950",
-        text: "text-white",
-        border: "border-red-800",
-        icon: "!",
+        accent: "bg-red-500",
+        accentBorder: "border-red-500/20",
+        icon: "✕",
+        iconColor: "text-red-400",
         label: "// error",
       },
       warning: {
-        bg: "bg-yellow-900",
-        text: "text-white",
-        border: "border-yellow-700",
-        icon: "⚠",
+        accent: "bg-yellow-500",
+        accentBorder: "border-yellow-500/20",
+        icon: "!",
+        iconColor: "text-yellow-400",
         label: "// warning",
       },
     };
@@ -39,36 +39,62 @@ export function useActionToast() {
       (t) => (
         <div
           className={`${
-            t.visible ? "animate-enter" : "animate-leave"
-          } flex items-center gap-4 ${styles.bg} ${styles.text} px-6 py-4 border ${styles.border} shadow-xl rounded`}
+            t.visible ? "animate-toast-in" : "animate-toast-out"
+          } max-w-[360px] w-full pointer-events-auto`}
         >
-          {product && (
-            <img
-              src={product.image_url[0]}
-              className="w-12 h-12 object-cover rounded"
-              alt={product.name}
-            />
-          )}
+          <div className={`relative flex overflow-hidden bg-black border ${styles.accentBorder}`}>
+            {/* Left accent bar */}
+            <div className={`w-[3px] flex-shrink-0 ${styles.accent}`} />
 
-          <div className="flex-1">
-            <p className={`font-black uppercase tracking-widest text-xs opacity-70`}>
-              {styles.label}
-            </p>
+            <div className="flex items-center gap-3.5 px-4 py-3.5 flex-1 min-w-0">
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
+                  {styles.label}
+                </p>
 
-            {product && (
-              <>
-                <p className="font-bold uppercase text-sm">{product.name}</p>
-                {selectedSize && <p className={`text-xs opacity-75`}>Size: {selectedSize}</p>}
-              </>
-            )}
+                {product && (
+                  <p
+                    className="text-[13px] text-white uppercase tracking-wide truncate mt-1"
+                    style={{ fontFamily: "'Archivo Black', sans-serif" }}
+                  >
+                    {product.name}
+                  </p>
+                )}
 
-            {message && <p className="font-semibold text-sm">{message}</p>}
+                {selectedSize && (
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mt-0.5">
+                    // size: {selectedSize}
+                  </p>
+                )}
+
+                {message && (
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white mt-0.5">
+                    {message}
+                  </p>
+                )}
+              </div>
+
+              {/* Product image */}
+              {product && (
+                <img
+                  src={product.image_url[0]}
+                  className="w-12 h-12 object-cover flex-shrink-0"
+                  alt={product.name}
+                />
+              )}
+
+              {/* Status icon */}
+              <div
+                className={`w-7 h-7 flex-shrink-0 border border-white/10 flex items-center justify-center`}
+              >
+                <span className={`text-xs font-bold ${styles.iconColor}`}>{styles.icon}</span>
+              </div>
+            </div>
           </div>
-
-          <span className="text-2xl font-black">{styles.icon}</span>
         </div>
       ),
-      { duration }
+      { duration, position: "top-right" }
     );
   };
 
