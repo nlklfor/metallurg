@@ -8,6 +8,7 @@ export interface ProductType {
   stock_status: "in_stock" | "out_of_stock" | "pre_order";
   is_new: boolean;
   slug: string;
+  quantity: number;
   image_url: string[];
   materials?: string;
   weight?: number;

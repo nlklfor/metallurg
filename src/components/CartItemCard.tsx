@@ -8,8 +8,12 @@ interface CartItemCardProps {
 
 export default function CartItemCard({ item }: CartItemCardProps) {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const increaseQuantity = useCartStore((state) => state.increaseQuantity);
+  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
 
   const isOutOfStock = item.stock_status === "out_of_stock";
+  const atMax = item.cart_quantity >= (item.quantity ?? 99);
+  const atMin = item.cart_quantity <= 1;
 
   return (
     <div
@@ -17,14 +21,12 @@ export default function CartItemCard({ item }: CartItemCardProps) {
         isOutOfStock ? "opacity-30 grayscale blur-[1px]" : "hover:border-gray-400"
       }`}
     >
-      {/* IMAGE */}
-      <div className="w-28 h-36 bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 relative">
+      <div className="w-32 h-36 bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 relative">
         <img
           src={item.image_url[0]}
           alt={item.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/60">
             <p className="text-gray-500 font-black text-[8px] uppercase tracking-[0.2em]">
@@ -34,7 +36,6 @@ export default function CartItemCard({ item }: CartItemCardProps) {
         )}
       </div>
 
-      {/* INFO */}
       <div className="flex flex-col justify-between flex-grow py-1">
         <div className="flex justify-between items-start">
           <div>
@@ -44,23 +45,45 @@ export default function CartItemCard({ item }: CartItemCardProps) {
             </p>
           </div>
           <p className="text-lg font-black text-black italic">
-            {item.price.toLocaleString()}{" "}
+            {(item.price * item.cart_quantity).toLocaleString()}{" "}
             <span className="text-xs font-normal text-gray-400">UAH</span>
           </p>
         </div>
 
         <div className="flex justify-between items-end mt-4">
-          {isOutOfStock && (
+          {isOutOfStock ? (
             <p className="text-red-400 font-bold text-[9px] uppercase tracking-[0.3em]">
               UNAVAILABLE
             </p>
+          ) : (
+            <div className="flex items-center border border-gray-200">
+              <button
+                onClick={() => decreaseQuantity(item.id, item.selectedSize)}
+                disabled={atMin}
+                className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 transition-all text-base leading-none disabled:opacity-25 disabled:cursor-not-allowed"
+                aria-label="Decrease quantity"
+              >
+                −
+              </button>
+              <span className="w-7 h-7 flex items-center justify-center text-[11px] font-black tabular-nums border-x border-gray-200 text-black">
+                {item.cart_quantity}
+              </span>
+              <button
+                onClick={() => increaseQuantity(item.id, item.selectedSize)}
+                disabled={atMax}
+                className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 transition-all text-base leading-none disabled:opacity-25 disabled:cursor-not-allowed"
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+            </div>
           )}
 
           <button
             onClick={() => removeFromCart(item.id, item.selectedSize)}
             className="flex items-center gap-2 text-gray-300 hover:text-red-500 transition-colors text-[10px] font-bold uppercase tracking-[0.2em] ml-auto group/btn"
           >
-            <Trash2 size={14} className="group-hover/btn:rotate-12 transition-transform" />
+            <Trash2 size={14} className="transition-transform" />
             <span>Remove</span>
           </button>
         </div>

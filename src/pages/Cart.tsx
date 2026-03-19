@@ -24,7 +24,6 @@ const Cart = () => {
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 
       <div className="flex-1 max-w-7xl mx-auto w-full px-8 py-16">
-        {/* Header */}
         <div className="flex items-center justify-between mb-16">
           <div className="flex items-center gap-6">
             <button
@@ -53,7 +52,6 @@ const Cart = () => {
         </div>
 
         {cartItems.length === 0 ? (
-          /* Empty State */
           <div className="border border-gray-200 p-20 text-center">
             <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">// STATUS</p>
             <p className="text-gray-400 font-bold text-lg uppercase tracking-[0.2em] mb-10">
@@ -68,7 +66,6 @@ const Cart = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Items */}
             <div className="lg:col-span-8 space-y-4">
               <p className="text-[8px] text-gray-300 tracking-[0.4em] uppercase mb-4">
                 // CART_ITEMS
@@ -78,10 +75,8 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* Summary */}
             <div className="lg:col-span-4">
               <div className="border border-gray-200 sticky top-24">
-                {/* Summary Header */}
                 <div className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
                   <span className="text-[10px] text-gray-400 tracking-[0.3em] uppercase">
                     METALLURG // SUMMARY
@@ -90,21 +85,24 @@ const Cart = () => {
                 </div>
 
                 <div className="px-6 py-8 space-y-6">
-                  {/* Line Items */}
                   <div className="space-y-3">
                     {cartItems.map((item, i) => (
                       <div key={i} className="flex justify-between text-xs text-gray-500">
                         <span className="truncate max-w-[60%]">
                           {item.name} <span className="text-gray-300">SZ_{item.selectedSize}</span>
+                          {item.cart_quantity > 1 && (
+                            <span className="text-gray-300"> ×{item.cart_quantity}</span>
+                          )}
                         </span>
-                        <span className="text-black">{item.price.toLocaleString()}</span>
+                        <span className="text-black">
+                          {(item.price * item.cart_quantity).toLocaleString()}
+                        </span>
                       </div>
                     ))}
                   </div>
 
                   <div className="border-t border-gray-200" />
 
-                  {/* Subtotal */}
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-[10px] text-gray-400 tracking-[0.2em] uppercase">
@@ -126,7 +124,6 @@ const Cart = () => {
 
                   <div className="border-t border-gray-200" />
 
-                  {/* Total */}
                   <div className="flex justify-between items-baseline">
                     <span className="text-sm font-bold uppercase tracking-wider">Total</span>
                     <span className="text-2xl font-black italic tracking-tight">
@@ -135,7 +132,6 @@ const Cart = () => {
                     </span>
                   </div>
 
-                  {/* Promo Code */}
                   <div className="relative">
                     <input
                       type="text"
@@ -147,7 +143,6 @@ const Cart = () => {
                     </button>
                   </div>
 
-                  {/* Checkout Button */}
                   <button
                     onClick={() => setCheckoutOpen(true)}
                     className="w-full bg-black text-white py-5 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-gray-800 transition-all flex items-center justify-center gap-4 group"
@@ -160,7 +155,6 @@ const Cart = () => {
                   </button>
                 </div>
 
-                {/* Summary Footer */}
                 <div className="border-t border-gray-200 px-6 py-3 flex justify-between">
                   <span className="text-[8px] text-gray-300 tracking-widest">SECURE_CHECKOUT</span>
                   <span className="text-[8px] text-gray-300 tracking-widest">MTL_STORE_2026</span>

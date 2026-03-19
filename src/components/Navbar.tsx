@@ -45,7 +45,9 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
           </Button>
           <Link to="/cart">
             <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
-              <span className={`text-sm font-medium ${theme.text}`}>cart ({cartItems.length})</span>
+              <span className={`text-sm font-medium ${theme.text}`}>
+                cart ({cartItems.reduce((total, item) => total + item.cart_quantity, 0)})
+              </span>
             </Button>
           </Link>
         </div>

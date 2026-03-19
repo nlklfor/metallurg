@@ -8,11 +8,12 @@ export function formatPrice(price: number): string {
 }
 
 export function serializeCartItems(
-  items: { name: string; selectedSize: string | number; price: number }[]
+  items: { name: string; selectedSize: string | number; price: number; cart_quantity: number }[]
 ) {
   return items.map((item) => ({
     name: item.name,
     selectedSize: item.selectedSize,
     price: item.price,
+    cart_quantity: item.cart_quantity,
   }));
 }
