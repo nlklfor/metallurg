@@ -138,7 +138,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                           ROUTE_TYPE
                         </p>
                         <p className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider mt-0.5">
-                          {order.is_international ? "🌍 INTERNATIONAL" : "🇺🇦 LOCAL"}
+                          {order.is_international ? "INTERNATIONAL" : "LOCAL"}
                         </p>
                       </div>
                       <div>

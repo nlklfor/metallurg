@@ -43,11 +43,9 @@ export function useActionToast() {
           } max-w-[360px] w-full pointer-events-auto`}
         >
           <div className={`relative flex overflow-hidden bg-black border ${styles.accentBorder}`}>
-            {/* Left accent bar */}
             <div className={`w-[3px] flex-shrink-0 ${styles.accent}`} />
 
             <div className="flex items-center gap-3.5 px-4 py-3.5 flex-1 min-w-0">
-              {/* Content */}
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
                   {styles.label}
@@ -75,7 +73,6 @@ export function useActionToast() {
                 )}
               </div>
 
-              {/* Product image */}
               {product && (
                 <img
                   src={product.image_url[0]}
@@ -84,7 +81,6 @@ export function useActionToast() {
                 />
               )}
 
-              {/* Status icon */}
               <div
                 className={`w-7 h-7 flex-shrink-0 border border-white/10 flex items-center justify-center`}
               >

@@ -34,12 +34,14 @@ export default function ProductDetails() {
 function ProductDetailsContent({ id }: { id: string }) {
   const { product, isLoading, error } = useProductDetails(id);
   const [selectedSize, setSelectedSize] = useState<string | number | null>(null);
+  const [cartQuantity, setCartQuantity] = useState(1);
   const { items } = useCartStore((state) => state);
   const addItem = useCartStore((state) => state.addToCart);
   const { showSuccess, showError } = useActionToast();
   const theme = getThemeColors("dark");
 
   const isOutOfStock = product?.stock_status === "out_of_stock";
+  const maxQty = product?.quantity ?? 1;
 
   const handleAddToCart = () => {
     if (isOutOfStock) {
@@ -55,7 +57,7 @@ function ProductDetailsContent({ id }: { id: string }) {
       return;
     }
     if (product) {
-      addItem(product, selectedSize);
+      addItem(product, selectedSize, cartQuantity);
       showSuccess({ product, selectedSize, message: "product_added_to_cart" });
     }
   };
@@ -91,7 +93,6 @@ function ProductDetailsContent({ id }: { id: string }) {
 
       <div className="flex-1 p-6 md:p-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* ── Left: SNS-style vertical slider ── */}
           <div className={isOutOfStock ? "opacity-40" : ""}>
             <ProductImageSlider
               images={product.image_url}
@@ -100,7 +101,6 @@ function ProductDetailsContent({ id }: { id: string }) {
             />
           </div>
 
-          {/* ── Right: product info ── */}
           <div className="flex flex-col">
             <header className="mb-8">
               <div className="flex justify-between items-baseline mb-2">
@@ -139,28 +139,69 @@ function ProductDetailsContent({ id }: { id: string }) {
             </section>
 
             {!isOutOfStock && (
-              <div className="mb-12">
-                <h3
-                  className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em] mb-4`}
-                >
-                  // select_size
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes?.map((size) => (
-                    <Button
-                      key={String(size)}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-8 py-3 text-sm rounded-xs transition-all border ${
-                        selectedSize === size
-                          ? "bg-white text-black border-white hover:bg-gray-100"
-                          : `bg-transparent ${theme.text} ${theme.border} hover:border-gray-400`
-                      }`}
-                    >
-                      {size}
-                    </Button>
-                  ))}
+              <>
+                <div className="mb-8">
+                  <h3
+                    className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em] mb-4`}
+                  >
+                    // select_size
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizes?.map((size) => (
+                      <Button
+                        key={String(size)}
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-8 py-3 text-sm rounded-xs transition-all border ${
+                          selectedSize === size
+                            ? "bg-white text-black border-white hover:bg-gray-100"
+                            : `bg-transparent ${theme.text} ${theme.border} hover:border-gray-400`
+                        }`}
+                      >
+                        {size}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+
+                <div className="mb-12">
+                  <h3
+                    className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em] mb-4`}
+                  >
+                    // quantity
+                  </h3>
+                  <div className="flex items-center gap-4">
+                    <div className={`flex items-center border ${theme.border}`}>
+                      <button
+                        onClick={() => setCartQuantity((q) => Math.max(1, q - 1))}
+                        disabled={cartQuantity <= 1}
+                        className={`w-10 h-10 flex items-center justify-center ${theme.textSecondary} hover:text-white transition-colors text-lg disabled:opacity-25 disabled:cursor-not-allowed`}
+                        aria-label="Decrease quantity"
+                      >
+                        −
+                      </button>
+                      <span
+                        className={`w-10 h-10 flex items-center justify-center text-sm font-black tabular-nums border-x ${theme.border}`}
+                      >
+                        {cartQuantity}
+                      </span>
+                      <button
+                        onClick={() => setCartQuantity((q) => Math.min(maxQty, q + 1))}
+                        disabled={cartQuantity >= maxQty}
+                        className={`w-10 h-10 flex items-center justify-center ${theme.textSecondary} hover:text-white transition-colors text-lg disabled:opacity-25 disabled:cursor-not-allowed`}
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <span
+                      className={`text-[10px] ${theme.textSecondary} tracking-[0.2em] uppercase`}
+                    >
+                      {maxQty} IN_STOCK
+                    </span>
+                  </div>
+                </div>
+              </>
             )}
 
             <Button

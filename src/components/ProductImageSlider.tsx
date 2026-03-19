@@ -30,7 +30,7 @@ export default function ProductImageSlider({
   };
 
   return (
-    <div className="relative flex gap-3 h-[600px] lg:h-[700px]">
+    <div className="relative flex gap-3 h-[450px] lg:h-[520px]">
       <div className="flex flex-col justify-center gap-2 py-2 z-10">
         {images.map((_, i) => (
           <button
@@ -68,17 +68,6 @@ export default function ProductImageSlider({
               }`}
               style={{ transitionTimingFunction: "cubic-bezier(0.25,0.1,0.25,1)" }}
             />
-
-            <div
-              className="absolute top-4 left-4 px-2 py-1 text-[9px] tracking-widest border"
-              style={{
-                backgroundColor: "rgba(0,0,0,0.6)",
-                borderColor: "rgba(255,255,255,0.1)",
-                color: "rgba(255,255,255,0.4)",
-              }}
-            >
-              {`SPEC_SHR_IMG_0${idx + 1}`}
-            </div>
 
             <div
               className="absolute bottom-4 right-4 text-[9px] tracking-widest tabular-nums"
