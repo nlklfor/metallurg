@@ -9,17 +9,19 @@ import Orders from "./pages/Orders";
 import ProductDetails from "./pages/ProductDetails.tsx";
 import Cart from "./pages/Cart.tsx";
 import About from "./pages/About.tsx";
+import Protocol from "./pages/Protocol.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/shop" element={<Shop />} />
+        <Route path="/inventory" element={<Shop />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/protocol" element={<Protocol />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

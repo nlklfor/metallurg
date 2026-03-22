@@ -5,10 +5,13 @@ import type { NavbarProps } from "@/interfaces";
 import { NAV_LINKS } from "@/lib/constants/navigation";
 import { useCartStore } from "@/stores/useCartStore";
 import { getThemeColors, type ThemeVariant } from "@/config/theme";
+import { useState } from "react";
+import SearchModal from "@/components/SearchModal";
 
 export default function Navbar({ variant = "light" }: NavbarProps) {
   const theme = getThemeColors(variant as ThemeVariant);
   const cartItems = useCartStore((state) => state.items);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <nav className={`sticky top-0 z-50 ${theme.bg} border-b ${theme.border} w-full`}>
@@ -22,7 +25,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             </Link>
           ))}
         </div>
-
+        {/* TODO ADD LANGUAGE SWITCHER AND CURRENCY SELECTOR */}
         <Link
           to="/"
           className={`absolute left-1/2 transform -translate-x-1/2 text-xl font-bold ${theme.text}`}
@@ -37,7 +40,11 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         </Link>
 
         <div className="flex items-center gap-6">
-          <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
+          <Button
+            variant="link"
+            className={`${theme.text} ${theme.hover} p-0`}
+            onClick={() => setSearchOpen(true)}
+          >
             search
           </Button>
           <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
@@ -52,6 +59,8 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
           </Link>
         </div>
       </div>
+
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   );
 }

@@ -58,12 +58,12 @@ function App() {
         </div>
       </div>
 
-      {/* Location */}
       <div className="fixed bottom-12 right-8 z-20 text-white/30 text-[10px] font-mono tracking-[0.3em] uppercase text-right space-y-1">
         <p>50.4501° N, 30.5234° E</p>
         <p>KYIV, UKRAINE</p>
       </div>
     </div>
+    // TODO ADD COOKIES AND PRIVACY POLICY LINKS IN THE FOOTER
   );
 }
 

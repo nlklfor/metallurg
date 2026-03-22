@@ -77,10 +77,12 @@ export const EDGE_FUNCTION_URL =
   "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/notify-telegram";
 
 // Navigation
-export { MAIN_PAGE_BTNS, MAIN_PAGE_LINKS, NAV_LINKS, FOOTER_LINKS } from "./navigation";
+export { MAIN_PAGE_BTNS, MAIN_PAGE_LINKS, NAV_LINKS } from "./navigation";
 
 // Site
 export { SITE_CONFIG } from "./site";
 
 // Filters
 export { DEFAULT_FILTERS } from "./filters";
+
+// TODO: SPLIT THE CONSTANTS INTO SEPARATE FILES BECAUSE THIS ONES ARE NO FOR ORDERS
