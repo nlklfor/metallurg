@@ -25,7 +25,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             </Link>
           ))}
         </div>
-
+        {/* TODO ADD LANGUAGE SWITCHER AND CURRENCY SELECTOR */}
         <Link
           to="/"
           className={`absolute left-1/2 transform -translate-x-1/2 text-xl font-bold ${theme.text}`}

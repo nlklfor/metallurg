@@ -19,7 +19,6 @@ const Cart = () => {
   return (
     <div className="bg-white text-black min-h-screen flex flex-col">
       <Navbar variant="light" />
-
       <CheckoutModal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 
@@ -58,7 +57,7 @@ const Cart = () => {
               CART_EMPTY
             </p>
             <Button
-              onClick={() => navigate("/shop")}
+              onClick={() => navigate("/inventory")}
               className="bg-black text-white px-12 py-6 font-black text-[11px] uppercase tracking-[0.3em] hover:bg-gray-800 transition-all rounded-none"
             >
               Browse_Collection →

@@ -90,7 +90,6 @@ function ProductDetailsContent({ id }: { id: string }) {
     <div className={`w-full min-h-screen ${theme.bg} ${theme.text} flex flex-col`}>
       <Navbar variant="dark" />
       <Toaster position="bottom-right" />
-
       <div className="flex-1 p-6 md:p-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div className={isOutOfStock ? "opacity-40" : ""}>
@@ -228,7 +227,7 @@ function ProductDetailsContent({ id }: { id: string }) {
           </div>
         </div>
       </div>
-
+      {/* TODO: ADD YOU MAY ALSO LIKE SECTION WITH RELATED PRODUCTS */}
       <Footer />
     </div>
   );
