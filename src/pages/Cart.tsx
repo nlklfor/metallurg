@@ -1,5 +1,6 @@
 import { ArrowLeft, MoveRight } from "lucide-react";
 import { useCartStore } from "@/stores/useCartStore";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import CartItemCard from "@/components/CartItemCard";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.items);
   const totalPriceFn = useCartStore((state) => state.totalPrice);
+  const currency = useCurrencyStore((state) => state.currency);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [trackOpen, setTrackOpen] = useState(false);
 
@@ -94,7 +96,7 @@ const Cart = () => {
                           )}
                         </span>
                         <span className="text-black">
-                          {(item.price * item.cart_quantity).toLocaleString()}
+                          {formatPrice(item.price * item.cart_quantity, currency)}
                         </span>
                       </div>
                     ))}
@@ -108,7 +110,7 @@ const Cart = () => {
                         // subtotal
                       </span>
                       <span className="text-sm text-black">
-                        {totalPriceFn().toLocaleString()} UAH
+                        {formatPrice(totalPriceFn(), currency)}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -126,8 +128,7 @@ const Cart = () => {
                   <div className="flex justify-between items-baseline">
                     <span className="text-sm font-bold uppercase tracking-wider">Total</span>
                     <span className="text-2xl font-black italic tracking-tight">
-                      {totalPriceFn().toLocaleString()}{" "}
-                      <span className="text-sm font-normal text-gray-400">UAH</span>
+                      {formatPrice(totalPriceFn(), currency)}
                     </span>
                   </div>
 

@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ProductDetailsSkeleton from "@/components/ProductDetailsSkeleton";
 import ErrorState from "@/components/ErrorState";
 import { useCartStore } from "@/stores/useCartStore";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useActionToast } from "@/hooks/useActionToast";
@@ -39,6 +40,7 @@ function ProductDetailsContent({ id }: { id: string }) {
   const addItem = useCartStore((state) => state.addToCart);
   const { showSuccess, showError } = useActionToast();
   const theme = getThemeColors("dark");
+  const currency = useCurrencyStore((state) => state.currency);
 
   const isOutOfStock = product?.stock_status === "out_of_stock";
   const maxQty = product?.quantity ?? 1;
@@ -108,7 +110,7 @@ function ProductDetailsContent({ id }: { id: string }) {
                 </h1>
                 <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
               </div>
-              <p className={`text-2xl ${theme.text}`}>{product.price.toLocaleString()} UAH</p>
+              <p className={`text-2xl ${theme.text}`}>{formatPrice(product.price, currency)}</p>
             </header>
 
             <section className={`border-y ${theme.border} py-8 my-8 space-y-6`}>

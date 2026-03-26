@@ -12,6 +12,7 @@ import { Slider } from "./ui/slider";
 import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "./ui/button";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 
 export default function ProductFilters({
   filters,
@@ -21,6 +22,7 @@ export default function ProductFilters({
   const [localPrice, setLocalPrice] = useState<number>(filters.priceRange[1]);
   const debouncedPrice = useDebounce(localPrice, 500);
   const prevDebouncedPrice = useRef(debouncedPrice);
+  const currency = useCurrencyStore((state) => state.currency);
 
   const handleSortChange = (value: FilterOptions["sortBy"]) => {
     onFilterChange({ sortBy: value });
@@ -68,7 +70,7 @@ export default function ProductFilters({
           className="w-40"
         />
         <span className="text-sm font-medium whitespace-nowrap">
-          UAH {localPrice.toLocaleString()}
+          {formatPrice(localPrice, currency)}
         </span>
       </div>
 

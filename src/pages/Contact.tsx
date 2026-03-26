@@ -5,7 +5,7 @@ import { Instagram, Send } from "lucide-react";
 
 export default function Contact() {
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
 
       <div className="px-8 pt-16 pb-8">

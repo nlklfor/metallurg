@@ -1,6 +1,7 @@
 import type { ProductType } from "@/interfaces";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 
 interface ProductItemProps {
   product: ProductType;
@@ -9,6 +10,7 @@ interface ProductItemProps {
 export default function ProductItem({ product }: ProductItemProps) {
   const [isHovering, setIsHovering] = useState(false);
   const isOutOfStock = product.stock_status === "out_of_stock";
+  const currency = useCurrencyStore((state) => state.currency);
 
   const content = (
     <div
@@ -48,7 +50,9 @@ export default function ProductItem({ product }: ProductItemProps) {
       <div className="p-3 space-y-2 flex flex-col justify-start flex-1 bg-white">
         <h3 className="font-archivo-black text-sm text-black line-clamp-2">{product.name}</h3>
         {product.price && (
-          <p className="font-ibm-mono text-sm font-semibold text-black">{product.price} UAH</p>
+          <p className="font-ibm-mono text-sm font-semibold text-black">
+            {formatPrice(product.price, currency)}
+          </p>
         )}
 
         {product.sizes && !isOutOfStock && (

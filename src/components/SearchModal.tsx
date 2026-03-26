@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDebounce } from "@/hooks/useDebounce";
 import { getProducts } from "@/api/products";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import type { ProductType } from "@/interfaces";
 
 interface SearchModalProps {
@@ -17,6 +18,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const debouncedQuery = useDebounce(query, 300);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const currency = useCurrencyStore((state) => state.currency);
 
   const isLoading = isOpen && !hasFetched;
 
@@ -178,8 +180,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
                             <div className="flex-shrink-0 text-right">
                               <p className="text-sm text-white font-bold tabular-nums">
-                                {product.price.toLocaleString()}{" "}
-                                <span className="text-[10px] text-gray-500 font-normal">UAH</span>
+                                {formatPrice(product.price, currency)}
                               </p>
                               {product.stock_status === "out_of_stock" && (
                                 <p className="text-[8px] text-red-400 uppercase tracking-[0.2em]">

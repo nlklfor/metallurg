@@ -77,7 +77,7 @@ const fadeUp: Variants = {
 
 export default function About() {
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
 
       {/* Hero Header */}

@@ -1,5 +1,6 @@
 import type { CartItem } from "@/interfaces";
 import { useCartStore } from "@/stores/useCartStore";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import { Trash2 } from "lucide-react";
 
 interface CartItemCardProps {
@@ -12,6 +13,7 @@ export default function CartItemCard({ item }: CartItemCardProps) {
   const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
 
   const isOutOfStock = item.stock_status === "out_of_stock";
+  const currency = useCurrencyStore((state) => state.currency);
   const atMax = item.cart_quantity >= (item.quantity ?? 99);
   const atMin = item.cart_quantity <= 1;
 
@@ -45,8 +47,7 @@ export default function CartItemCard({ item }: CartItemCardProps) {
             </p>
           </div>
           <p className="text-lg font-black text-black italic">
-            {(item.price * item.cart_quantity).toLocaleString()}{" "}
-            <span className="text-xs font-normal text-gray-400">UAH</span>
+            {formatPrice(item.price * item.cart_quantity, currency)}
           </p>
         </div>
 

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCheckout } from "@/hooks/useCheckout";
 import { SHIPPING_ZONES } from "@/lib/constants/index";
+import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import type { CheckoutModalProps } from "@/interfaces";
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
@@ -21,6 +22,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     handleSubmit,
     handleClose,
   } = useCheckout();
+
+  const currency = useCurrencyStore((state) => state.currency);
 
   return (
     <AnimatePresence>
@@ -68,12 +71,12 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         <span className="text-gray-600 truncate max-w-[60%]">
                           {item.name} <span className="text-gray-400">SZ_{item.selectedSize}</span>
                         </span>
-                        <span>{item.price.toLocaleString()} UAH</span>
+                        <span>{formatPrice(item.price, currency)}</span>
                       </div>
                     ))}
                     <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between text-sm font-archivo-black">
                       <span>TOTAL</span>
-                      <span>{total.toLocaleString()} UAH</span>
+                      <span>{formatPrice(total, currency)}</span>
                     </div>
                   </div>
 
