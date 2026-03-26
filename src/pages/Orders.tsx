@@ -7,7 +7,7 @@ export default function Orders() {
   const [trackOpen, setTrackOpen] = useState(false);
 
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 

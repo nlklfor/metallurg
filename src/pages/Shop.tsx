@@ -7,7 +7,7 @@ export default function Shop() {
   const { filters, updateFilters, clearFilters } = useFilters();
 
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
       {/* TODO ADD BREAD CRUMBS */}
       <div className="px-8 pt-16 pb-8">

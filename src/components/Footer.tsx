@@ -3,7 +3,7 @@ import { EncryptedText } from "@/components/ui/encrypted-text";
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-6 px-8">
+    <footer className="bg-black text-white py-6 px-8 mt-auto">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-6">
           <span className="text-[10px] tracking-[0.3em] uppercase text-gray-500">

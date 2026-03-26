@@ -7,6 +7,8 @@ export function formatPrice(price: number): string {
   return `${price.toLocaleString()} UAH`;
 }
 
+// NOTE: For currency-aware formatting, use formatPrice from @/stores/useCurrencyStore instead.
+
 export function serializeCartItems(
   items: { name: string; selectedSize: string | number; price: number; cart_quantity: number }[]
 ) {
