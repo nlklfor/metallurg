@@ -74,5 +74,5 @@ export default function ProductItem({ product }: ProductItemProps) {
 
   if (isOutOfStock) return content;
 
-  return <Link to={`/product/${product.id}`}>{content}</Link>;
+  return <Link to={`/product/${product.slug}`}>{content}</Link>;
 }

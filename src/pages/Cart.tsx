@@ -8,6 +8,7 @@ import { useState } from "react";
 import CheckoutModal from "@/components/CheckoutModal";
 import TrackOrderModal from "@/components/TrackModal";
 import Navbar from "@/components/Navbar";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "@/components/Footer";
 
 const Cart = () => {
@@ -21,6 +22,15 @@ const Cart = () => {
   return (
     <div className="bg-white text-black min-h-screen flex flex-col">
       <Navbar variant="light" />
+      <div className="px-8 pt-6">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Inventory", href: "/inventory" },
+            { label: "Cart" },
+          ]}
+        />
+      </div>
       <CheckoutModal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 

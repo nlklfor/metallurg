@@ -57,7 +57,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const handleSelect = useCallback(
     (product: ProductType) => {
       onClose();
-      navigate(`/product/${product.id}`);
+      navigate(`/product/${product.slug}`);
     },
     [onClose, navigate]
   );

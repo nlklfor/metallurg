@@ -1,4 +1,5 @@
 import { Footer, Navbar } from "@/components";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { useState } from "react";
 import TrackOrderModal from "@/components/TrackModal";
 import { Package, Star } from "lucide-react";
@@ -9,6 +10,9 @@ export default function Orders() {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
+      <div className="px-8 pt-6">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders" }]} />
+      </div>
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 
       <div className="px-8 pt-16 pb-8">
