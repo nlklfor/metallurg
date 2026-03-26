@@ -1,4 +1,5 @@
 import { Footer, Navbar } from "@/components";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { motion, type Variants } from "framer-motion";
 
 const TIMELINE = [
@@ -80,8 +81,11 @@ export default function About() {
     <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
 
+      <div className="px-8 pt-6">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
+      </div>
       {/* Hero Header */}
-      <div className="px-8 pt-16 pb-8">
+      <div className="px-8 pt-10 pb-8">
         <div className="flex items-baseline justify-between">
           <div>
             <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-3">

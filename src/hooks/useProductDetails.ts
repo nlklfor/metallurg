@@ -1,20 +1,20 @@
-import { getProductById } from "@/api/products";
+import { getProductBySlug } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 import { useEffect, useState } from "react";
 
-export const useProductDetails = (id: string | undefined) => {
+export const useProductDetails = (slug: string | undefined) => {
   const [product, setProduct] = useState<ProductType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
 
     const fetchProduct = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await getProductById(id);
+        const data = await getProductBySlug(slug);
         setProduct(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -28,7 +28,7 @@ export const useProductDetails = (id: string | undefined) => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [slug]);
 
   return { product, isLoading, error };
 };

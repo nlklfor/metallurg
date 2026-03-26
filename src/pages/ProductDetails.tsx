@@ -12,12 +12,13 @@ import { Button } from "@/components/ui/button";
 import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/ProductImageSlider";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function ProductDetails() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const theme = getThemeColors("dark");
 
-  if (!id) {
+  if (!slug) {
     return (
       <div className={`w-full min-h-screen ${theme.bg} flex flex-col`}>
         <Navbar variant="dark" />
@@ -29,11 +30,11 @@ export default function ProductDetails() {
     );
   }
 
-  return <ProductDetailsContent key={id} id={id} />;
+  return <ProductDetailsContent key={slug} slug={slug} />;
 }
 
-function ProductDetailsContent({ id }: { id: string }) {
-  const { product, isLoading, error } = useProductDetails(id);
+function ProductDetailsContent({ slug }: { slug: string }) {
+  const { product, isLoading, error } = useProductDetails(slug);
   const [selectedSize, setSelectedSize] = useState<string | number | null>(null);
   const [cartQuantity, setCartQuantity] = useState(1);
   const { items } = useCartStore((state) => state);
@@ -92,6 +93,16 @@ function ProductDetailsContent({ id }: { id: string }) {
     <div className={`w-full min-h-screen ${theme.bg} ${theme.text} flex flex-col`}>
       <Navbar variant="dark" />
       <Toaster position="bottom-right" />
+      <div className="px-6 md:px-12 pt-6">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Inventory", href: "/inventory" },
+            { label: product.name },
+          ]}
+          variant="dark"
+        />
+      </div>
       <div className="flex-1 p-6 md:p-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div className={isOutOfStock ? "opacity-40" : ""}>
