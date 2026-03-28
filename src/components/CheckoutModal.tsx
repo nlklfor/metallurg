@@ -179,7 +179,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     onClick={() => handleClose(onClose)}
                     className="w-full border border-black py-4 font-archivo-black text-[11px] uppercase tracking-[0.4em] hover:bg-black hover:text-white transition-all"
                   >
-                    CLOSE_AND_CLEAR_CART
+                    CLOSE_AND_CLEAR_LOADOUT
                   </button>
                 </div>
               )}

@@ -97,10 +97,10 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               </div>
             )}
           </div>
-          <Link to="/cart">
+          <Link to="/loadout">
             <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
               <span className={`text-sm font-medium ${theme.text}`}>
-                cart ({cartItems.reduce((total, item) => total + item.cart_quantity, 0)})
+                loadout ({cartItems.reduce((total, item) => total + item.cart_quantity, 0)})
               </span>
             </Button>
           </Link>
