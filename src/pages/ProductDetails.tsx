@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useProductDetails } from "@/hooks/useProductDetails";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductDetailsSkeleton from "@/components/ProductDetailsSkeleton";
@@ -13,6 +13,9 @@ import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/ProductImageSlider";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import ProductItem from "@/components/ProductItem";
+import { getProducts } from "@/api/products";
+import type { ProductType } from "@/interfaces";
 
 export default function ProductDetails() {
   const { slug } = useParams();
@@ -42,6 +45,20 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   const { showSuccess, showError } = useActionToast();
   const theme = getThemeColors("dark");
   const currency = useCurrencyStore((state) => state.currency);
+  const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
+
+  useEffect(() => {
+    if (!product) return;
+    getProducts()
+      .then((data) => {
+        const others = (data ?? []).filter(
+          (p) => p.id !== product.id && p.stock_status !== "out_of_stock"
+        );
+        const shuffled = others.sort(() => Math.random() - 0.5);
+        setRelatedProducts(shuffled.slice(0, 4));
+      })
+      .catch(() => setRelatedProducts([]));
+  }, [product]);
 
   const isOutOfStock = product?.stock_status === "out_of_stock";
   const maxQty = product?.quantity ?? 1;
@@ -240,7 +257,27 @@ function ProductDetailsContent({ slug }: { slug: string }) {
           </div>
         </div>
       </div>
-      {/* TODO: ADD YOU MAY ALSO LIKE SECTION WITH RELATED PRODUCTS */}
+
+      {relatedProducts.length > 0 && (
+        <div className="px-6 md:px-12 pb-12">
+          <div className="max-w-7xl mx-auto">
+            <div className="border-t border-gray-800 pt-12">
+              <p className="text-[10px] text-gray-500 tracking-[0.4em] uppercase mb-3">
+                // RECOMMENDED
+              </p>
+              <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-10">
+                You May Also Like
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {relatedProducts.map((p) => (
+                  <ProductItem key={p.id} product={p} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
