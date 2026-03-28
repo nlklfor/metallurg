@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useProductDetails } from "@/hooks/useProductDetails";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
@@ -13,7 +13,6 @@ import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/ProductImageSlider";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import ProductItem from "@/components/ProductItem";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 
@@ -73,12 +72,12 @@ function ProductDetailsContent({ slug }: { slug: string }) {
       return;
     }
     if (items.some((item) => item.id === product?.id && item.selectedSize === selectedSize)) {
-      showError({ message: "Product_already_in_cart" });
+      showError({ message: "Product_already_in_loadout" });
       return;
     }
     if (product) {
       addItem(product, selectedSize, cartQuantity);
-      showSuccess({ product, selectedSize, message: "product_added_to_cart" });
+      showSuccess({ product, selectedSize, message: "product_added_to_loadout" });
     }
   };
 
@@ -247,11 +246,11 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                 <span>Out_of_Stock</span>
               ) : selectedSize ? (
                 <div className="flex items-center gap-2">
-                  <span>Initiate_Order</span>
+                  <span>INITIALIZE_ACQUISITION</span>
                   <span className="group-hover:translate-x-2 transition-transform">→</span>
                 </div>
               ) : (
-                <span>Select_size_to_order</span>
+                <span>SET_SIZE_UNIT</span>
               )}
             </Button>
           </div>
@@ -270,7 +269,22 @@ function ProductDetailsContent({ slug }: { slug: string }) {
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {relatedProducts.map((p) => (
-                  <ProductItem key={p.id} product={p} />
+                  <Link
+                    key={p.id}
+                    to={`/product/${p.slug}`}
+                    className="group relative aspect-[3/4] bg-gray-900 overflow-hidden"
+                  >
+                    <img
+                      src={p.image_url[0]}
+                      alt={p.name}
+                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+                    />
+                    <img
+                      src={p.image_url[1] ?? p.image_url[0]}
+                      alt={p.name}
+                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                    />
+                  </Link>
                 ))}
               </div>
             </div>

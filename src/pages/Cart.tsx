@@ -27,7 +27,7 @@ const Cart = () => {
           items={[
             { label: "Home", href: "/" },
             { label: "Inventory", href: "/inventory" },
-            { label: "Cart" },
+            { label: "Loadout" },
           ]}
         />
       </div>
@@ -47,9 +47,9 @@ const Cart = () => {
               />
             </button>
             <div>
-              <h1 className="text-5xl font-black uppercase tracking-tighter italic">Cart</h1>
+              <h1 className="text-5xl font-black uppercase tracking-tighter italic">Loadout</h1>
               <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase mt-1">
-                // ITEMS_IN_BAG: {cartItems.length}
+                // ITEMS_IN_LOADOUT: {cartItems.length}
               </p>
             </div>
           </div>
@@ -66,7 +66,7 @@ const Cart = () => {
           <div className="border border-gray-200 p-20 text-center">
             <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">// STATUS</p>
             <p className="text-gray-400 font-bold text-lg uppercase tracking-[0.2em] mb-10">
-              CART_EMPTY
+              LOADOUT_EMPTY
             </p>
             <Button
               onClick={() => navigate("/inventory")}
@@ -79,7 +79,7 @@ const Cart = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-8 space-y-4">
               <p className="text-[8px] text-gray-300 tracking-[0.4em] uppercase mb-4">
-                // CART_ITEMS
+                // ITEMS_FOR_EXECUTION
               </p>
               {cartItems.map((item) => (
                 <CartItemCard key={`${item.id}-${item.selectedSize}`} item={item} />
@@ -157,7 +157,7 @@ const Cart = () => {
                     onClick={() => setCheckoutOpen(true)}
                     className="w-full bg-black text-white py-5 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-gray-800 transition-all flex items-center justify-center gap-4 group"
                   >
-                    <span>Checkout_Now</span>
+                    <span>EXECUTE_PROTOCOL</span>
                     <MoveRight
                       size={16}
                       className="group-hover:translate-x-2 transition-transform"

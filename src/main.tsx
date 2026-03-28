@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import Shop from "./pages/Shop";
@@ -19,7 +19,8 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/loadout" element={<Cart />} />
+        <Route path="/cart" element={<Navigate to="/loadout" replace />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/protocol" element={<Protocol />} />
       </Routes>
