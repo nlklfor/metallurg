@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
+import WelcomeGate from "./pages/WelcomeGate.tsx";
 import Shop from "./pages/Shop";
 import Contact from "./pages/Contact";
 import Orders from "./pages/Orders";
@@ -15,6 +16,7 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/gate/mtl-ch-ua" element={<WelcomeGate />} />
         <Route path="/inventory" element={<Shop />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
