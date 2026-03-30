@@ -1,71 +1,7 @@
 import { Footer, Navbar } from "@/components";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { PILLARS, TIMELINE, VALUES } from "@/lib/constants/about";
 import { motion, type Variants } from "framer-motion";
-
-const TIMELINE = [
-  {
-    year: "2024",
-    title: "GENESIS",
-    description:
-      "The idea was born — a curated inventory for those who know what they want but can't find it. No mass market. No compromises.",
-  },
-  {
-    year: "2025",
-    title: "FIRST_INVENTORY",
-    description:
-      "First wave of sourced pieces went live. Rare grails, heavy luxury, verified authenticity. Word spread fast.",
-  },
-  {
-    year: "2026",
-    title: "NETWORK_EXPANSION",
-    description:
-      "International logistics activated. Switzerland transit hub operational. Access points multiplied across 3 shipping zones.",
-  },
-];
-
-const VALUES = [
-  {
-    label: "AUTHENTICATION",
-    value: "100%",
-    description: "Every item verified. We stake our reputation on authenticity — no exceptions.",
-  },
-  {
-    label: "SOURCING_NETWORK",
-    value: "GLOBAL",
-    description:
-      "Connected to private sellers, boutiques, and archives across Europe, Asia, and the US.",
-  },
-  {
-    label: "INVENTORY",
-    value: "<100",
-    description:
-      "We don't stock thousands. Each piece is hand-selected and impossible to find elsewhere.",
-  },
-  {
-    label: "SHIPPING_ZONES",
-    value: "3",
-    description:
-      "Ukraine, Switzerland, International — transparent logistics from source to your door.",
-  },
-];
-
-const PILLARS = [
-  {
-    title: "STRICT_SELECTION",
-    description:
-      "We reject more than we accept. Every item passes through our curation filter — brand heritage, condition, rarity, and demand. If it doesn't meet the standard, it doesn't make the inventory.",
-  },
-  {
-    title: "TRANSPARENT_LOGISTICS",
-    description:
-      "From the moment you place an order, you see everything. Real-time tracking, honest timelines, no black boxes. Your package moves through verified channels with full visibility.",
-  },
-  {
-    title: "IMPOSSIBLE_ACCESS",
-    description:
-      "We specialize in pieces you won't find on public marketplaces. Private archives, closed seller networks, pre-market drops. METALLURG™ is the bridge between you and the unreachable.",
-  },
-];
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -84,7 +20,6 @@ export default function About() {
       <div className="px-8 pt-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
       </div>
-      {/* Hero Header */}
       <div className="px-8 pt-10 pb-8">
         <div className="flex items-baseline justify-between">
           <div>
@@ -101,13 +36,12 @@ export default function About() {
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6">
           <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
-            An inventory of heavy luxury and rare streetwear. Strict selection, transparent
-            logistics, and access to items impossible to find in the public domain.
+            A curated archive of heavy luxury and rare streetwear. Not a store — an inventory.
+            Documentation, provenance, and access to pieces that don't exist in the public domain.
           </p>
         </div>
       </div>
 
-      {/* Manifesto */}
       <section className="px-8 py-16">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -142,10 +76,10 @@ export default function About() {
                 transition={{ duration: 0.6 }}
                 className="text-3xl font-black text-black uppercase tracking-tight leading-tight"
               >
-                We don't design clothes.
+                This is not a store.
                 <br />
-                We <span className="italic text-gray-400">find</span> them — source the unreachable,
-                verify the authentic, deliver the impossible.
+                This is an <span className="italic text-gray-400">archive</span> — we document,
+                verify, and catalogue what others let disappear.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0, y: 12 }}
@@ -154,21 +88,20 @@ export default function About() {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="text-sm text-gray-400 leading-relaxed max-w-xl"
               >
-                METALLURG™ operates at the intersection of private sourcing and public access. We
-                connect you to pieces that don't exist on shelves — archived collections, limited
-                collaborations, and one-of-one grails that surface only through trusted networks.
+                METALLURG™ exists at the intersection of private collecting and public
+                documentation. We maintain an inventory of pieces that don't appear on shelves —
+                archived collections, limited collaborations, and one-of-one grails preserved
+                through trusted networks. The archive is the product.
               </motion.p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Divider */}
       <div className="px-8">
         <div className="max-w-5xl mx-auto border-t border-gray-200" />
       </div>
 
-      {/* Three Pillars */}
       <section className="px-8 py-16">
         <div className="max-w-5xl mx-auto">
           <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">
@@ -199,12 +132,10 @@ export default function About() {
         </div>
       </section>
 
-      {/* Divider */}
       <div className="px-8">
         <div className="max-w-5xl mx-auto border-t border-gray-200" />
       </div>
 
-      {/* Values / Stats */}
       <section className="px-8 py-16">
         <div className="max-w-5xl mx-auto">
           <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">
@@ -234,12 +165,10 @@ export default function About() {
         </div>
       </section>
 
-      {/* Divider */}
       <div className="px-8">
         <div className="max-w-5xl mx-auto border-t border-gray-200" />
       </div>
 
-      {/* Timeline */}
       <section className="px-8 py-16">
         <div className="max-w-5xl mx-auto">
           <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">// TIMELINE</p>
@@ -269,7 +198,6 @@ export default function About() {
                 </div>
               </motion.div>
             ))}
-            {/* Future */}
             <div className="grid grid-cols-12 gap-6 border-t border-gray-200 py-10">
               <div className="col-span-2">
                 <p className="text-3xl font-black text-gray-200 italic tracking-tight">????</p>
@@ -290,12 +218,10 @@ export default function About() {
         </div>
       </section>
 
-      {/* Divider */}
       <div className="px-8">
         <div className="max-w-5xl mx-auto border-t border-gray-200" />
       </div>
 
-      {/* Bottom Quote */}
       <section className="px-8 py-20">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
@@ -308,13 +234,13 @@ export default function About() {
               // PHILOSOPHY
             </p>
             <blockquote className="text-4xl md:text-5xl font-black text-black uppercase tracking-tighter italic leading-tight max-w-3xl mx-auto">
-              "If you can find it
+              "If it's still on
               <br />
-              on the shelf — it's not{" "}
+              the shelf — it doesn't belong{" "}
               <span className="text-gray-300 hover:text-black transition-colors duration-500">
-                rare
-              </span>{" "}
-              enough."
+                to the archive
+              </span>
+              ."
             </blockquote>
             <div className="mt-8 flex items-center justify-center gap-3">
               <div className="w-8 h-px bg-gray-300" />
