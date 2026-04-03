@@ -5,12 +5,16 @@ import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 
 interface ProductItemProps {
   product: ProductType;
+  variant?: "light" | "dark";
 }
 
-export default function ProductItem({ product }: ProductItemProps) {
+export default function ProductItem({ product, variant = "light" }: ProductItemProps) {
   const [isHovering, setIsHovering] = useState(false);
   const isOutOfStock = product.stock_status === "out_of_stock";
   const currency = useCurrencyStore((state) => state.currency);
+
+  const isDark = variant === "dark";
+  const textColor = isDark ? "text-white" : "text-black";
 
   const content = (
     <div
@@ -20,7 +24,7 @@ export default function ProductItem({ product }: ProductItemProps) {
       onMouseEnter={() => !isOutOfStock && setIsHovering(true)}
       onMouseLeave={() => !isOutOfStock && setIsHovering(false)}
     >
-      <div className="relative w-full h-2/3 bg-gray-100 overflow-hidden">
+      <div className="relative w-full h-2/3 bg-transparent overflow-hidden">
         <img
           src={product.image_url[0]}
           alt={product.name}
@@ -47,10 +51,10 @@ export default function ProductItem({ product }: ProductItemProps) {
         )}
       </div>
 
-      <div className="p-3 space-y-2 flex flex-col justify-start flex-1 bg-white">
-        <h3 className="font-archivo-black text-sm text-black line-clamp-2">{product.name}</h3>
+      <div className="p-3 space-y-2 flex flex-col justify-start flex-1 bg-transparent">
+        <h3 className={`font-archivo-black text-sm ${textColor} line-clamp-2`}>{product.name}</h3>
         {product.price && (
-          <p className="font-ibm-mono text-sm font-semibold text-black">
+          <p className={`font-ibm-mono text-sm font-semibold ${textColor}`}>
             {formatPrice(product.price, currency)}
           </p>
         )}
@@ -62,7 +66,7 @@ export default function ProductItem({ product }: ProductItemProps) {
             }`}
           >
             {product.sizes.map((size) => (
-              <span key={size} className="font-ibm-mono text-xs text-black px-2 py-1">
+              <span key={size} className={`font-ibm-mono text-xs ${textColor} px-2 py-1`}>
                 {size}
               </span>
             ))}
