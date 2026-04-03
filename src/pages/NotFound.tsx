@@ -1,31 +1,73 @@
-import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { Link } from "react-router-dom";
+import { EncryptedText } from "@/components/ui/encrypted-text";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 export default function NotFound() {
-  const navigate = useNavigate();
-
   return (
-    <div className="w-full min-h-screen bg-black text-white flex flex-col">
-      <Navbar variant="dark" />
+    <div className="h-screen w-screen overflow-hidden bg-black flex flex-col items-center justify-center relative">
+      {/* Scanlines */}
+      <div className="gate-scanlines" />
+      <div className="gate-grain" />
 
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="text-center max-w-md">
-          <h1 className="text-7xl font-black mb-4 italic tracking-tighter">404</h1>
-          <h2 className="text-2xl font-bold mb-4 uppercase tracking-[0.2em]">Product_not_found.</h2>
-          <p className="text-gray-400 mb-8">
-            The product you are looking for does not exist or has been removed.
-          </p>
-          <button
-            onClick={() => navigate("/")}
-            className="w-full bg-white text-black py-4 font-black uppercase tracking-[0.3em] hover:bg-gray-200 transition-colors"
+      {/* Glitch 404 */}
+      <div className="relative z-20 flex flex-col items-center gap-6">
+        <p
+          className="text-[10px] text-white/20 tracking-[0.5em] uppercase"
+          style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+        >
+          // SYSTEM_ERROR
+        </p>
+
+        <h1
+          className="text-[12rem] md:text-[16rem] font-black leading-none tracking-tighter text-white select-none notfound-glitch"
+          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
+          data-text="404"
+        >
+          404
+        </h1>
+
+        <div className="flex flex-col items-center gap-2 -mt-4">
+          <div
+            className="text-sm text-white/60 h-6"
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
           >
-            Return_to_Home
-          </button>
+            <TypingAnimation duration={50} showCursor cursorStyle="block">
+              {"> ROUTE_NOT_FOUND — ACCESS_DENIED"}
+            </TypingAnimation>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center gap-4">
+          <Link
+            to="/"
+            className="border border-white/30 px-10 py-4 text-xs uppercase tracking-[0.3em] !text-white no-underline hover:bg-white hover:!text-black transition-all duration-200"
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+          >
+            [ RETURN_TO_BASE ]
+          </Link>
         </div>
       </div>
 
-      <Footer />
+      {/* Bottom logo */}
+      <div className="absolute bottom-10 z-20">
+        <span
+          className="text-lg tracking-tighter"
+          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
+        >
+          <EncryptedText
+            text="METALLURG™"
+            encryptedClassName="text-neutral-700"
+            revealedClassName="text-white/15"
+            revealDelayMs={150}
+          />
+        </span>
+      </div>
+
+      {/* Coords */}
+      <div className="gate-coords">
+        <p>ERR::404</p>
+        <p>PATH_UNDEFINED</p>
+      </div>
     </div>
   );
 }
