@@ -63,10 +63,11 @@ export default function ProductImageSlider({
             <img
               src={url}
               alt={`${productName} — view ${idx + 1}`}
-              className={`w-full h-full object-cover transition-transform duration-700 ${
-                isOutOfStock ? "grayscale blur-[1px]" : "hover:scale-[1.03]"
+              className={`absolute inset-0 w-full h-full object-cover scale-[1.01] transition-transform duration-700 ${
+                isOutOfStock ? "grayscale blur-[1px]" : "hover:scale-[1.04]"
               }`}
               style={{ transitionTimingFunction: "cubic-bezier(0.25,0.1,0.25,1)" }}
+              loading={idx === 0 ? "eager" : "lazy"}
             />
 
             <div

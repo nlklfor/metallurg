@@ -76,7 +76,8 @@ export default function ProductFilters({
 
       <Button
         onClick={handleClearFilters}
-        className="ml-auto px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium transition"
+        variant="outline"
+        className="ml-auto px-5 py-2 border border-black bg-transparent hover:bg-black text-black hover:text-white text-xs uppercase tracking-[0.15em] font-medium transition-all duration-200 rounded-none"
       >
         Clear Filters
       </Button>

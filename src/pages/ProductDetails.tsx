@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useProductDetails } from "@/hooks/useProductDetails";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
@@ -13,6 +13,7 @@ import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/ProductImageSlider";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import ProductItem from "@/components/ProductItem";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 
@@ -269,22 +270,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {relatedProducts.map((p) => (
-                  <Link
-                    key={p.id}
-                    to={`/product/${p.slug}`}
-                    className="group relative aspect-[3/4] bg-gray-900 overflow-hidden"
-                  >
-                    <img
-                      src={p.image_url[0]}
-                      alt={p.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
-                    />
-                    <img
-                      src={p.image_url[1] ?? p.image_url[0]}
-                      alt={p.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-                    />
-                  </Link>
+                  <ProductItem key={p.id} product={p} variant="dark" />
                 ))}
               </div>
             </div>
