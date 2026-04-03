@@ -11,6 +11,7 @@ import ProductDetails from "./pages/ProductDetails.tsx";
 import Cart from "./pages/Cart.tsx";
 import About from "./pages/About.tsx";
 import Protocol from "./pages/Protocol.tsx";
+import NotFound from "./pages/NotFound.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/cart" element={<Navigate to="/loadout" replace />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/protocol" element={<Protocol />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
