@@ -2,10 +2,63 @@ import { Footer, Navbar } from "@/components";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useState } from "react";
 import TrackOrderModal from "@/components/TrackModal";
+import ReviewModal from "@/components/ReviewModal";
+import ReviewList from "@/components/ReviewList";
+import { useAllReviews } from "@/hooks/useAllReviews";
 import { Package, Star } from "lucide-react";
+import supabase from "@/lib/supabase";
+
+interface ResolvedOrder {
+  id: string;
+  order_number: string;
+  customer_name: string;
+  items: { name: string; selectedSize: string | number; price: number }[];
+}
 
 export default function Orders() {
   const [trackOpen, setTrackOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewOrder, setReviewOrder] = useState<ResolvedOrder | null>(null);
+  const [orderInput, setOrderInput] = useState("");
+  const [lookupError, setLookupError] = useState("");
+  const [isLookingUp, setIsLookingUp] = useState(false);
+  const { reviews, stats, isLoading: reviewsLoading, refetch } = useAllReviews();
+
+  const handleReviewLookup = async () => {
+    const trimmed = orderInput.trim().toUpperCase();
+    if (!trimmed) return;
+
+    setIsLookingUp(true);
+    setLookupError("");
+
+    const { data, error } = await supabase
+      .from("orders")
+      .select("id, order_number, customer_name, status, items")
+      .eq("order_number", trimmed)
+      .single();
+
+    setIsLookingUp(false);
+
+    if (error || !data) {
+      setLookupError("ORDER_NOT_FOUND");
+      return;
+    }
+
+    if (data.status !== "completed") {
+      setLookupError("ORDER_NOT_COMPLETED — Only delivered orders can be reviewed.");
+      return;
+    }
+
+    setReviewOrder({
+      id: data.id,
+      order_number: data.order_number,
+      customer_name: data.customer_name,
+      items: data.items,
+    });
+    setReviewOpen(true);
+    setOrderInput("");
+    setLookupError("");
+  };
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
@@ -14,6 +67,22 @@ export default function Orders() {
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders" }]} />
       </div>
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
+      {reviewOrder && (
+        <ReviewModal
+          isOpen={reviewOpen}
+          onClose={() => {
+            setReviewOpen(false);
+            setReviewOrder(null);
+          }}
+          onSubmitted={() => {
+            refetch();
+          }}
+          orderNumber={reviewOrder.order_number}
+          customerName={reviewOrder.customer_name}
+          orderId={reviewOrder.id}
+          orderItems={reviewOrder.items}
+        />
+      )}
 
       <div className="px-8 pt-16 pb-8">
         <div className="flex items-baseline justify-between">
@@ -63,28 +132,60 @@ export default function Orders() {
           </button>
 
           {/* Reviews Card */}
-          <div className="border border-gray-200 p-10 text-left relative overflow-hidden">
+          <div className="border border-gray-200 p-10 text-left hover:border-black transition-all group">
             <div className="flex items-start justify-between mb-6">
-              <div className="w-14 h-14 bg-gray-100 flex items-center justify-center">
-                <Star size={24} className="text-gray-300" />
+              <div className="w-14 h-14 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Star size={24} className="text-white" />
               </div>
-              <span className="text-[9px] text-gray-300 tracking-[0.3em] uppercase border border-gray-200 px-3 py-1">
-                COMING_SOON
-              </span>
             </div>
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">// REVIEWS</p>
-            <h3 className="text-xl font-black text-gray-300 uppercase tracking-tight mb-2">
-              Customer Reviews
-            </h3>
-            <p className="text-sm text-gray-300 leading-relaxed">
-              Share your experience and read what others think about METALLURG™ products.
+            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">
+              // FIELD_REPORT
             </p>
-
-            {/* Diagonal line overlay */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <div className="absolute top-0 left-0 w-[141%] h-[1px] bg-gray-200 origin-top-left rotate-[35deg]" />
+            <h3 className="text-xl font-black text-black uppercase tracking-tight mb-3">
+              Submit a Review
+            </h3>
+            <p className="text-sm text-gray-400 leading-relaxed mb-6">
+              Share your field report. Enter your completed order ID to begin.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={orderInput}
+                onChange={(e) => setOrderInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleReviewLookup()}
+                placeholder="MTL-1234"
+                className="flex-1 font-ibm-mono border border-gray-200 px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black uppercase tracking-[0.2em] transition-colors"
+              />
+              <button
+                onClick={handleReviewLookup}
+                disabled={isLookingUp || !orderInput.trim()}
+                className="bg-black text-white px-5 font-archivo-black text-[10px] uppercase tracking-widest hover:bg-gray-900 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+              >
+                {isLookingUp ? "..." : "GO →"}
+              </button>
             </div>
+            {lookupError && (
+              <p className="text-[9px] font-ibm-mono text-red-500 mt-2 tracking-[0.2em] uppercase">
+                ✗ {lookupError}
+              </p>
+            )}
           </div>
+        </div>
+      </div>
+
+      {/* All Reviews Section */}
+      <div className="bg-black text-white px-8 py-16">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[10px] text-zinc-500 tracking-[0.4em] uppercase mb-3">
+            // ALL_FIELD_REPORTS
+          </p>
+          <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-10">
+            Community Reports
+            {stats.count > 0 && (
+              <span className="text-zinc-600 text-lg ml-3 not-italic">({stats.count})</span>
+            )}
+          </h2>
+          <ReviewList reviews={reviews} stats={stats} isLoading={reviewsLoading} />
         </div>
       </div>
 

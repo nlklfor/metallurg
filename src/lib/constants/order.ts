@@ -3,7 +3,7 @@ import { Package, Wrench, Truck, Globe, MapPin, CheckCircle, Archive, Clock } fr
 
 // ─── Shipping ─────────────────────────────────────────────────────────────────
 
-export const SHIPPING_ZONES: ShippingZone[] = ["Ukraine", "Switzerland", "International"];
+export const SHIPPING_ZONES: ShippingZone[] = ["Ukraine", "Switzerland"];
 
 // ─── Tracking Routes ──────────────────────────────────────────────────────────
 
