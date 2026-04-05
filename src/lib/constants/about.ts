@@ -41,8 +41,7 @@ export const VALUES = [
   {
     label: "NODES",
     value: "3",
-    description:
-      "Ukraine, Switzerland, International — a distributed network of archive access points.",
+    description: "Ukraine, Switzerland — a distributed network of archive access points.",
   },
 ];
 

@@ -1,5 +1,5 @@
 export type OrderStep = "form" | "submitting" | "success" | "error";
-export type ShippingZone = "Ukraine" | "Switzerland" | "International";
+export type ShippingZone = "Ukraine" | "Switzerland";
 
 export interface Order {
   order_number: string;

@@ -21,7 +21,7 @@ export const sections = [
     id: "04",
     title: "LOGISTICS_&_RISK_MANAGEMENT",
     content:
-      "International Dispatch: Objects are moved via independent logistics partners.\n\nJurisdiction: Local regulations of the destination country apply.\n\nLiability: The Archive is not responsible for delays or seizures resulting from international border control protocols or customs interference.",
+      "Dispatch: Objects are moved via independent logistics partners across Ukraine and Switzerland.\n\nJurisdiction: Local regulations of the destination country apply.\n\nLiability: The Archive is not responsible for delays or seizures resulting from border control protocols or customs interference.",
   },
   {
     id: "05",
