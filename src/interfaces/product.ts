@@ -13,6 +13,8 @@ export interface ProductType {
   materials?: string;
   weight?: number;
   model_3d_url?: string;
+  condition?: string;
+  box?: string;
 }
 
 export interface ProductImageSliderProps {
