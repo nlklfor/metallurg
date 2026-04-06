@@ -164,6 +164,20 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                   <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>// weight</h3>
                   <p className={`text-sm ${theme.textSecondary}`}>{product.weight} KG</p>
                 </div>
+                {product.condition && (
+                  <div>
+                    <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>
+                      // condition
+                    </h3>
+                    <p className={`text-sm ${theme.textSecondary}`}>{product.condition}</p>
+                  </div>
+                )}
+                {product.box && (
+                  <div>
+                    <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>// box</h3>
+                    <p className={`text-sm ${theme.textSecondary}`}>{product.box}</p>
+                  </div>
+                )}
               </div>
             </section>
 
