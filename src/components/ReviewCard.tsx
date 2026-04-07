@@ -13,6 +13,11 @@ function RatingBlocks({ rating }: { rating: number }) {
   );
 }
 
+function maskName(name: string): string {
+  if (name.length <= 3) return name;
+  return name.slice(0, 3) + "*".repeat(name.length - 3);
+}
+
 export default function ReviewCard({ review }: { review: Review | ReviewWithOrderItems }) {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const orderItems = "order_items" in review ? review.order_items : [];
@@ -34,7 +39,7 @@ export default function ReviewCard({ review }: { review: Review | ReviewWithOrde
             </div>
             <div>
               <p className="text-[11px] font-archivo-black text-white uppercase tracking-wider">
-                {review.author_name}
+                {maskName(review.author_name)}
               </p>
               <p className="text-[8px] font-ibm-mono text-zinc-600 tracking-[0.3em] uppercase">
                 VERIFIED_PURCHASE
