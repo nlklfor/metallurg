@@ -18,9 +18,14 @@ export function useReviewSubmission({ isOpen, orderId }: UseReviewSubmissionPara
 
     const check = async () => {
       setIsChecking(true);
-      const existing = await getReviewByOrder(orderId);
-      setIsAlreadyReviewed(!!existing);
-      setIsChecking(false);
+      try {
+        const existing = await getReviewByOrder(orderId);
+        setIsAlreadyReviewed(!!existing);
+      } catch {
+        setError("Failed to check review status.");
+      } finally {
+        setIsChecking(false);
+      }
     };
 
     check();

@@ -324,6 +324,24 @@ h1 {
   flex-shrink: 0;
 }
 
+.gate-monolith--compact {
+  max-width: 280px;
+  height: 30vh;
+}
+
+/* ── Layout ──────────────────────────────────────────────── */
+.gate-layout {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 480px;
+  padding: 0 24px;
+}
+
 /* ── Title Block (SOON + encrypted logo) ─────────────────── */
 .gate-title-block {
   position: relative;
@@ -382,6 +400,181 @@ h1 {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.4);
   margin-bottom: 4px;
+}
+
+.gate-access-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gate-access-success {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  padding: 16px 0;
+}
+
+.gate-redirect-hint {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.25);
+  margin-top: 8px;
+  animation: gate-blink 1.2s step-end infinite;
+}
+
+/* ── Exit Animation ──────────────────────────────────────── */
+.gate-root--exit {
+  animation: gate-exit 1.5s ease-in forwards;
+}
+
+@keyframes gate-exit {
+  0% {
+    filter: none;
+    opacity: 1;
+  }
+  20% {
+    filter: brightness(1.8) contrast(1.5);
+  }
+  40% {
+    filter: invert(1);
+    transform: translateX(-2px);
+  }
+  60% {
+    filter: brightness(2) contrast(2);
+    transform: translateX(2px);
+  }
+  80% {
+    filter: brightness(3);
+    opacity: 0.5;
+  }
+  100% {
+    filter: brightness(0);
+    opacity: 0;
+  }
+}
+
+/* ── Status & Progress Bar ───────────────────────────────── */
+.gate-status {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.gate-status-label {
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.gate-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.gate-progress-fill {
+  height: 100%;
+  background: #ffffff;
+  transition: width 0.4s ease;
+}
+
+.gate-progress-pct {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Boot Terminal Log ───────────────────────────────────── */
+.gate-terminal {
+  width: 100%;
+  max-height: 140px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.015);
+  padding: 12px 14px;
+  scrollbar-width: none;
+}
+
+.gate-terminal::-webkit-scrollbar {
+  display: none;
+}
+
+.gate-terminal-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.gate-terminal-line {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.25);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.gate-terminal-line:last-of-type {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.gate-cursor {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.4);
+  animation: gate-blink 0.8s step-end infinite;
+}
+
+@keyframes gate-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── Social Nodes ────────────────────────────────────────── */
+.gate-nodes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.8s ease 0.2s,
+    transform 0.8s ease 0.2s;
+  pointer-events: none;
+}
+
+.gate-nodes--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.gate-node {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.gate-node:hover {
+  color: #ffffff;
+}
+
+.gate-node-sep {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.1);
 }
 
 .gate-input {
@@ -543,18 +736,35 @@ h1 {
   .gate-monolith {
     max-width: 100%;
   }
-  .gate-terminal,
-  .gate-access {
+  .gate-monolith--compact {
+    max-width: 200px;
+    height: 25vh;
+  }
+  .gate-layout {
     max-width: 100%;
     padding: 0 16px;
   }
-  .gate-terminal-text {
-    font-size: 10px;
+  .gate-terminal {
+    max-height: 110px;
+  }
+  .gate-terminal-line {
+    font-size: 8px;
+  }
+  .gate-access {
+    max-width: 100%;
+    padding: 0;
   }
   .gate-coords {
     bottom: 16px;
     right: 16px;
     font-size: 8px;
+  }
+  .gate-nodes {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .gate-node-sep {
+    display: none;
   }
 }
 

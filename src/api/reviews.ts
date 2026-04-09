@@ -35,7 +35,12 @@ export async function submitReview(review: ReviewFormData, images: File[]): Prom
   const imageUrls: string[] = [];
 
   for (const file of images) {
-    const ext = file.name.split(".").pop();
+    const mimeToExt: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+    };
+    const ext = mimeToExt[file.type] ?? file.name.split(".").pop() ?? "bin";
     const path = `${review.order_id}/${crypto.randomUUID()}.${ext}`;
 
     const { error: uploadError } = await supabase.storage

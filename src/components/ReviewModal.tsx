@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Upload, Star } from "lucide-react";
@@ -49,7 +50,7 @@ export default function ReviewModal({
     onClose();
   };
 
-  const handleImageAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageAdd = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     const allowed = files.filter((f) => ["image/jpeg", "image/png", "image/webp"].includes(f.type));
     const remaining = 3 - images.length;
@@ -174,136 +175,138 @@ export default function ReviewModal({
                 </div>
               )}
 
-              {!isChecking && !isAlreadyReviewed && (step === "form" || isSubmitting) && (
-                <div className="relative z-10 px-6 py-6 space-y-6">
-                  {/* Order items list */}
-                  <div className="pb-4 border-b border-zinc-900">
-                    <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
-                      // ORDER_ITEMS
-                    </p>
-                    <div className="space-y-1.5">
-                      {orderItems.map((item, i) => (
-                        <p
-                          key={i}
-                          className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider"
-                        >
-                          → {item.name}
-                          <span className="text-zinc-700 ml-2">SIZE: {item.selectedSize}</span>
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
-                      // RATING *
-                    </p>
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          onMouseEnter={() => setHoverRating(star)}
-                          onMouseLeave={() => setHoverRating(0)}
-                          onClick={() => setRating(star)}
-                          disabled={isSubmitting}
-                          className="p-1 transition-all disabled:opacity-50"
-                        >
-                          <Star
-                            size={20}
-                            className={`transition-colors ${
-                              star <= activeRating
-                                ? "fill-white text-white"
-                                : "fill-transparent text-zinc-700"
-                            }`}
-                          />
-                        </button>
-                      ))}
-                      <span className="ml-3 text-[10px] font-ibm-mono text-zinc-600 tracking-wider">
-                        {activeRating > 0
-                          ? `${"█".repeat(activeRating)}${"░".repeat(5 - activeRating)}`
-                          : "░░░░░"}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-2">
-                      // REPORT_BODY
-                    </p>
-                    <textarea
-                      value={body}
-                      onChange={(e) => setBody(e.target.value)}
-                      disabled={isSubmitting}
-                      placeholder="How does the object perform in the field?"
-                      maxLength={1000}
-                      rows={4}
-                      className="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm font-ibm-mono text-white placeholder-zinc-800 focus:outline-none focus:border-zinc-500 transition-colors resize-none disabled:opacity-50"
-                    />
-                    <p className="text-[8px] font-ibm-mono text-zinc-800 text-right mt-1">
-                      {body.length}/1000
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-2">
-                      // ATTACH_IMAGES ({images.length}/3)
-                    </p>
-                    <div className="flex gap-2">
-                      {previews.map((src, i) => (
-                        <div key={i} className="relative w-16 h-16 border border-zinc-800 group">
-                          <img
-                            src={src}
-                            alt={`Upload ${i + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                          <button
-                            onClick={() => removeImage(i)}
-                            disabled={isSubmitting}
-                            className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              {!isChecking &&
+                !isAlreadyReviewed &&
+                (step === "form" || step === "submitting" || isSubmitting) && (
+                  <div className="relative z-10 px-6 py-6 space-y-6">
+                    {/* Order items list */}
+                    <div className="pb-4 border-b border-zinc-900">
+                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
+                        // ORDER_ITEMS
+                      </p>
+                      <div className="space-y-1.5">
+                        {orderItems.map((item, i) => (
+                          <p
+                            key={i}
+                            className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider"
                           >
-                            <X size={10} className="text-white" />
-                          </button>
-                        </div>
-                      ))}
-                      {images.length < 3 && (
-                        <button
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={isSubmitting}
-                          className="w-16 h-16 border border-dashed border-zinc-800 flex items-center justify-center hover:border-zinc-500 transition-colors disabled:opacity-50"
-                        >
-                          <Upload size={14} className="text-zinc-700" />
-                        </button>
-                      )}
+                            → {item.name}
+                            <span className="text-zinc-700 ml-2">SIZE: {item.selectedSize}</span>
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      multiple
-                      onChange={handleImageAdd}
-                      className="hidden"
-                    />
-                  </div>
 
-                  <button
-                    onClick={handleSubmit}
-                    disabled={rating === 0 || isSubmitting}
-                    className="w-full bg-white text-black py-4 font-archivo-black text-[11px] uppercase tracking-[0.4em] hover:bg-zinc-100 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <motion.span
-                        animate={{ opacity: [1, 0.3, 1] }}
-                        transition={{ duration: 0.8, repeat: Infinity }}
-                        className="font-ibm-mono"
-                      >
-                        TRANSMITTING...
-                      </motion.span>
-                    ) : (
-                      "SUBMIT_REPORT →"
-                    )}
-                  </button>
-                </div>
-              )}
+                    <div>
+                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
+                        // RATING *
+                      </p>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            onMouseEnter={() => setHoverRating(star)}
+                            onMouseLeave={() => setHoverRating(0)}
+                            onClick={() => setRating(star)}
+                            disabled={isSubmitting}
+                            className="p-1 transition-all disabled:opacity-50"
+                          >
+                            <Star
+                              size={20}
+                              className={`transition-colors ${
+                                star <= activeRating
+                                  ? "fill-white text-white"
+                                  : "fill-transparent text-zinc-700"
+                              }`}
+                            />
+                          </button>
+                        ))}
+                        <span className="ml-3 text-[10px] font-ibm-mono text-zinc-600 tracking-wider">
+                          {activeRating > 0
+                            ? `${"█".repeat(activeRating)}${"░".repeat(5 - activeRating)}`
+                            : "░░░░░"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-2">
+                        // REPORT_BODY
+                      </p>
+                      <textarea
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
+                        disabled={isSubmitting}
+                        placeholder="How does the object perform in the field?"
+                        maxLength={1000}
+                        rows={4}
+                        className="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm font-ibm-mono text-white placeholder-zinc-800 focus:outline-none focus:border-zinc-500 transition-colors resize-none disabled:opacity-50"
+                      />
+                      <p className="text-[8px] font-ibm-mono text-zinc-800 text-right mt-1">
+                        {body.length}/1000
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-2">
+                        // ATTACH_IMAGES ({images.length}/3)
+                      </p>
+                      <div className="flex gap-2">
+                        {previews.map((src, i) => (
+                          <div key={i} className="relative w-16 h-16 border border-zinc-800 group">
+                            <img
+                              src={src}
+                              alt={`Upload ${i + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                            <button
+                              onClick={() => removeImage(i)}
+                              disabled={isSubmitting}
+                              className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X size={10} className="text-white" />
+                            </button>
+                          </div>
+                        ))}
+                        {images.length < 3 && (
+                          <button
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isSubmitting}
+                            className="w-16 h-16 border border-dashed border-zinc-800 flex items-center justify-center hover:border-zinc-500 transition-colors disabled:opacity-50"
+                          >
+                            <Upload size={14} className="text-zinc-700" />
+                          </button>
+                        )}
+                      </div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        onChange={handleImageAdd}
+                        className="hidden"
+                      />
+                    </div>
+
+                    <button
+                      onClick={handleSubmit}
+                      disabled={rating === 0 || isSubmitting}
+                      className="w-full bg-white text-black py-4 font-archivo-black text-[11px] uppercase tracking-[0.4em] hover:bg-zinc-100 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <motion.span
+                          animate={{ opacity: [1, 0.3, 1] }}
+                          transition={{ duration: 0.8, repeat: Infinity }}
+                          className="font-ibm-mono"
+                        >
+                          TRANSMITTING...
+                        </motion.span>
+                      ) : (
+                        "SUBMIT_REPORT →"
+                      )}
+                    </button>
+                  </div>
+                )}
 
               {step === "success" && (
                 <div className="relative z-10 px-6 py-12 text-center space-y-5">

@@ -40,7 +40,7 @@ export default function Orders() {
     setIsLookingUp(false);
 
     if (error || !data) {
-      setLookupError("ORDER_NOT_FOUND");
+      setLookupError("Order not found — please check the order number and try again.");
       return;
     }
 
