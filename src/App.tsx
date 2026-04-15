@@ -20,9 +20,9 @@ function App() {
 
       <div className="absolute inset-0 z-10 bg-black/50" />
 
-      <div className="relative z-20 flex h-screen flex-col items-center justify-center gap-8">
+      <div className="relative z-20 flex h-screen flex-col items-center justify-center gap-4 sm:gap-8 px-4">
         <h1
-          className="text-8xl tracking-tighter text-white drop-shadow-2xl text-center"
+          className="text-2xl sm:text-4xl md:text-5xl tracking-tighter text-white drop-shadow-2xl text-center"
           style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
         >
           <EncryptedText
@@ -32,7 +32,7 @@ function App() {
             revealDelayMs={150}
           />
         </h1>
-        <nav className="flex flex-col gap-4 mt-10 items-center">
+        <nav className="flex flex-col gap-3 sm:gap-4 mt-6 sm:mt-10 items-center">
           {MAIN_PAGE_BTNS.map((btn) => (
             <Link key={btn.label} to={btn.href} className="w-40">
               <Button size="lg" variant={"link"} className="text-white w-full">
@@ -43,22 +43,22 @@ function App() {
         </nav>
       </div>
 
-      <div className="fixed bottom-12 left-8 z-20 flex flex-col">
-        <div className="text-white text-md h-8">
+      <div className="fixed bottom-6 sm:bottom-12 left-4 sm:left-8 z-20 flex flex-col">
+        <div className="text-white text-[10px] sm:text-xs h-5">
           <TypingAnimation>// ACCESSING_ARCHIVE_2026... </TypingAnimation>
           <TypingAnimation delay={2700} className="text-green-400 animate-pulse">
             OK
           </TypingAnimation>
         </div>
-        <div className="text-white text-md h-8">
+        <div className="text-white text-[10px] sm:text-xs h-5">
           <TypingAnimation delay={3000}>// STATUS: OPERATIONAL</TypingAnimation>
         </div>
-        <div className="text-white text-md h-8">
+        <div className="text-white text-[10px] sm:text-xs h-5">
           <TypingAnimation delay={6000}>// WELCOME TO MTL_NETWORK</TypingAnimation>
         </div>
       </div>
 
-      <div className="fixed bottom-12 right-8 z-20 text-white/30 text-[10px] font-mono tracking-[0.3em] uppercase text-right space-y-1">
+      <div className="fixed top-4 right-4 sm:bottom-12 sm:top-auto sm:right-8 z-20 text-white/30 text-[7px] sm:text-[8px] font-mono tracking-[0.2em] uppercase text-right space-y-0.5">
         <p>50.4501° N, 30.5234° E</p>
         <p>KYIV, UKRAINE</p>
       </div>

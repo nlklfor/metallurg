@@ -53,7 +53,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                 }}
               />
 
-              <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-6 py-4">
+              <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-4 sm:px-6 py-4">
                 <div>
                   <p className="text-[8px] font-ibm-mono uppercase tracking-[0.5em] text-zinc-700">
                     METALLURG // SYSTEM
@@ -70,7 +70,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                 </button>
               </div>
 
-              <div className="relative z-10 px-6 pt-6 pb-5">
+              <div className="relative z-10 px-4 sm:px-6 pt-5 sm:pt-6 pb-5">
                 <p className="text-[8px] font-ibm-mono uppercase tracking-[0.4em] text-zinc-700 mb-2">
                   // INPUT_ORDER_ID
                 </p>
@@ -124,7 +124,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                     transition={{ duration: 0.4, ease: "easeOut" }}
                     className="relative z-10 border-t border-zinc-800"
                   >
-                    <div className="px-6 py-4 border-b border-zinc-900 grid grid-cols-2 gap-y-3">
+                    <div className="px-4 sm:px-6 py-4 border-b border-zinc-900 grid grid-cols-2 gap-y-3">
                       <div>
                         <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
                           ORDER_ID
@@ -159,7 +159,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                       </div>
                     </div>
 
-                    <div className="px-6 pt-6 pb-2">
+                    <div className="px-4 sm:px-6 pt-5 sm:pt-6 pb-2">
                       <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-6">
                         // DELIVERY_PIPELINE
                       </p>
@@ -178,7 +178,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                 )}
               </AnimatePresence>
 
-              <div className="relative z-10 border-t border-zinc-900 px-6 py-3 flex justify-between">
+              <div className="relative z-10 border-t border-zinc-900 px-4 sm:px-6 py-3 flex justify-between">
                 <span className="text-[8px] font-ibm-mono text-zinc-800 tracking-widest">
                   ENCRYPTED_CHANNEL
                 </span>

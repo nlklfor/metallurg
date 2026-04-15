@@ -18,7 +18,7 @@ export default function ProductItem({ product, variant = "light" }: ProductItemP
 
   const content = (
     <div
-      className={`overflow-hidden w-72 h-106 flex flex-col gap-10 transition-all duration-300 ${
+      className={`overflow-hidden w-full h-106 flex flex-col gap-10 transition-all duration-300 ${
         isOutOfStock ? "opacity-40 grayscale cursor-not-allowed" : ""
       }`}
       onMouseEnter={() => !isOutOfStock && setIsHovering(true)}

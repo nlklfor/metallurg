@@ -30,7 +30,7 @@ export default function ProductImageSlider({
   };
 
   return (
-    <div className="relative flex gap-3 h-[450px] lg:h-[520px]">
+    <div className="relative flex gap-3 h-[300px] sm:h-[420px] lg:h-[520px]">
       <div className="flex flex-col justify-center gap-2 py-2 z-10">
         {images.map((_, i) => (
           <button
@@ -59,12 +59,15 @@ export default function ProductImageSlider({
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {images.map((url, idx) => (
-          <div key={idx} className="snap-start snap-always w-full h-full relative overflow-hidden">
+          <div
+            key={idx}
+            className="snap-start snap-always w-full h-full relative overflow-hidden bg-zinc-950"
+          >
             <img
               src={url}
               alt={`${productName} — view ${idx + 1}`}
-              className={`absolute inset-0 w-full h-full object-cover scale-[1.01] transition-transform duration-700 ${
-                isOutOfStock ? "grayscale blur-[1px]" : "hover:scale-[1.04]"
+              className={`absolute inset-0 w-full h-full object-contain transition-transform duration-700 ${
+                isOutOfStock ? "grayscale blur-[1px]" : "hover:scale-[1.03]"
               }`}
               style={{ transitionTimingFunction: "cubic-bezier(0.25,0.1,0.25,1)" }}
               loading={idx === 0 ? "eager" : "lazy"}

@@ -45,9 +45,9 @@ export default function ProductFilters({
   }, [debouncedPrice, onFilterChange]);
 
   return (
-    <div className="px-8 py-6 border-b border-gray-200 flex items-center gap-4">
+    <div className="px-4 sm:px-8 py-4 sm:py-6 border-b border-gray-200 flex flex-wrap items-center gap-3 sm:gap-4">
       <Select value={filters.sortBy} onValueChange={handleSortChange}>
-        <SelectTrigger className="w-48">
+        <SelectTrigger className="w-36 sm:w-48">
           <SelectValue placeholder="Select a sort option" />
         </SelectTrigger>
         <SelectContent>
@@ -67,9 +67,9 @@ export default function ProductFilters({
           max={50000}
           min={0}
           step={1000}
-          className="w-40"
+          className="w-28 sm:w-40"
         />
-        <span className="text-sm font-medium whitespace-nowrap">
+        <span className="text-xs sm:text-sm font-medium whitespace-nowrap">
           {formatPrice(localPrice, currency)}
         </span>
       </div>

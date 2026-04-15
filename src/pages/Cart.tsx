@@ -22,7 +22,7 @@ const Cart = () => {
   return (
     <div className="bg-white text-black min-h-screen flex flex-col">
       <Navbar variant="light" />
-      <div className="px-8 pt-6">
+      <div className="px-4 sm:px-8 pt-6">
         <Breadcrumbs
           items={[
             { label: "Home", href: "/" },
@@ -34,12 +34,12 @@ const Cart = () => {
       <CheckoutModal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
 
-      <div className="flex-1 max-w-7xl mx-auto w-full px-8 py-16">
-        <div className="flex items-center justify-between mb-16">
-          <div className="flex items-center gap-6">
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-16">
+        <div className="flex items-center justify-between mb-8 sm:mb-16">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={() => navigate(-1)}
-              className="w-10 h-10 border border-gray-200 flex items-center justify-center hover:border-black transition-colors group"
+              className="w-10 h-10 border border-gray-200 flex items-center justify-center hover:border-black transition-colors group flex-shrink-0"
             >
               <ArrowLeft
                 size={16}
@@ -47,7 +47,9 @@ const Cart = () => {
               />
             </button>
             <div>
-              <h1 className="text-5xl font-black uppercase tracking-tighter italic">Loadout</h1>
+              <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter italic">
+                Loadout
+              </h1>
               <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase mt-1">
                 // ITEMS_IN_LOADOUT: {cartItems.length}
               </p>
@@ -63,7 +65,7 @@ const Cart = () => {
         </div>
 
         {cartItems.length === 0 ? (
-          <div className="border border-gray-200 p-20 text-center">
+          <div className="border border-gray-200 p-10 sm:p-20 text-center">
             <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">// STATUS</p>
             <p className="text-gray-400 font-bold text-lg uppercase tracking-[0.2em] mb-10">
               LOADOUT_EMPTY
@@ -76,7 +78,7 @@ const Cart = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
             <div className="lg:col-span-8 space-y-4">
               <p className="text-[8px] text-gray-300 tracking-[0.4em] uppercase mb-4">
                 // ITEMS_FOR_EXECUTION

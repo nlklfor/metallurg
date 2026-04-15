@@ -11,8 +11,8 @@ export default function ProductList({ filters }: { filters: FilterOptions | null
 
   if (isLoading)
     return (
-      <div className="px-8 py-16">
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="px-4 sm:px-8 py-16">
+        <ul className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
           {Array.from({ length: 8 }).map((_, idx) => (
             <li key={idx}>
               <ProductSkeleton />
@@ -25,8 +25,8 @@ export default function ProductList({ filters }: { filters: FilterOptions | null
   if (error) return <div className="px-8 py-16 text-center text-red-600">Error: {error}</div>;
 
   return (
-    <div className="px-8 py-16">
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="px-4 sm:px-8 py-16">
+      <ul className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <li key={product.id}>
