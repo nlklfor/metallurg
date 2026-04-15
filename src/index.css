@@ -121,11 +121,6 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -584,7 +579,7 @@ h1 {
   border-radius: 0;
   padding: 12px 16px;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 16px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.3);

@@ -120,8 +120,8 @@ function ProductDetailsContent({ slug }: { slug: string }) {
           variant="dark"
         />
       </div>
-      <div className="flex-1 p-6 md:p-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="flex-1 p-4 sm:p-6 md:p-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           <div className={isOutOfStock ? "opacity-40" : ""}>
             <ProductImageSlider
               images={product.image_url}
@@ -133,7 +133,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
           <div className="flex flex-col">
             <header className="mb-8">
               <div className="flex justify-between items-baseline mb-2">
-                <h1 className="text-6xl font-black uppercase tracking-tighter italic">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter italic">
                   {product.name}
                 </h1>
                 <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
@@ -148,7 +148,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                 >
                   // description
                 </h3>
-                <p className={`${theme.textSecondary} leading-relaxed max-w-lg`}>
+                <p className={`text-xs ${theme.textSecondary} leading-relaxed max-w-lg`}>
                   {product.description}
                 </p>
               </div>
@@ -158,24 +158,24 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                   <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>
                     // material
                   </h3>
-                  <p className={`text-sm ${theme.textSecondary}`}>{product.materials}</p>
+                  <p className={`text-xs ${theme.textSecondary}`}>{product.materials}</p>
                 </div>
                 <div>
                   <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>// weight</h3>
-                  <p className={`text-sm ${theme.textSecondary}`}>{product.weight} KG</p>
+                  <p className={`text-xs ${theme.textSecondary}`}>{product.weight} KG</p>
                 </div>
                 {product.condition && (
                   <div>
                     <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>
                       // condition
                     </h3>
-                    <p className={`text-sm ${theme.textSecondary}`}>{product.condition}</p>
+                    <p className={`text-xs ${theme.textSecondary}`}>{product.condition}</p>
                   </div>
                 )}
                 {product.box && (
                   <div>
                     <h3 className={`text-[10px] ${theme.textSecondary} uppercase mb-1`}>// box</h3>
-                    <p className={`text-sm ${theme.textSecondary}`}>{product.box}</p>
+                    <p className={`text-xs ${theme.textSecondary}`}>{product.box}</p>
                   </div>
                 )}
               </div>
@@ -206,7 +206,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                <div className="mb-12">
+                <div className="mb-6 sm:mb-12">
                   <h3
                     className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em] mb-4`}
                   >
@@ -251,7 +251,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
               disabled={!selectedSize || isOutOfStock}
               onClick={handleAddToCart}
               variant="destructive"
-              className={`w-full py-8 font-black uppercase tracking-[0.3em] rounded-xs text-lg transition-all duration-300 group flex items-center justify-center gap-4 ${
+              className={`w-full py-5 sm:py-8 font-black uppercase tracking-[0.3em] rounded-xs text-sm sm:text-lg transition-all duration-300 group flex items-center justify-center gap-4 ${
                 isOutOfStock
                   ? `${theme.bg} ${theme.textSecondary} cursor-not-allowed`
                   : "bg-white text-black hover:bg-gray-200 disabled:opacity-20 disabled:cursor-not-allowed"

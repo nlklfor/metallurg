@@ -19,11 +19,11 @@ export default function CartItemCard({ item }: CartItemCardProps) {
 
   return (
     <div
-      className={`group flex gap-6 p-5 border border-gray-200 transition-all duration-300 ${
+      className={`group flex gap-3 sm:gap-6 p-4 sm:p-5 border border-gray-200 transition-all duration-300 ${
         isOutOfStock ? "opacity-30 grayscale blur-[1px]" : "hover:border-gray-400"
       }`}
     >
-      <div className="w-32 h-36 bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 relative">
+      <div className="w-24 sm:w-32 h-28 sm:h-36 bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 relative">
         <img
           src={item.image_url[0]}
           alt={item.name}
@@ -41,12 +41,14 @@ export default function CartItemCard({ item }: CartItemCardProps) {
       <div className="flex flex-col justify-between flex-grow py-1">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-bold text-black tracking-tight uppercase">{item.name}</h3>
+            <h3 className="text-sm sm:text-lg font-bold text-black tracking-tight uppercase">
+              {item.name}
+            </h3>
             <p className="text-[10px] text-gray-400 mt-1 tracking-[0.2em]">
               // SIZE: <span className="text-gray-600">{item.selectedSize}</span>
             </p>
           </div>
-          <p className="text-lg font-black text-black italic">
+          <p className="text-sm sm:text-lg font-black text-black italic">
             {formatPrice(item.price * item.cart_quantity, currency)}
           </p>
         </div>

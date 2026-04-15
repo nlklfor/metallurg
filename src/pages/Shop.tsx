@@ -10,16 +10,16 @@ export default function Shop() {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
-      <div className="px-8 pt-6">
+      <div className="px-4 sm:px-8 pt-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Inventory" }]} />
       </div>
-      <div className="px-8 pt-10 pb-8">
+      <div className="px-4 sm:px-8 pt-6 sm:pt-10 pb-6 sm:pb-8">
         <div className="flex items-baseline justify-between">
           <div>
             <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-3">
               // CATALOG_V2.0
             </p>
-            <h2 className="text-6xl font-black text-black uppercase tracking-tighter italic">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
               Inventory
             </h2>
           </div>
@@ -28,7 +28,7 @@ export default function Shop() {
           </p>
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6">
-          <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
             Indexed objects from private archives and limited releases. Each item authenticated,
             verified, and ready for acquisition through encrypted channels.
           </p>

@@ -120,12 +120,12 @@ export default function ReviewModal({
                 }}
               />
 
-              <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-6 py-4">
-                <div>
+              <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-4 sm:px-6 py-4">
+                <div className="min-w-0 mr-4">
                   <p className="text-[8px] font-ibm-mono uppercase tracking-[0.5em] text-zinc-700">
                     METALLURG // REPORTS
                   </p>
-                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.25em] text-zinc-200 mt-0.5">
+                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.25em] text-zinc-200 mt-0.5 truncate">
                     FIELD_REPORT — {orderNumber}
                   </p>
                 </div>
@@ -138,7 +138,7 @@ export default function ReviewModal({
               </div>
 
               {isChecking && (
-                <div className="relative z-10 px-6 py-12">
+                <div className="relative z-10 px-4 sm:px-6 py-12">
                   <div className="space-y-2">
                     {[...Array(2)].map((_, i) => (
                       <div
@@ -151,7 +151,7 @@ export default function ReviewModal({
               )}
 
               {!isChecking && isAlreadyReviewed && (
-                <div className="relative z-10 px-6 py-12 text-center space-y-5">
+                <div className="relative z-10 px-4 sm:px-6 py-12 text-center space-y-5">
                   <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 mx-auto flex items-center justify-center">
                     <span className="text-2xl text-zinc-500">✓</span>
                   </div>
@@ -178,7 +178,7 @@ export default function ReviewModal({
               {!isChecking &&
                 !isAlreadyReviewed &&
                 (step === "form" || step === "submitting" || isSubmitting) && (
-                  <div className="relative z-10 px-6 py-6 space-y-6">
+                  <div className="relative z-10 px-4 sm:px-6 py-5 sm:py-6 space-y-6">
                     {/* Order items list */}
                     <div className="pb-4 border-b border-zinc-900">
                       <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
@@ -309,7 +309,7 @@ export default function ReviewModal({
                 )}
 
               {step === "success" && (
-                <div className="relative z-10 px-6 py-12 text-center space-y-5">
+                <div className="relative z-10 px-4 sm:px-6 py-12 text-center space-y-5">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -339,7 +339,7 @@ export default function ReviewModal({
               )}
 
               {step === "error" && (
-                <div className="relative z-10 px-6 py-12 text-center space-y-5">
+                <div className="relative z-10 px-4 sm:px-6 py-12 text-center space-y-5">
                   <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 mx-auto flex items-center justify-center">
                     <span className="text-2xl text-red-500">✗</span>
                   </div>

@@ -17,64 +17,64 @@ export default function About() {
     <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
 
-      <div className="px-8 pt-6">
+      <div className="px-4 sm:px-8 pt-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
       </div>
-      <div className="px-8 pt-10 pb-8">
-        <div className="flex items-baseline justify-between">
+      <div className="px-4 sm:px-8 pt-6 sm:pt-10 pb-6 sm:pb-8">
+        <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2 sm:gap-0">
           <div>
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-3">
+            <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.28em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-3">
               // ABOUT_METALLURG
             </p>
-            <h2 className="text-6xl font-black text-black uppercase tracking-tighter italic">
+            <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
               About
             </h2>
           </div>
-          <p className="text-[10px] text-gray-300 tracking-[0.3em] uppercase hidden md:block">
+          <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase hidden md:block">
             METALLURG™ — EST. 2024
           </p>
         </div>
-        <div className="border-t border-gray-200 mt-6 pt-6">
-          <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
+        <div className="border-t border-gray-200 mt-4 sm:mt-6 pt-4 sm:pt-6">
+          <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
             A curated archive of heavy luxury and rare streetwear. Not a store — an inventory.
             Documentation, provenance, and access to pieces that don't exist in the public domain.
           </p>
         </div>
       </div>
 
-      <section className="px-8 py-16">
+      <section className="px-4 sm:px-8 py-8 sm:py-16">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-4">
-              <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12">
+            <div className="lg:col-span-4 mb-8 lg:mb-0">
+              <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.28em] sm:tracking-[0.4em] uppercase mb-3 sm:mb-4">
                 // MANIFESTO
               </p>
-              <div className="border-l-2 border-black pl-6 space-y-4">
+              <div className="border-l-2 border-black pl-4 sm:pl-6 space-y-3 sm:space-y-4">
                 <div>
-                  <p className="text-[9px] text-gray-300 tracking-[0.3em] uppercase">
+                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
                     50.4501° N, 30.5234° E
                   </p>
-                  <p className="text-[9px] text-gray-300 tracking-[0.3em] uppercase">
+                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
                     KYIV, UKRAINE
                   </p>
                 </div>
                 <div>
-                  <p className="text-[9px] text-gray-300 tracking-[0.3em] uppercase">
+                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
                     TYPE: CURATED_INVENTORY
                   </p>
-                  <p className="text-[9px] text-gray-300 tracking-[0.3em] uppercase">
+                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
                     SECTOR: LUXURY / STREETWEAR
                   </p>
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-8 space-y-6">
+            <div className="lg:col-span-8 space-y-4 sm:space-y-6">
               <motion.p
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="text-3xl font-black text-black uppercase tracking-tight leading-tight"
+                className="text-lg sm:text-2xl md:text-3xl font-black text-black uppercase tracking-tight leading-tight"
               >
                 This is not a store.
                 <br />
@@ -181,36 +181,42 @@ export default function About() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="grid grid-cols-12 gap-6 border-t border-gray-200 py-10 group"
+                className="flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-6 border-t border-gray-200 py-6 sm:py-10 group"
               >
-                <div className="col-span-2">
-                  <p className="text-3xl font-black text-gray-200 italic tracking-tight group-hover:text-black transition-colors">
+                <div className="sm:col-span-2 mb-1 sm:mb-0">
+                  <p className="text-2xl sm:text-3xl font-black text-gray-200 italic tracking-tight group-hover:text-black transition-colors">
                     {item.year}
                   </p>
                 </div>
-                <div className="col-span-3">
-                  <p className="text-sm font-black uppercase tracking-[0.2em] text-black">
+                <div className="sm:col-span-3 mb-1 sm:mb-0">
+                  <p className="text-xs sm:text-sm font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] text-black">
                     {item.title}
                   </p>
                 </div>
-                <div className="col-span-7">
-                  <p className="text-sm text-gray-400 leading-relaxed">{item.description}</p>
+                <div className="sm:col-span-7">
+                  <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
               </motion.div>
             ))}
-            <div className="grid grid-cols-12 gap-6 border-t border-gray-200 py-10">
-              <div className="col-span-2">
-                <p className="text-3xl font-black text-gray-200 italic tracking-tight">????</p>
+            <div className="flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-6 border-t border-gray-200 py-6 sm:py-10">
+              <div className="sm:col-span-2 mb-1 sm:mb-0">
+                <p className="text-2xl sm:text-3xl font-black text-gray-200 italic tracking-tight">
+                  ????
+                </p>
               </div>
-              <div className="col-span-3">
-                <p className="text-sm font-black uppercase tracking-[0.2em] text-gray-300">
+              <div className="sm:col-span-3 mb-1 sm:mb-0">
+                <p className="text-xs sm:text-sm font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] text-gray-300">
                   NEXT_CHAPTER
                 </p>
               </div>
-              <div className="col-span-7">
+              <div className="sm:col-span-7">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <p className="text-sm text-gray-300 leading-relaxed">Sourcing in progress...</p>
+                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                    Sourcing in progress...
+                  </p>
                 </div>
               </div>
             </div>

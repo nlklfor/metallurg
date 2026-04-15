@@ -63,7 +63,7 @@ export default function Orders() {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
       <Navbar variant="light" />
-      <div className="px-8 pt-6">
+      <div className="px-4 sm:px-8 pt-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders" }]} />
       </div>
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
@@ -84,13 +84,13 @@ export default function Orders() {
         />
       )}
 
-      <div className="px-8 pt-16 pb-8">
+      <div className="px-4 sm:px-8 pt-8 sm:pt-16 pb-6 sm:pb-8">
         <div className="flex items-baseline justify-between">
           <div>
             <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-3">
               // ORDER_MANAGEMENT
             </p>
-            <h2 className="text-6xl font-black text-black uppercase tracking-tighter italic">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
               Orders & Reviews
             </h2>
           </div>
@@ -105,12 +105,12 @@ export default function Orders() {
         </div>
       </div>
 
-      <div className="px-8 pb-16">
+      <div className="px-4 sm:px-8 pb-8 sm:pb-16">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Track Order Card */}
           <button
             onClick={() => setTrackOpen(true)}
-            className="border border-gray-200 p-10 text-left hover:border-black transition-all group"
+            className="border border-gray-200 p-5 sm:p-10 text-left hover:border-black transition-all group"
           >
             <div className="flex items-start justify-between mb-6">
               <div className="w-14 h-14 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -132,7 +132,7 @@ export default function Orders() {
           </button>
 
           {/* Reviews Card */}
-          <div className="border border-gray-200 p-10 text-left hover:border-black transition-all group">
+          <div className="border border-gray-200 p-5 sm:p-10 text-left hover:border-black transition-all group">
             <div className="flex items-start justify-between mb-6">
               <div className="w-14 h-14 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Star size={24} className="text-white" />
@@ -174,7 +174,7 @@ export default function Orders() {
       </div>
 
       {/* All Reviews Section */}
-      <div className="bg-black text-white px-8 py-16">
+      <div className="bg-black text-white px-4 sm:px-8 py-10 sm:py-16">
         <div className="max-w-5xl mx-auto">
           <p className="text-[10px] text-zinc-500 tracking-[0.4em] uppercase mb-3">
             // ALL_FIELD_REPORTS
