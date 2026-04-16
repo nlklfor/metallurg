@@ -42,11 +42,14 @@ export function useCheckout() {
     const order_number = generateOrderNumber();
     const serializedItems = serializeCartItems(items);
 
+    const is_international = zone === "Ukraine";
+
     const payload = {
       order_number,
       customer_name: name.trim(),
       contact: contact.trim(),
       shipping_zone: zone,
+      is_international,
       items: serializedItems,
       total_price: total,
     };

@@ -39,9 +39,10 @@ export const VALUES = [
       "We don't catalogue thousands. Each entry is hand-selected — only pieces worth preserving.",
   },
   {
-    label: "NODES",
-    value: "3",
-    description: "Ukraine, Switzerland — a distributed network of archive access points.",
+    label: "CUSTOMERS",
+    value: "500+",
+    description:
+      "Over 500 customers are interested in our archive across Ukraine, Switzerland, and beyond.",
   },
 ];
 
