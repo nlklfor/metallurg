@@ -224,6 +224,14 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  /* Prevent iOS Safari from zooming on input focus */
+  @media (max-width: 640px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
 }
 
 @font-face {

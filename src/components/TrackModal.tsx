@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrackOrder } from "@/hooks/useTrackOrder";
-import { INTERNATIONAL_ROUTE, LOCAL_ROUTE } from "@/lib/constants/index";
+import {
+  INTERNATIONAL_ROUTE,
+  LOCAL_ROUTE,
+  STATUS_LABELS,
+  STATUS_COLORS,
+} from "@/lib/constants/index";
 import TrackStep from "@/components/TrackStep";
 import type { TrackOrderModalProps, TrackStepDefinition } from "@/interfaces";
 
@@ -10,7 +15,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
   const { order, isLoading, error, trackOrder, reset } = useTrackOrder();
 
   const route: TrackStepDefinition[] | null = order
-    ? order.is_international
+    ? order.shipping_zone === "Ukraine"
       ? INTERNATIONAL_ROUTE
       : LOCAL_ROUTE
     : null;
@@ -155,6 +160,16 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                         </p>
                         <p className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider mt-0.5">
                           {order.shipping_zone}
+                        </p>
+                      </div>
+                      <div className="col-span-2 pt-1">
+                        <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase mb-1">
+                          ORDER_STATUS
+                        </p>
+                        <p
+                          className={`text-[11px] font-archivo-black tracking-[0.2em] uppercase ${STATUS_COLORS[order.status] ?? "text-zinc-400"}`}
+                        >
+                          {STATUS_LABELS[order.status] ?? order.status.toUpperCase()}
                         </p>
                       </div>
                     </div>
