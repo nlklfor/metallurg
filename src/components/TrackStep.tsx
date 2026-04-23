@@ -1,5 +1,48 @@
 import { motion } from "framer-motion";
 import type { TrackStepProps } from "@/interfaces";
+import { useNpTracking } from "@/hooks/useNpTracking";
+import NpTrackingPanel from "@/components/NpTrackingPanel";
+
+function NpPanel({ trackingNumber }: { trackingNumber: string | null }) {
+  const { data, isLoading, error } = useNpTracking(trackingNumber);
+
+  if (!trackingNumber) return null;
+
+  if (isLoading) {
+    return (
+      <motion.p
+        animate={{ opacity: [1, 0.3, 1] }}
+        transition={{ duration: 0.8, repeat: Infinity }}
+        className="mt-3 text-[9px] font-ibm-mono text-zinc-600 tracking-[0.3em] uppercase"
+      >
+        // FETCHING_NP_DATA...
+      </motion.p>
+    );
+  }
+
+  if (data) return <NpTrackingPanel data={data} />;
+
+  return (
+    <div className="mt-3 space-y-2">
+      {error && (
+        <p className="text-[9px] font-ibm-mono text-red-500 tracking-[0.2em] uppercase">
+          // ERR: {error}
+        </p>
+      )}
+      <motion.a
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        href={`https://novaposhta.ua/tracking/?cargo_number=${trackingNumber}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block text-[9px] tracking-[0.2em] text-white border border-zinc-600 px-3 py-1.5 hover:border-white hover:bg-white hover:text-black transition-all uppercase"
+      >
+        TRACK_ON_NP → {trackingNumber}
+      </motion.a>
+    </div>
+  );
+}
 
 export default function TrackStep({
   step,
@@ -83,19 +126,7 @@ export default function TrackStep({
           {step.sublabel}
         </p>
 
-        {isLast && isActive && trackingNumber && (
-          <motion.a
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            href={`https://novaposhta.ua/tracking/?cargo_number=${trackingNumber}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-3 text-[9px] tracking-[0.2em] text-white border border-zinc-600 px-3 py-1.5 hover:border-white hover:bg-white hover:text-black transition-all uppercase"
-          >
-            TRACK_ON_NP → {trackingNumber}
-          </motion.a>
-        )}
+        {isLast && isActive && <NpPanel trackingNumber={trackingNumber} />}
       </div>
     </div>
   );
