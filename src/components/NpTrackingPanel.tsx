@@ -2,7 +2,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { motion } from "framer-motion";
-import type { NpTrackingData } from "@/hooks/useNpTracking";
+import type { NpTrackingData } from "@/lib/constants/np";
 
 const markerIcon = L.divIcon({
   className: "",
