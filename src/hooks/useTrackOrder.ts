@@ -1,6 +1,7 @@
 import { useState } from "react";
-import supabase from "@/lib/supabase";
 import type { Order } from "@/interfaces";
+
+const EDGE_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/track-order";
 
 export function useTrackOrder() {
   const [order, setOrder] = useState<Order | null>(null);
@@ -15,22 +16,26 @@ export function useTrackOrder() {
     setError(null);
     setOrder(null);
 
-    const { data, error: sbError } = await supabase
-      .from("orders")
-      .select(
-        "order_number, customer_name, shipping_zone, total_price, status, current_status_index, is_international, tracking_number, created_at, items"
-      )
-      .eq("order_number", trimmed)
-      .single();
+    try {
+      const res = await fetch(EDGE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderNumber: trimmed }),
+      });
 
-    setIsLoading(false);
+      const json = await res.json();
 
-    if (sbError || !data) {
+      if (!res.ok || json.error) {
+        setError("ORDER_NOT_FOUND // Verify your ID and try again.");
+        return;
+      }
+
+      setOrder(json as Order);
+    } catch {
       setError("ORDER_NOT_FOUND // Verify your ID and try again.");
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    setOrder(data as Order);
   };
 
   const reset = () => {
