@@ -38,7 +38,6 @@ function Lightbox({
       className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
       onClick={onClose}
     >
-      {/* Close */}
       <button
         onClick={onClose}
         className="absolute top-5 right-5 z-10 text-zinc-400 hover:text-white transition-colors"
@@ -47,12 +46,10 @@ function Lightbox({
         <X size={22} />
       </button>
 
-      {/* Counter */}
       <span className="absolute top-5 left-5 text-[9px] font-ibm-mono text-zinc-600 tracking-widest">
         {String(current + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
       </span>
 
-      {/* Image */}
       <motion.div
         key={current}
         initial={{ opacity: 0, scale: 0.97 }}
@@ -69,7 +66,6 @@ function Lightbox({
         />
       </motion.div>
 
-      {/* Prev / Next */}
       {images.length > 1 && (
         <>
           <button
@@ -95,7 +91,6 @@ function Lightbox({
         </>
       )}
 
-      {/* Dots */}
       {images.length > 1 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
           {images.map((_, i) => (
