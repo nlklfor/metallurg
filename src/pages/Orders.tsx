@@ -1,9 +1,9 @@
 import { Footer, Navbar } from "@/components";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { useState } from "react";
-import TrackOrderModal from "@/components/TrackModal";
-import ReviewModal from "@/components/ReviewModal";
-import ReviewList from "@/components/ReviewList";
+import TrackOrderModal from "@/components/tracking/TrackModal";
+import ReviewModal from "@/components/review/ReviewModal";
+import ReviewList from "@/components/review/ReviewList";
 import { useAllReviews } from "@/hooks/useAllReviews";
 import { Package, Star } from "lucide-react";
 import supabase from "@/lib/supabase";

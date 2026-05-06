@@ -6,7 +6,7 @@ import { NAV_LINKS } from "@/lib/constants/navigation";
 import { useCartStore } from "@/stores/useCartStore";
 import { getThemeColors, type ThemeVariant } from "@/config/theme";
 import { useState, useRef, useEffect } from "react";
-import SearchModal from "@/components/SearchModal";
+import SearchModal from "@/components/search/SearchModal";
 import { useCurrencyStore, CURRENCIES, type CurrencyCode } from "@/stores/useCurrencyStore";
 
 export default function Navbar({ variant = "light" }: NavbarProps) {

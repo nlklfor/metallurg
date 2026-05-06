@@ -8,10 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "./ui/slider";
+import { Slider } from "../ui/slider";
 import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 
 export default function ProductFilters({

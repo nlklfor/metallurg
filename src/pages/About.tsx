@@ -1,5 +1,5 @@
 import { Footer, Navbar } from "@/components";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { PILLARS, TIMELINE, VALUES } from "@/lib/constants/about";
 import { motion, type Variants } from "framer-motion";
 

@@ -4,7 +4,7 @@ import { SHIPPING_ZONES } from "@/lib/constants/index";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import type { CheckoutModalProps } from "@/interfaces";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import ReceiptDocument from "@/components/ReceiptDocument";
+import ReceiptDocument from "@/components/checkout/ReceiptDocument";
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const {

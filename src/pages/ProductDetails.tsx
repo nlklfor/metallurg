@@ -1,19 +1,19 @@
 import { useParams } from "react-router-dom";
 import { useProductDetails } from "@/hooks/useProductDetails";
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ProductDetailsSkeleton from "@/components/ProductDetailsSkeleton";
-import ErrorState from "@/components/ErrorState";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import ProductDetailsSkeleton from "@/components/product/ProductDetailsSkeleton";
+import ErrorState from "@/components/layout/ErrorState";
 import { useCartStore } from "@/stores/useCartStore";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
-import ProductImageSlider from "@/components/ProductImageSlider";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import ProductItem from "@/components/ProductItem";
+import ProductImageSlider from "@/components/product/ProductImageSlider";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import ProductItem from "@/components/product/ProductItem";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 

@@ -1,15 +1,15 @@
 import { ArrowLeft, MoveRight } from "lucide-react";
 import { useCartStore } from "@/stores/useCartStore";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
-import CartItemCard from "@/components/CartItemCard";
+import CartItemCard from "@/components/cart/CartItemCard";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import CheckoutModal from "@/components/CheckoutModal";
-import TrackOrderModal from "@/components/TrackModal";
-import Navbar from "@/components/Navbar";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import Footer from "@/components/Footer";
+import CheckoutModal from "@/components/checkout/CheckoutModal";
+import TrackOrderModal from "@/components/tracking/TrackModal";
+import Navbar from "@/components/layout/Navbar";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import Footer from "@/components/layout/Footer";
 
 const Cart = () => {
   const navigate = useNavigate();
