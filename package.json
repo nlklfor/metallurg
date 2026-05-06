@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@google/model-viewer": "^4.2.0",
+    "@react-pdf/renderer": "^4.5.1",
     "@supabase/supabase-js": "^2.95.3",
     "@tailwindcss/vite": "^4.1.18",
     "@types/react-router-dom": "^5.3.3",

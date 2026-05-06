@@ -7,7 +7,7 @@ import {
   STATUS_LABELS,
   STATUS_COLORS,
 } from "@/lib/constants/index";
-import TrackStep from "@/components/TrackStep";
+import TrackStep from "@/components/tracking/TrackStep";
 import type { TrackOrderModalProps, TrackStepDefinition } from "@/interfaces";
 
 export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProps) {

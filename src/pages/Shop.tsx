@@ -1,7 +1,7 @@
 import { Footer, Navbar } from "@/components";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import ProductList from "@/components/ProductList";
-import ProductFilters from "@/components/ProductFilters";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import ProductList from "@/components/product/ProductList";
+import ProductFilters from "@/components/product/ProductFilters";
 import { useFilters } from "@/hooks/useFilters";
 
 export default function Shop() {

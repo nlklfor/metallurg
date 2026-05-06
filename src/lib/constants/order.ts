@@ -76,6 +76,8 @@ export const STATUS_COLORS: Record<string, string> = {
 export const EDGE_FUNCTION_URL =
   "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/notify-telegram";
 
+export const TRACK_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/track-order";
+
 // Navigation
 export { MAIN_PAGE_BTNS, MAIN_PAGE_LINKS, NAV_LINKS } from "./navigation";
 

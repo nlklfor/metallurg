@@ -1,5 +1,5 @@
 import { Footer, Navbar } from "@/components";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { Iphone } from "@/components/ui/iphone";
 import phone from "@/assets/images/phone-screenshot.png";
 import { Instagram, Send } from "lucide-react";

@@ -3,6 +3,8 @@ import { useCheckout } from "@/hooks/useCheckout";
 import { SHIPPING_ZONES } from "@/lib/constants/index";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import type { CheckoutModalProps } from "@/interfaces";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ReceiptDocument from "@/components/checkout/ReceiptDocument";
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const {
@@ -174,6 +176,27 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     <span className="text-black">TRACK_MY_ORDER</span> SECTION TO CHECK YOUR
                     DELIVERY STATUS.
                   </p>
+
+                  <PDFDownloadLink
+                    document={
+                      <ReceiptDocument
+                        data={{
+                          orderNumber,
+                          customerName: name,
+                          contact,
+                          zone,
+                          items,
+                          total,
+                          date: new Date().toISOString(),
+                          currency,
+                        }}
+                      />
+                    }
+                    fileName={`${orderNumber}_receipt.pdf`}
+                    className="block text-center text-[10px] font-ibm-mono text-gray-400 hover:text-black tracking-[0.2em] uppercase transition-colors"
+                  >
+                    {({ loading }) => (loading ? "GENERATING..." : "↓ DOWNLOAD_RECEIPT")}
+                  </PDFDownloadLink>
 
                   <button
                     onClick={() => handleClose(onClose)}

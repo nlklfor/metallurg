@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import type { TrackStepProps } from "@/interfaces";
 import { useNpTracking } from "@/hooks/useNpTracking";
-import NpTrackingPanel from "@/components/NpTrackingPanel";
+import NpTrackingPanel from "@/components/tracking/NpTrackingPanel";
 
 function NpPanel({ trackingNumber }: { trackingNumber: string | null }) {
   const { data, isLoading, error } = useNpTracking(trackingNumber);
