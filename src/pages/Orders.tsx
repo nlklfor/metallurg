@@ -6,7 +6,7 @@ import ReviewModal from "@/components/review/ReviewModal";
 import ReviewList from "@/components/review/ReviewList";
 import { useAllReviews } from "@/hooks/useAllReviews";
 import { Package, Star } from "lucide-react";
-import supabase from "@/lib/supabase";
+import { TRACK_URL } from "@/lib/constants/order";
 
 interface ResolvedOrder {
   id: string;
@@ -31,33 +31,38 @@ export default function Orders() {
     setIsLookingUp(true);
     setLookupError("");
 
-    const { data, error } = await supabase
-      .from("orders")
-      .select("id, order_number, customer_name, status, items")
-      .eq("order_number", trimmed)
-      .single();
+    try {
+      const res = await fetch(TRACK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderNumber: trimmed }),
+      });
+      const data = await res.json();
 
-    setIsLookingUp(false);
+      if (!res.ok || data.error) {
+        setLookupError("Order not found — please check the order number and try again.");
+        return;
+      }
 
-    if (error || !data) {
+      if (data.status !== "completed") {
+        setLookupError("ORDER_NOT_COMPLETED — Only delivered orders can be reviewed.");
+        return;
+      }
+
+      setReviewOrder({
+        id: data.id,
+        order_number: data.order_number,
+        customer_name: data.customer_name,
+        items: data.items,
+      });
+      setReviewOpen(true);
+      setOrderInput("");
+      setLookupError("");
+    } catch {
       setLookupError("Order not found — please check the order number and try again.");
-      return;
+    } finally {
+      setIsLookingUp(false);
     }
-
-    if (data.status !== "completed") {
-      setLookupError("ORDER_NOT_COMPLETED — Only delivered orders can be reviewed.");
-      return;
-    }
-
-    setReviewOrder({
-      id: data.id,
-      order_number: data.order_number,
-      customer_name: data.customer_name,
-      items: data.items,
-    });
-    setReviewOpen(true);
-    setOrderInput("");
-    setLookupError("");
   };
 
   return (
