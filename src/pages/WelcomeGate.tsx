@@ -40,8 +40,6 @@ function useBootLog() {
 
 export default function WelcomeGate() {
   const { lines, progress, done } = useBootLog();
-  const [nickname, setNickname] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [exiting, setExiting] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -52,18 +50,9 @@ export default function WelcomeGate() {
     }
   }, [lines]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nickname.trim()) return;
-    setSubmitted(true);
-
-    setTimeout(() => {
-      setExiting(true);
-    }, 1500);
-
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
+  const handleEnter = () => {
+    setExiting(true);
+    setTimeout(() => navigate("/"), 1500);
   };
 
   return (
@@ -131,30 +120,11 @@ export default function WelcomeGate() {
           </div>
         </div>
 
-        {/* Nickname capture */}
+        {/* Enter button */}
         <div className={`gate-access ${done ? "gate-access--visible" : ""}`}>
-          <p className="gate-access-headline">// IDENTIFY_OPERATOR</p>
-          {submitted ? (
-            <div className="gate-access-success">
-              <p>✓ OPERATOR_{nickname.toUpperCase()} — ACCESS_GRANTED</p>
-              <p className="gate-redirect-hint">Redirecting to archive...</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="gate-access-form">
-              <input
-                type="text"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                placeholder="ENTER_CALLSIGN"
-                className="gate-input"
-                maxLength={24}
-                required
-              />
-              <button type="submit" className="gate-btn">
-                REQUEST_ACCESS →
-              </button>
-            </form>
-          )}
+          <button onClick={handleEnter} className="gate-btn">
+            ENTER_ARCHIVE →
+          </button>
         </div>
 
         {/* Social nodes */}
