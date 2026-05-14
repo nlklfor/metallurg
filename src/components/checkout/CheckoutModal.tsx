@@ -3,8 +3,9 @@ import { useCheckout } from "@/hooks/useCheckout";
 import { SHIPPING_ZONES } from "@/lib/constants/index";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import type { CheckoutModalProps } from "@/interfaces";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import ReceiptDocument from "@/components/checkout/ReceiptDocument";
+import { lazy, Suspense } from "react";
+
+const ReceiptDownloadLink = lazy(() => import("@/components/checkout/ReceiptDownloadLink"));
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const {
@@ -177,26 +178,26 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     DELIVERY STATUS.
                   </p>
 
-                  <PDFDownloadLink
-                    document={
-                      <ReceiptDocument
-                        data={{
-                          orderNumber,
-                          customerName: name,
-                          contact,
-                          zone,
-                          items,
-                          total,
-                          date: new Date().toISOString(),
-                          currency,
-                        }}
-                      />
+                  <Suspense
+                    fallback={
+                      <span className="text-[10px] font-ibm-mono text-gray-300 tracking-[0.2em] uppercase">
+                        ↓ DOWNLOAD_RECEIPT
+                      </span>
                     }
-                    fileName={`${orderNumber}_receipt.pdf`}
-                    className="block text-center text-[10px] font-ibm-mono text-gray-400 hover:text-black tracking-[0.2em] uppercase transition-colors"
                   >
-                    {({ loading }) => (loading ? "GENERATING..." : "↓ DOWNLOAD_RECEIPT")}
-                  </PDFDownloadLink>
+                    <ReceiptDownloadLink
+                      data={{
+                        orderNumber,
+                        customerName: name,
+                        contact,
+                        zone,
+                        items,
+                        total,
+                        date: new Date().toISOString(),
+                        currency,
+                      }}
+                    />
+                  </Suspense>
 
                   <button
                     onClick={() => handleClose(onClose)}
