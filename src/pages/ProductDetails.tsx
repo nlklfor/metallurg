@@ -13,7 +13,7 @@ import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/product/ProductImageSlider";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import ProductItem from "@/components/product/ProductItem";
+import RelatedProductsSlider from "@/components/product/RelatedProductsSlider";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 
@@ -55,7 +55,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
           (p) => p.id !== product.id && p.stock_status !== "out_of_stock"
         );
         const shuffled = others.sort(() => Math.random() - 0.5);
-        setRelatedProducts(shuffled.slice(0, 4));
+        setRelatedProducts(shuffled.slice(0, 5));
       })
       .catch(() => setRelatedProducts([]));
   }, [product]);
@@ -282,11 +282,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
               <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-10">
                 You May Also Like
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {relatedProducts.map((p) => (
-                  <ProductItem key={p.id} product={p} variant="dark" />
-                ))}
-              </div>
+              <RelatedProductsSlider products={relatedProducts} variant="dark" />
             </div>
           </div>
         </div>
