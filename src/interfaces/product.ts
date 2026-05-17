@@ -15,6 +15,7 @@ export interface ProductType {
   model_3d_url?: string;
   condition?: string;
   box?: string;
+  sku?: string;
 }
 
 export interface ProductImageSliderProps {

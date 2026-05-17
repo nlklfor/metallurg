@@ -136,7 +136,14 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter italic">
                   {product.name}
                 </h1>
-                <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
+                  {product.sku && (
+                    <span className="text-[9px] font-ibm-mono tracking-[0.2em] text-gray-600 uppercase">
+                      SKU_{product.sku}
+                    </span>
+                  )}
+                </div>
               </div>
               <p className={`text-2xl ${theme.text}`}>{formatPrice(product.price, currency)}</p>
             </header>
