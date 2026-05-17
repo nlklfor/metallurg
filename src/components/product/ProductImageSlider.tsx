@@ -146,7 +146,7 @@ export default function ProductImageSlider({
 
   return (
     <>
-      <div className="relative flex gap-3 h-[300px] sm:h-[420px] lg:h-[520px]">
+      <div className="relative flex gap-3 h-[300px] sm:h-[420px] lg:h-[600px] xl:h-[700px]">
         <div className="flex flex-col justify-center gap-2 py-2 z-10">
           {images.map((_, i) => (
             <button
@@ -183,6 +183,9 @@ export default function ProductImageSlider({
                 src={url}
                 alt={`${productName} — view ${idx + 1}`}
                 onClick={() => !isOutOfStock && setLightboxOpen(true)}
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
                 className={`absolute inset-0 w-full h-full object-contain transition-transform duration-700 ${
                   isOutOfStock ? "grayscale blur-[1px]" : "hover:scale-[1.03] cursor-zoom-in"
                 }`}
@@ -191,7 +194,7 @@ export default function ProductImageSlider({
               />
 
               <img
-                src="/mtl-logo-transparent.png"
+                src="https://ytynsqcxteyufoynvsir.supabase.co/storage/v1/object/public/product-image/mtl-logo-transparent.png"
                 alt=""
                 aria-hidden="true"
                 className="absolute bottom-10 right-3 z-10 w-10 h-10 opacity-20 pointer-events-none select-none object-contain"
