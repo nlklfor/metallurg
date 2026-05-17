@@ -13,7 +13,7 @@ import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/product/ProductImageSlider";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import ProductItem from "@/components/product/ProductItem";
+import RelatedProductsSlider from "@/components/product/RelatedProductsSlider";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 
@@ -55,7 +55,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
           (p) => p.id !== product.id && p.stock_status !== "out_of_stock"
         );
         const shuffled = others.sort(() => Math.random() - 0.5);
-        setRelatedProducts(shuffled.slice(0, 4));
+        setRelatedProducts(shuffled.slice(0, 5));
       })
       .catch(() => setRelatedProducts([]));
   }, [product]);
@@ -136,7 +136,14 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter italic">
                   {product.name}
                 </h1>
-                <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`${theme.textSecondary} text-xs`}>VER. 2026.01</span>
+                  {product.sku && (
+                    <span className="text-[9px] font-ibm-mono tracking-[0.2em] text-gray-600 uppercase">
+                      SKU_{product.sku}
+                    </span>
+                  )}
+                </div>
               </div>
               <p className={`text-2xl ${theme.text}`}>{formatPrice(product.price, currency)}</p>
             </header>
@@ -282,11 +289,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
               <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-10">
                 You May Also Like
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {relatedProducts.map((p) => (
-                  <ProductItem key={p.id} product={p} variant="dark" />
-                ))}
-              </div>
+              <RelatedProductsSlider products={relatedProducts} variant="dark" />
             </div>
           </div>
         </div>

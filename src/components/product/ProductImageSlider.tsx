@@ -190,6 +190,13 @@ export default function ProductImageSlider({
                 loading={idx === 0 ? "eager" : "lazy"}
               />
 
+              <img
+                src="/mtl-logo-transparent.png"
+                alt=""
+                aria-hidden="true"
+                className="absolute bottom-10 right-3 z-10 w-10 h-10 opacity-20 pointer-events-none select-none object-contain"
+              />
+
               <div
                 className="absolute bottom-4 right-4 text-[9px] tracking-widest tabular-nums"
                 style={{ color: "rgba(255,255,255,0.25)" }}

@@ -69,7 +69,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           return (
             p.name.toLowerCase().includes(q) ||
             p.description?.toLowerCase().includes(q) ||
-            p.materials?.toLowerCase().includes(q)
+            p.materials?.toLowerCase().includes(q) ||
+            p.sku?.toLowerCase().includes(q)
           );
         })
       : [];
@@ -174,7 +175,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 {product.name}
                               </p>
                               <p className="text-[10px] text-gray-500 tracking-[0.2em] mt-0.5">
-                                {product.materials && `// ${product.materials}`}
+                                {product.sku
+                                  ? `SKU_${product.sku}`
+                                  : product.materials && `// ${product.materials}`}
                               </p>
                             </div>
 
@@ -203,7 +206,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               {!showResults && (
                 <div className="mt-6 py-4">
                   <p className="text-[9px] text-gray-600 uppercase tracking-[0.3em]">
-                    // search by name, material, or description
+                    // search by name, material, description or sku
                   </p>
                 </div>
               )}
