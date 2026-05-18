@@ -12,7 +12,6 @@ export interface ProductType {
   image_url: string[];
   materials?: string;
   weight?: number;
-  model_3d_url?: string;
   condition?: string;
   box?: string;
   sku?: string;
