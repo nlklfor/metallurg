@@ -44,6 +44,13 @@ export default function ProductFilters({
     }
   }, [debouncedPrice, onFilterChange]);
 
+  const CATEGORIES: { value: FilterOptions["category"]; label: string }[] = [
+    { value: null, label: "ALL" },
+    { value: "apparel", label: "APPAREL" },
+    { value: "footwear", label: "FOOTWEAR" },
+    { value: "accessories", label: "ACCESSORIES" },
+  ];
+
   return (
     <div className="px-4 sm:px-8 py-4 sm:py-6 border-b border-gray-200 flex flex-wrap items-center gap-3 sm:gap-4">
       <Select value={filters.sortBy} onValueChange={handleSortChange}>
@@ -59,6 +66,22 @@ export default function ProductFilters({
           </SelectGroup>
         </SelectContent>
       </Select>
+
+      <div className="flex items-center gap-1">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={String(cat.value)}
+            onClick={() => onFilterChange({ category: cat.value })}
+            className={`px-3 py-1.5 text-[10px] font-ibm-mono uppercase tracking-[0.2em] border transition-all duration-150 ${
+              filters.category === cat.value
+                ? "bg-black text-white border-black"
+                : "bg-white text-black border-gray-300 hover:border-black"
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
 
       <div className="flex items-center gap-3">
         <Slider

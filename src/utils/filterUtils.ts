@@ -9,6 +9,7 @@ export function filterProducts(
   const filtered = products.filter((product) => {
     if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1])
       return false;
+    if (filters.category && product.category !== filters.category) return false;
     return true;
   });
 

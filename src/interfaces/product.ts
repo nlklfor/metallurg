@@ -16,6 +16,7 @@ export interface ProductType {
   condition?: string;
   box?: string;
   sku?: string;
+  category?: "apparel" | "footwear" | "accessories" | null;
 }
 
 export interface ProductImageSliderProps {

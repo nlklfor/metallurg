@@ -4,4 +4,5 @@ export const DEFAULT_FILTERS: FilterOptions = {
   sortBy: "newest",
   sizes: [],
   priceRange: [0, 20000],
+  category: null,
 };
