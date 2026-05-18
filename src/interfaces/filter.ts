@@ -8,4 +8,5 @@ export interface FilterOptions {
   sortBy: "price-asc" | "price-desc" | "newest";
   sizes: string[];
   priceRange: [number, number];
+  category: "apparel" | "footwear" | "accessories" | null;
 }

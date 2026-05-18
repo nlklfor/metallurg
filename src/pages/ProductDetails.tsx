@@ -146,6 +146,25 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                 </div>
               </div>
               <p className={`text-2xl ${theme.text}`}>{formatPrice(product.price, currency)}</p>
+
+              <div className="flex items-center gap-2 mt-3">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    product.stock_status === "in_stock"
+                      ? "bg-green-500"
+                      : product.stock_status === "pre_order"
+                        ? "bg-blue-500"
+                        : "bg-red-500"
+                  }`}
+                />
+                <span className="text-[10px] font-ibm-mono uppercase tracking-[0.25em] text-gray-400">
+                  {product.stock_status === "in_stock"
+                    ? "IN_STOCK"
+                    : product.stock_status === "pre_order"
+                      ? "PRE_ORDER"
+                      : "OUT_OF_STOCK"}
+                </span>
+              </div>
             </header>
 
             <section className={`border-y ${theme.border} py-8 my-8 space-y-6`}>
