@@ -29,8 +29,8 @@ export default function Shop() {
         </div>
         <div className="border-t border-gray-200 mt-6 pt-6">
           <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
-            Indexed objects from private archives and limited releases. Each item authenticated,
-            verified, and ready for acquisition through encrypted channels.
+            Selected streetwear and sportswear. Browse the current inventory, pick your size, and
+            we'll handle the rest.
           </p>
         </div>
       </div>
