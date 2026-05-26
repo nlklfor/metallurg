@@ -29,6 +29,11 @@ export default function CartItemCard({ item }: CartItemCardProps) {
           alt={item.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {item.is_new && !isOutOfStock && (
+          <div className="absolute top-1.5 left-1.5 border border-black bg-white px-1.5 py-0.5">
+            <p className="text-black font-ibm-mono text-[7px] uppercase tracking-[0.2em]">NEW</p>
+          </div>
+        )}
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/60">
             <p className="text-gray-500 font-black text-[8px] uppercase tracking-[0.2em]">

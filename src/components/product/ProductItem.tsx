@@ -28,6 +28,7 @@ export default function ProductItem({ product, variant = "light" }: ProductItemP
         <img
           src={product.image_url[0]}
           alt={product.name}
+          loading="lazy"
           className={`absolute w-full h-full object-contain transition-opacity duration-500 ease-in-out ${
             isHovering && !isOutOfStock ? "opacity-0" : "opacity-100"
           }${isOutOfStock ? " blur-[2px]" : ""}`}
@@ -35,10 +36,17 @@ export default function ProductItem({ product, variant = "light" }: ProductItemP
         <img
           src={product.image_url[1]}
           alt={product.name}
+          loading="lazy"
           className={`absolute w-full h-full object-contain transition-opacity duration-500 ease-in-out ${
             isHovering && !isOutOfStock ? "opacity-100" : "opacity-0"
           }${isOutOfStock ? " blur-[2px]" : ""}`}
         />
+
+        {product.is_new && !isOutOfStock && (
+          <div className="absolute top-2 left-2 z-10 border border-black bg-white px-1.5 py-0.5">
+            <p className="text-black font-ibm-mono text-[7px] uppercase tracking-[0.2em]">NEW</p>
+          </div>
+        )}
 
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center">
