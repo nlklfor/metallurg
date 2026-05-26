@@ -3,19 +3,19 @@ export const TIMELINE = [
     year: "2024",
     title: "GENESIS",
     description:
-      "The concept emerged — a private archive for those who appreciate craftsmanship, heritage, and pieces that deserve to be documented. Not a store. A record.",
+      "Started as a side project — sourcing pieces we liked, connecting with people who appreciated them. Ukraine to Switzerland, streetwear to sport.",
   },
   {
     year: "2025",
-    title: "FIRST_ARCHIVE",
+    title: "FIRST_INVENTORY",
     description:
-      "The first entries were catalogued. Rare pieces, verified provenance, detailed documentation. The archive began attracting a like-minded community.",
+      "First consistent inventory built. A small community formed in Ukraine and Switzerland — people who trusted our selection and came back.",
   },
   {
     year: "2026",
     title: "NETWORK_EXPANSION",
     description:
-      "The network grew across borders. Switzerland and Ukraine nodes active. The archive expanded into a living, cross-continental inventory of curated pieces.",
+      "Launched the inventory site. Shipping consistently across UA and CH. The selection grows, the approach stays the same.",
   },
 ];
 
@@ -23,43 +23,40 @@ export const VALUES = [
   {
     label: "VERIFICATION",
     value: "100%",
-    description:
-      "Every archived piece is verified for authenticity and provenance — no exceptions.",
+    description: "Every piece is checked before it ships — condition, authenticity, no exceptions.",
   },
   {
     label: "NETWORK",
     value: "GLOBAL",
-    description:
-      "Connected to private collectors, archives, and trusted sources across Europe, Asia, and the US.",
+    description: "Sourced through trusted contacts across Europe. UA and CH nodes active.",
   },
   {
-    label: "ARCHIVE_SIZE",
+    label: "INVENTORY_SIZE",
     value: "<100",
     description:
-      "We don't catalogue thousands. Each entry is hand-selected — only pieces worth preserving.",
+      "We don't list thousands. Each entry is hand-selected — only pieces worth wearing.",
   },
   {
     label: "CUSTOMERS",
     value: "500+",
-    description:
-      "Over 500 customers are interested in our archive across Ukraine, Switzerland, and beyond.",
+    description: "Over 500 customers across Ukraine, Switzerland, and beyond.",
   },
 ];
 
 export const PILLARS = [
   {
-    title: "STRICT_CURATION",
+    title: "SELECTION",
     description:
-      "We reject more than we accept. Every piece passes through our archival filter — heritage, condition, rarity, and cultural significance. If it doesn't meet the standard, it doesn't enter the inventory.",
+      "We only add pieces we'd wear ourselves. Streetwear, sportswear, and the occasional drop that crosses both. If it doesn't make the cut, it doesn't enter the inventory.",
   },
   {
     title: "FULL_TRANSPARENCY",
     description:
-      "Every archived item comes with documented provenance, condition reports, and honest descriptions. No hidden information, no ambiguity. What you see in the archive is exactly what exists.",
+      "What you see is what you get. Honest descriptions, real condition, no exaggeration. What's in the inventory is exactly what exists.",
   },
   {
-    title: "IMPOSSIBLE_ACCESS",
+    title: "DIRECT_ACCESS",
     description:
-      "We document pieces you won't find in public catalogues. Private collections, closed networks, unreleased archives. METALLURG™ is the bridge between you and what's usually invisible.",
+      "Kyiv to Zürich, no middlemen. You contact us, we sort the details and ship. Fast, direct, and without the noise of a typical store.",
   },
 ];

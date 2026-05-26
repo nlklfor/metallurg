@@ -36,8 +36,8 @@ export default function About() {
         </div>
         <div className="border-t border-gray-200 mt-4 sm:mt-6 pt-4 sm:pt-6">
           <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
-            A curated archive of heavy luxury and rare streetwear. Not a store — an inventory.
-            Documentation, provenance, and access to pieces that don't exist in the public domain.
+            A curated inventory of streetwear and sportswear. Not a store — an access point.
+            Sourced, verified, and delivered through trusted channels.
           </p>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function About() {
                     TYPE: CURATED_INVENTORY
                   </p>
                   <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-                    SECTOR: LUXURY / STREETWEAR
+                    SECTOR: STREETWEAR / SPORT
                   </p>
                 </div>
               </div>
@@ -78,8 +78,8 @@ export default function About() {
               >
                 This is not a store.
                 <br />
-                This is an <span className="italic text-gray-400">archive</span> — we document,
-                verify, and catalogue what others let disappear.
+                This is an <span className="italic text-gray-400">inventory</span> — we source,
+                verify, and deliver what's worth wearing.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0, y: 12 }}
@@ -88,10 +88,9 @@ export default function About() {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="text-sm text-gray-400 leading-relaxed max-w-xl"
               >
-                METALLURG™ exists at the intersection of private collecting and public
-                documentation. We maintain an inventory of pieces that don't appear on shelves —
-                archived collections, limited collaborations, and one-of-one grails preserved
-                through trusted networks. The archive is the product.
+                METALLURG™ operates between Kyiv and Zürich. We source streetwear and sportswear —
+                pieces that fit your rotation. Each item verified and shipped through trusted
+                networks. The inventory is the product.
               </motion.p>
             </div>
           </div>
@@ -240,13 +239,13 @@ export default function About() {
               // PHILOSOPHY
             </p>
             <blockquote className="text-4xl md:text-5xl font-black text-black uppercase tracking-tighter italic leading-tight max-w-3xl mx-auto">
-              "If it's still on
+              "Good pieces.
               <br />
-              the shelf — it doesn't belong{" "}
+              Right people.{" "}
               <span className="text-gray-300 hover:text-black transition-colors duration-500">
-                to the archive
+                No noise.
               </span>
-              ."
+              "
             </blockquote>
             <div className="mt-8 flex items-center justify-center gap-3">
               <div className="w-8 h-px bg-gray-300" />
