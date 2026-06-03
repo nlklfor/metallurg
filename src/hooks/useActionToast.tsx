@@ -86,6 +86,14 @@ export function useActionToast() {
               >
                 <span className={`text-xs font-bold ${styles.iconColor}`}>{styles.icon}</span>
               </div>
+
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                className="w-6 h-6 flex-shrink-0 flex items-center justify-center text-gray-600 hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                <span className="text-[10px]">✕</span>
+              </button>
             </div>
           </div>
         </div>
