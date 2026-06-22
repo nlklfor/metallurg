@@ -283,7 +283,11 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                     <span
                       className={`text-[10px] tracking-[0.2em] uppercase ${isLowStock ? "text-orange-400" : theme.textSecondary}`}
                     >
-                      {isLowStock ? `LAST_${maxQty}` : `${maxQty} IN_STOCK`}
+                      {!selectedSize && hasSizeStock
+                        ? "SELECT_SIZE"
+                        : isLowStock
+                          ? `LAST_${maxQty}`
+                          : `${maxQty} IN_STOCK`}
                     </span>
                   </div>
                 </div>
