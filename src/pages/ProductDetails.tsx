@@ -14,6 +14,7 @@ import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/product/ProductImageSlider";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import RelatedProductsSlider from "@/components/product/RelatedProductsSlider";
+import SizeGuideModal from "@/components/product/SizeGuideModal";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 
@@ -46,6 +47,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   const theme = getThemeColors("dark");
   const currency = useCurrencyStore((state) => state.currency);
   const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   useEffect(() => {
     if (!product) return;
@@ -215,11 +217,19 @@ function ProductDetailsContent({ slug }: { slug: string }) {
             {!isOutOfStock && (
               <>
                 <div className="mb-8">
-                  <h3
-                    className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em] mb-4`}
-                  >
-                    // select_size
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em]`}>
+                      // select_size
+                    </h3>
+                    {product.category !== "accessories" && (
+                      <button
+                        onClick={() => setSizeGuideOpen(true)}
+                        className="text-[9px] font-ibm-mono uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-colors underline underline-offset-2"
+                      >
+                        SIZE_GUIDE
+                      </button>
+                    )}
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {product.sizes?.map((size) => {
                       const stock = getSizeStock(size);
@@ -336,6 +346,12 @@ function ProductDetailsContent({ slug }: { slug: string }) {
       )}
 
       <Footer />
+
+      <SizeGuideModal
+        isOpen={sizeGuideOpen}
+        onClose={() => setSizeGuideOpen(false)}
+        category={product?.category}
+      />
     </div>
   );
 }
