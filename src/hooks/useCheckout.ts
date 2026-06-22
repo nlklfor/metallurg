@@ -18,14 +18,22 @@ export function useCheckout() {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [zone, setZone] = useState<ShippingZone>("Ukraine");
+  const [city, setCity] = useState("");
+  const [npBranch, setNpBranch] = useState("");
 
-  const isFormValid = name.trim().length > 0 && contact.trim().length > 0;
+  const isUkraine = zone === "Ukraine";
+  const isFormValid =
+    name.trim().length > 0 &&
+    contact.trim().length > 0 &&
+    (!isUkraine || (city.trim().length > 0 && npBranch.trim().length > 0));
 
   const reset = () => {
     setStep("form");
     setName("");
     setContact("");
     setZone("Ukraine");
+    setCity("");
+    setNpBranch("");
     setErrorMsg("");
   };
 
@@ -50,6 +58,7 @@ export function useCheckout() {
       contact: contact.trim(),
       shipping_zone: zone,
       is_international,
+      ...(isUkraine && { city: city.trim(), np_branch: npBranch.trim() }),
       items: serializedItems,
       total_price: total,
     };
@@ -88,6 +97,11 @@ export function useCheckout() {
     setContact,
     zone,
     setZone,
+    city,
+    setCity,
+    npBranch,
+    setNpBranch,
+    isUkraine,
     isFormValid,
     items,
     total,
