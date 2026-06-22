@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrackOrder } from "@/hooks/useTrackOrder";
 import {
@@ -26,6 +26,26 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
     onClose();
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
+
   const handleTrack = () => trackOrder(input);
 
   return (
@@ -48,8 +68,12 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            onClick={handleClose}
           >
-            <div className="relative w-full max-w-md bg-black text-white border border-zinc-800 overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div
+              className="relative w-full max-w-md bg-black text-white border border-zinc-800 overflow-hidden max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div
                 className="absolute inset-0 pointer-events-none z-0"
                 style={{
