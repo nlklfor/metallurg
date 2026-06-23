@@ -44,7 +44,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   const handleTrack = () => trackOrder(input);
 
