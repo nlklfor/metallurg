@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrackOrder } from "@/hooks/useTrackOrder";
 import {
@@ -20,11 +20,11 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
       : LOCAL_ROUTE
     : null;
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     reset();
     setInput("");
     onClose();
-  };
+  }, [reset, onClose]);
 
   useEffect(() => {
     if (isOpen) {
