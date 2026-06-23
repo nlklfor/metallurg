@@ -10,11 +10,13 @@ interface SizeGuideModalProps {
 const APPAREL_STEPS = [
   {
     label: "CHEST",
-    instruction: "Wrap the tape around the widest part of your chest, just under your armpits. Keep it horizontal.",
+    instruction:
+      "Wrap the tape around the widest part of your chest, just under your armpits. Keep it horizontal.",
   },
   {
     label: "WAIST",
-    instruction: "Measure around the narrowest part of your waist, usually just above the belly button.",
+    instruction:
+      "Measure around the narrowest part of your waist, usually just above the belly button.",
   },
   {
     label: "HIPS",
@@ -22,26 +24,31 @@ const APPAREL_STEPS = [
   },
   {
     label: "LENGTH",
-    instruction: "Measure from the top of your shoulder straight down to where you want the garment to end.",
+    instruction:
+      "Measure from the top of your shoulder straight down to where you want the garment to end.",
   },
 ];
 
 const FOOTWEAR_STEPS = [
   {
     label: "STEP_01",
-    instruction: "Place a sheet of paper on the floor against a wall. Stand on it with your heel touching the wall.",
+    instruction:
+      "Place a sheet of paper on the floor against a wall. Stand on it with your heel touching the wall.",
   },
   {
     label: "STEP_02",
-    instruction: "Mark the tip of your longest toe on the paper. Measure the distance from the wall to the mark in cm.",
+    instruction:
+      "Mark the tip of your longest toe on the paper. Measure the distance from the wall to the mark in cm.",
   },
   {
     label: "STEP_03",
-    instruction: "Measure both feet — use the larger measurement. Feet are often slightly different sizes.",
+    instruction:
+      "Measure both feet — use the larger measurement. Feet are often slightly different sizes.",
   },
   {
     label: "BEST_TIME",
-    instruction: "Measure in the evening. Feet expand slightly throughout the day and are largest by night.",
+    instruction:
+      "Measure in the evening. Feet expand slightly throughout the day and are largest by night.",
   },
 ];
 
@@ -119,15 +126,15 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
                 {steps.map((step, i) => (
                   <div key={step.label} className="flex gap-4">
                     <div className="flex-shrink-0 w-6 h-6 border border-zinc-700 flex items-center justify-center mt-0.5">
-                      <span className="text-[9px] font-ibm-mono text-zinc-500">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="text-[9px] font-ibm-mono text-zinc-500">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
                     <div>
                       <p className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-zinc-500 mb-1">
                         // {step.label}
                       </p>
-                      <p className="text-xs text-zinc-300 leading-relaxed">
-                        {step.instruction}
-                      </p>
+                      <p className="text-xs text-zinc-300 leading-relaxed">{step.instruction}</p>
                     </div>
                   </div>
                 ))}

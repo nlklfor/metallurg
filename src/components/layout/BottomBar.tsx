@@ -15,8 +15,7 @@ export default function BottomBar() {
   const cartCount = cartItems.reduce((total, item) => total + item.cart_quantity, 0);
 
   const { pathname } = location;
-  const visible =
-    EXACT_ROUTES.includes(pathname) || pathname.startsWith("/product/");
+  const visible = EXACT_ROUTES.includes(pathname) || pathname.startsWith("/product/");
   if (!visible) return null;
 
   const isActive = (path: string) => location.pathname === path;
