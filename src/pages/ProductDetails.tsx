@@ -14,6 +14,7 @@ import { getThemeColors } from "@/config/theme";
 import ProductImageSlider from "@/components/product/ProductImageSlider";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import RelatedProductsSlider from "@/components/product/RelatedProductsSlider";
+import SizeGuideModal from "@/components/product/SizeGuideModal";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
 
@@ -46,6 +47,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   const theme = getThemeColors("dark");
   const currency = useCurrencyStore((state) => state.currency);
   const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([]);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   useEffect(() => {
     if (!product) return;
@@ -61,7 +63,12 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   }, [product]);
 
   const isOutOfStock = product?.stock_status === "out_of_stock";
-  const maxQty = product?.quantity ?? 1;
+  const hasSizeStock = product?.size_stock && Object.keys(product.size_stock).length > 0;
+  const getSizeStock = (size: string | number) =>
+    hasSizeStock ? (product!.size_stock![String(size)] ?? 0) : null;
+  const selectedSizeStock = selectedSize !== null ? getSizeStock(selectedSize) : null;
+  const maxQty = selectedSizeStock ?? product?.quantity ?? 1;
+  const isLowStock = selectedSizeStock !== null && selectedSizeStock > 0 && selectedSizeStock <= 3;
 
   const handleAddToCart = () => {
     if (isOutOfStock) {
@@ -210,25 +217,45 @@ function ProductDetailsContent({ slug }: { slug: string }) {
             {!isOutOfStock && (
               <>
                 <div className="mb-8">
-                  <h3
-                    className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em] mb-4`}
-                  >
-                    // select_size
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {product.sizes?.map((size) => (
-                      <Button
-                        key={String(size)}
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-8 py-3 text-sm rounded-xs transition-all border ${
-                          selectedSize === size
-                            ? "bg-white text-black border-white hover:bg-gray-100"
-                            : `bg-transparent ${theme.text} ${theme.border} hover:border-gray-400`
-                        }`}
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className={`text-[10px] ${theme.textSecondary} uppercase tracking-[0.2em]`}>
+                      // select_size
+                    </h3>
+                    {product.category !== "accessories" && (
+                      <button
+                        onClick={() => setSizeGuideOpen(true)}
+                        className="text-[9px] font-ibm-mono uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-colors underline underline-offset-2"
                       >
-                        {size}
-                      </Button>
-                    ))}
+                        SIZE_GUIDE
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizes?.map((size) => {
+                      const stock = getSizeStock(size);
+                      const soldOut = stock !== null && stock === 0;
+                      return (
+                        <Button
+                          key={String(size)}
+                          onClick={() => {
+                            if (!soldOut) {
+                              setSelectedSize(size);
+                              setCartQuantity(1);
+                            }
+                          }}
+                          disabled={soldOut}
+                          className={`px-8 py-3 text-sm rounded-xs transition-all border ${
+                            soldOut
+                              ? `bg-transparent opacity-30 cursor-not-allowed line-through ${theme.border} ${theme.text}`
+                              : selectedSize === size
+                                ? "bg-white text-black border-white hover:bg-gray-100"
+                                : `bg-transparent ${theme.text} ${theme.border} hover:border-gray-400`
+                          }`}
+                        >
+                          {size}
+                        </Button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -264,9 +291,13 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                     </div>
 
                     <span
-                      className={`text-[10px] ${theme.textSecondary} tracking-[0.2em] uppercase`}
+                      className={`text-[10px] tracking-[0.2em] uppercase ${isLowStock ? "text-orange-400" : theme.textSecondary}`}
                     >
-                      {maxQty} IN_STOCK
+                      {!selectedSize && hasSizeStock
+                        ? "SELECT_SIZE"
+                        : isLowStock
+                          ? `LAST_${maxQty}`
+                          : `${maxQty} IN_STOCK`}
                     </span>
                   </div>
                 </div>
@@ -315,6 +346,12 @@ function ProductDetailsContent({ slug }: { slug: string }) {
       )}
 
       <Footer />
+
+      <SizeGuideModal
+        isOpen={sizeGuideOpen}
+        onClose={() => setSizeGuideOpen(false)}
+        category={product?.category}
+      />
     </div>
   );
 }

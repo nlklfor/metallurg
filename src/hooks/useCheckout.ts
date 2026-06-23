@@ -10,7 +10,7 @@ export function useCheckout() {
   const totalPriceFn = useCartStore((state) => state.totalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
 
-  const total = useMemo(() => totalPriceFn(), [items, totalPriceFn]);
+  const total = useMemo(() => totalPriceFn(), [totalPriceFn]);
 
   const [step, setStep] = useState<OrderStep>("form");
   const [orderNumber, setOrderNumber] = useState("");

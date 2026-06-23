@@ -3,11 +3,13 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import AnimatedRoutes from "./components/layout/AnimatedRoutes.tsx";
+import BottomBar from "./components/layout/BottomBar.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <AnimatedRoutes />
+      <BottomBar />
     </BrowserRouter>
   </StrictMode>
 );

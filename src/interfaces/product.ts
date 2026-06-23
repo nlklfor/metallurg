@@ -9,6 +9,7 @@ export interface ProductType {
   is_new: boolean;
   slug: string;
   quantity: number;
+  size_stock?: Record<string, number>;
   image_url: string[];
   materials?: string;
   weight?: number;

@@ -22,12 +22,12 @@ function Lightbox({
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") prev();
-      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") setCurrent((i) => (i - 1 + images.length) % images.length);
+      if (e.key === "ArrowRight") setCurrent((i) => (i + 1) % images.length);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [onClose, images.length]);
 
   return (
     <motion.div

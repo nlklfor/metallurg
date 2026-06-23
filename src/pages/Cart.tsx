@@ -207,8 +207,8 @@ const Cart = () => {
                 </div>
 
                 <div className="border-t border-gray-200 px-6 py-3 flex justify-between">
-                  <span className="text-[8px] text-gray-300 tracking-widest">SECURE_CHECKOUT</span>
-                  <span className="text-[8px] text-gray-300 tracking-widest">MTL_STORE_2026</span>
+                  <span className="text-[8px] text-gray-300 tracking-widest">METALLURG™</span>
+                  <span className="text-[8px] text-gray-300 tracking-widest">MTL_BASE_2026</span>
                 </div>
               </div>
             </div>
