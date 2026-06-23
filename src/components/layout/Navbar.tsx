@@ -84,26 +84,6 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                 }`}
               />
             </button>
-            <button
-              className={`${theme.text} ${theme.hover}`}
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-            </button>
           </div>
 
           {/* Center logo */}
@@ -161,7 +141,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                 </div>
               )}
             </div>
-            <Link to="/loadout">
+            <Link to="/loadout" className="hidden md:inline-flex">
               <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
                 <span className={`text-xs sm:text-sm font-medium ${theme.text}`}>
                   loadout ({cartCount})

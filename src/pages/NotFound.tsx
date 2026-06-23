@@ -1,73 +1,68 @@
 import { Link } from "react-router-dom";
-import { EncryptedText } from "@/components/ui/encrypted-text";
-import { TypingAnimation } from "@/components/ui/typing-animation";
+import { motion } from "framer-motion";
 
 export default function NotFound() {
   return (
-    <div className="h-screen w-screen overflow-hidden bg-black flex flex-col items-center justify-center relative">
-      {/* Scanlines */}
-      <div className="gate-scanlines" />
-      <div className="gate-grain" />
-
-      {/* Glitch 404 */}
-      <div className="relative z-20 flex flex-col items-center gap-6">
-        <p
-          className="text-[10px] text-white/20 tracking-[0.5em] uppercase"
-          style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-        >
-          // SYSTEM_ERROR
+    <div className="h-screen w-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col items-center gap-8 z-10 px-8 text-center"
+      >
+        <p className="text-[9px] font-ibm-mono text-white/20 tracking-[0.5em] uppercase">
+          // SYSTEM_ERROR :: 404
         </p>
 
-        <h1
-          className="text-[12rem] md:text-[16rem] font-black leading-none tracking-tighter text-white select-none notfound-glitch"
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="text-[7rem] md:text-[10rem] font-black leading-none tracking-tighter text-white select-none"
           style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
-          data-text="404"
         >
           404
-        </h1>
+        </motion.h1>
 
-        <div className="flex flex-col items-center gap-2 -mt-4">
-          <div
-            className="text-sm text-white/60 h-6"
-            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-          >
-            <TypingAnimation duration={50} showCursor cursorStyle="block">
-              {"> ROUTE_NOT_FOUND — ACCESS_DENIED"}
-            </TypingAnimation>
-          </div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="space-y-2 -mt-4"
+        >
+          <p className="font-ibm-mono text-[11px] text-white/40 uppercase tracking-[0.3em]">
+            ROUTE_NOT_FOUND
+          </p>
+          <p className="font-ibm-mono text-[9px] text-white/20 uppercase tracking-[0.2em]">
+            The requested path does not exist in this inventory.
+          </p>
+        </motion.div>
 
-        <div className="mt-8 flex flex-col items-center gap-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
           <Link
             to="/"
-            className="border border-white/30 px-10 py-4 text-xs uppercase tracking-[0.3em] !text-white no-underline hover:bg-white hover:!text-black transition-all duration-200"
-            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+            className="inline-block border border-white/20 px-10 py-4 font-ibm-mono text-[10px] uppercase tracking-[0.3em] text-white/60 hover:border-white hover:text-white transition-all duration-300"
           >
-            [ RETURN_TO_BASE ]
+            RETURN_TO_BASE →
           </Link>
-        </div>
+        </motion.div>
+      </motion.div>
+
+      <div className="absolute bottom-8 z-10">
+        <p className="font-ibm-mono text-[8px] text-white/10 tracking-[0.4em] uppercase">
+          METALLURG™ — MTL_STORE_2026
+        </p>
       </div>
 
-      {/* Bottom logo */}
-      <div className="absolute bottom-10 z-20">
-        <span
-          className="text-lg tracking-tighter"
-          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
-        >
-          <EncryptedText
-            text="METALLURG™"
-            encryptedClassName="text-neutral-700"
-            revealedClassName="text-white/15"
-            revealDelayMs={150}
-          />
-        </span>
-      </div>
-
-      {/* Coords */}
-      <div className="gate-coords">
-        <p>ERR::404</p>
-        <p>PATH_UNDEFINED</p>
-      </div>
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, transparent 70%)",
+        }}
+      />
     </div>
   );
 }

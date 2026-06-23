@@ -302,10 +302,10 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               {/* sticky footer */}
               <div className="border-t border-gray-100 px-6 py-3 flex justify-between flex-shrink-0">
                 <span className="text-[8px] font-ibm-mono text-gray-300 tracking-widest">
-                  SECURE_CHECKOUT
+                  METALLURG™
                 </span>
                 <span className="text-[8px] font-ibm-mono text-gray-300 tracking-widest">
-                  MTL_STORE_2026
+                  MTL_BASE_2026
                 </span>
               </div>
             </div>
