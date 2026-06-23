@@ -56,7 +56,7 @@ export default function BottomBar() {
                 </span>
               )}
             </div>
-            <span className="text-[8px] font-ibm-mono uppercase tracking-[0.15em]">Cart</span>
+            <span className="text-[8px] font-ibm-mono uppercase tracking-[0.15em]">Loadout</span>
           </Link>
 
           <button
