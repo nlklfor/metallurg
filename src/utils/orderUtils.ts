@@ -1,6 +1,11 @@
+const ORDER_CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O or 1/I/L — avoids typos
+
 export function generateOrderNumber(): string {
-  const num = Math.floor(1000 + Math.random() * 9000);
-  return `MTL-${num}`;
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    code += ORDER_CODE_CHARS[Math.floor(Math.random() * ORDER_CODE_CHARS.length)];
+  }
+  return `MTL-${code}`;
 }
 
 export function formatPrice(price: number): string {
