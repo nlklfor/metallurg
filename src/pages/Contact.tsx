@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Footer, Navbar } from "@/components";
 import { FAQ } from "@/lib/constants/contact";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import NetworkNodesMap from "@/components/contact/NetworkNodesMap";
 import { Send } from "lucide-react";
 import { useContact } from "@/hooks/useContact";
 

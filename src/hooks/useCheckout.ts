@@ -71,10 +71,15 @@ export function useCheckout() {
 
       if (error) throw error;
 
+      const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
       await fetch(EDGE_FUNCTION_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${supabaseKey}`,
+          apikey: supabaseKey,
+        },
+        body: JSON.stringify({ order_number }),
       });
 
       setOrderNumber(order_number);
