@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Footer, Navbar } from "@/components";
+import { FAQ } from "@/lib/constants/contact";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import NetworkNodesMap from "@/components/contact/NetworkNodesMap";
 import { Send } from "lucide-react";
 import { useContact } from "@/hooks/useContact";
 
@@ -39,9 +39,9 @@ export default function Contact() {
       </div>
 
       <div className="px-4 sm:px-8 pb-10 sm:pb-16 flex-1">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10">
-          <div className="w-full lg:max-w-md space-y-8">
-            {/* Contact Form */}
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 items-start">
+          {/* Left — Form + Socials */}
+          <div className="space-y-8">
             <AnimatePresence mode="wait">
               {sent ? (
                 <motion.div
@@ -209,8 +209,25 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="w-full lg:max-w-lg lg:mt-20 lg:sticky lg:top-32">
-            <NetworkNodesMap />
+          {/* Right — FAQ */}
+          <div className="space-y-1">
+            <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-4">
+              // FAQ
+            </p>
+            {FAQ.map((item, i) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.06 }}
+                className="border-b border-gray-100 py-4"
+              >
+                <p className="text-[8px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400 mb-1.5">
+                  // {item.q}
+                </p>
+                <p className="text-xs text-gray-600 leading-relaxed">{item.a}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
