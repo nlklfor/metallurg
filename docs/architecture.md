@@ -1,4 +1,4 @@
-# METALLURG METALLURG Architecture Reference
+# METALLURG Architecture Reference
 
 Deep reference for the codebase: what it is, how it's structured, what libraries do what, and how each piece of functionality works. Companion to `design-system.md` (design system) and `backlog.md` (known issues). Written 2026-08-16 — re-verify specifics (file line numbers, dependency versions) against the current code before relying on them, this is a snapshot.
 
@@ -39,8 +39,8 @@ src/
   components/
     cart/        Cart line-item card
     checkout/    Checkout modal, PDF receipt document + its lazy download-link wrapper
-    contact/     Contact page map
-    layout/      Navbar, Footer, BottomBar, Breadcrumbs, PageTransition, AnimatedRoutes (route table), ErrorState, GateGuard (currently unused — see FIXES.md)
+    contact/     Contact page: `NetworkNodesMap` (leaflet map), static social links
+    layout/      Navbar, Footer, BottomBar, Breadcrumbs, PageTransition, AnimatedRoutes (route table), ErrorState, GateGuard (currently unused — see backlog.md)
     product/     Product list/item/filters/skeletons/image slider/related products/size guide
     review/      Review card/list/modal
     search/      Global search modal
@@ -51,14 +51,14 @@ src/
   hooks/         One hook per page/feature concern (see §5) — this is where almost all business logic and data-fetching lives, keeping pages/components close to presentational
   interfaces/    TypeScript types, one file per domain + an index.ts barrel
   lib/
-    constants/   Static content and config, split by domain (navigation, site, filters, np, order, about, protocol) — order.ts currently over-broad, see FIXES.md #9
+    constants/   Static content and config, split by domain (navigation, site, filters, np, order, about, protocol, contact) — order.ts currently over-broad, see backlog.md #9
     supabase.ts  Supabase client singleton
     utils.ts     `cn()` (clsx + tailwind-merge) helper used everywhere for conditional classNames
   pages/         One component per route (see §4)
   stores/        Zustand stores: cart, currency, gate (unused)
   utils/         Pure functions: computeTotal, filterUtils, orderUtils (order number generation, price formatting, cart serialization), timeAgo
 supabase/
-  functions/     Only contact-form is committed here — see FIXES.md #3 for the other three
+  functions/     Only contact-form is committed here — see backlog.md #3 for the other three
 ```
 
 ## 4. Routes (`src/components/layout/AnimatedRoutes.tsx`)

@@ -51,10 +51,9 @@ Workflow for anything here that touches code: new branch → implement → **ask
 **Risk:** The checkout total math, order-number generation, and cart quantity clamping (`useCartStore.ts`) are exactly the kind of small pure functions that silently break during refactors.
 **Fix:** Start small — Vitest + unit tests for `computeTotal`, `generateOrderNumber` (alphabet/length/prefix), and `serializeCartItems`. Wire `npm test` into `ci.yml` once it exists. Don't aim for full coverage immediately; cover the money-and-PII-adjacent logic first.
 
-### 7. No `.env.example`
+### 7. ~~No `.env.example`~~ ✅ Done
 
-**What:** `.gitignore` excludes `.env`, correctly, but there's no template listing which vars are required (`VITE_SUPABASE_URL`, `VITE_SUPABASE_KEY`, `EDGE_FUNCTION_URL`, and whatever the uncommitted edge functions need on the server side: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, likely a Nova Poshta API key).
-**Fix:** Add `.env.example` with variable names and one-line comments (no real values). Referenced from `README.md`.
+`.env.example` added in commit `39d0568` — lists all required vars with one-line comments.
 
 ### 8. Duplicated / hardcoded edge function base URL
 
@@ -78,7 +77,7 @@ Workflow for anything here that touches code: new branch → implement → **ask
 
 - `src/components/layout/GateGuard.tsx` and `src/stores/useGateStore.ts` are unused dead code — no route imports `GateGuard`, and `/gate/mtl-ch-ua` (`WelcomeGate.tsx`) is reachable directly without ever calling `unlock()`. Either wire it up (if the intent is to gate `/inventory` etc. behind the welcome sequence) or delete it.
 - `package.json` version is stuck at `0.0.0` — bump it or drop the field if you're not tracking releases.
-- `README.md` and `.github/copilot-instructions.md` were stale/template boilerplate — now replaced (see `README.md`, and consider deleting `copilot-instructions.md` if you don't use GitHub Copilot's workspace scaffolding feature).
+- `README.md` was stale template boilerplate — now replaced with project-specific content. `.github/copilot-instructions.md` was deleted (was unused GitHub Copilot scaffolding template).
 - `ProductDetails.tsx` (357 lines) and `CheckoutModal.tsx` (317 lines) are getting large; consider splitting presentational sub-sections out as the feature set grows further, not urgent today.
 
 ---
@@ -86,5 +85,5 @@ Workflow for anything here that touches code: new branch → implement → **ask
 ## Already done well (don't regress these)
 
 - Order codes were already hardened once (commit `e6552a9`, "fixed edge functions in supa / authorization required / mtl code more strong") — the 6-char/33-alphabet scheme and edge function auth header were a deliberate fix, not an oversight.
-- ESLint + Prettier + husky + lint-staged + commitlint are all wired correctly and enforced pre-commit.
+- ESLint + Prettier + husky + lint-staged + commitlint are all wired correctly and enforced pre-commit. `supabase/` is excluded from ESLint via `globalIgnores` to prevent Deno import errors hanging the pre-commit hook.
 - CI already typechecks, lints, format-checks, and builds on every PR to `main`.
