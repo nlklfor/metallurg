@@ -2,7 +2,7 @@
 
 A streetwear/sportswear e-commerce storefront with a terminal/cyberpunk visual identity, positioned across Zürich and Kyiv. Built with React 19, Vite, TypeScript, Tailwind v4, and Supabase.
 
-For a deep dive into architecture, stack, and functionality, see [`Project-mtl.md`](./Project-mtl.md). For the design system (colors, fonts, animations, motion), see [`style-mtl.md`](./style-mtl.md). For known issues and the hardening backlog, see [`FIXES.md`](./FIXES.md).
+For a deep dive into architecture, stack, and functionality, see [`docs/architecture.md`](./docs/architecture.md). For the design system (colors, fonts, animations, motion), see [`docs/design-system.md`](./docs/design-system.md). For known issues and the hardening backlog, see [`docs/backlog.md`](./docs/backlog.md).
 
 ## Stack
 

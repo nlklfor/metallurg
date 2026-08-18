@@ -1,6 +1,6 @@
-# style-mtl.md — METALLURG Design System Reference
+# METALLURG METALLURG Design System Reference
 
-How the site actually looks and moves, extracted from the code (not aspirational — this describes what's implemented today). Companion to `Project-mtl.md`. Use this before introducing new colors, fonts, or motion patterns so new UI stays consistent with the existing "terminal archive" identity.
+How the site actually looks and moves, extracted from the code (not aspirational — this describes what's implemented today). Companion to `architecture.md`. Use this before introducing new colors, fonts, or motion patterns so new UI stays consistent with the existing "terminal archive" identity.
 
 ---
 
