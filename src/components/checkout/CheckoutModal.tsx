@@ -2,8 +2,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCheckout } from "@/hooks/useCheckout";
 import { SHIPPING_ZONES } from "@/lib/constants/index";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
-import type { CheckoutModalProps } from "@/interfaces";
+import type { CheckoutModalProps, NPCity, NPWarehouse } from "@/interfaces";
 import { lazy, Suspense, useEffect } from "react";
+import AsyncCombobox from "@/components/checkout/AsyncCombobox";
+import { searchCities, searchWarehouses } from "@/api/novaPoshta";
 
 const ReceiptDownloadLink = lazy(() => import("@/components/checkout/ReceiptDownloadLink"));
 
@@ -19,10 +21,16 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setContact,
     zone,
     setZone,
-    city,
-    setCity,
-    npBranch,
-    setNpBranch,
+    selectedCity,
+    setSelectedCity,
+    selectedWarehouse,
+    setSelectedWarehouse,
+    country,
+    setCountry,
+    intlCity,
+    setIntlCity,
+    deliveryCost,
+    isCalculatingDelivery,
     isUkraine,
     isFormValid,
     items,
@@ -110,6 +118,18 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                           <span>{formatPrice(item.price, currency)}</span>
                         </div>
                       ))}
+                      {isUkraine && (
+                        <div className="flex justify-between text-xs font-ibm-mono text-gray-600">
+                          <span>DELIVERY (NOVA POSHTA)</span>
+                          <span>
+                            {isCalculatingDelivery
+                              ? "CALCULATING..."
+                              : deliveryCost !== null
+                                ? formatPrice(deliveryCost, currency)
+                                : "—"}
+                          </span>
+                        </div>
+                      )}
                       <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between text-sm font-archivo-black">
                         <span>TOTAL</span>
                         <span>{formatPrice(total, currency)}</span>
@@ -166,8 +186,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       </div>
                     </div>
 
-                    <AnimatePresence>
-                      {isUkraine && (
+                    <AnimatePresence mode="wait">
+                      {isUkraine ? (
                         <motion.div
                           key="ukraine-fields"
                           initial={{ opacity: 0, height: 0 }}
@@ -180,28 +200,72 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                             <label className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400">
                               // CITY
                             </label>
-                            <input
-                              type="text"
-                              value={city}
-                              onChange={(e) => setCity(e.target.value)}
-                              placeholder="KYIV / KHARKIV / LVIV..."
+                            <AsyncCombobox<NPCity>
+                              value={selectedCity}
+                              onChange={setSelectedCity}
+                              fetchOptions={searchCities}
+                              getOptionLabel={(c) => `${c.name}${c.area ? ` (${c.area})` : ""}`}
+                              getOptionKey={(c) => c.ref}
+                              placeholder="START TYPING A CITY..."
                               disabled={step === "submitting"}
-                              className="w-full font-ibm-mono border border-black px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black disabled:opacity-50 uppercase tracking-wider"
                             />
                           </div>
                           <div className="space-y-1">
                             <label className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400">
                               // NOVA_POSHTA_BRANCH
                             </label>
+                            <AsyncCombobox<NPWarehouse>
+                              value={selectedWarehouse}
+                              onChange={setSelectedWarehouse}
+                              fetchOptions={(q) => searchWarehouses(selectedCity!.ref, q)}
+                              getOptionLabel={(w) => w.description}
+                              getOptionKey={(w) => w.ref}
+                              placeholder={
+                                selectedCity ? "SEARCH BRANCH..." : "SELECT A CITY FIRST"
+                              }
+                              disabled={step === "submitting" || !selectedCity}
+                              minQueryLength={0}
+                            />
+                          </div>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="international-fields"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="space-y-4 overflow-hidden"
+                        >
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400">
+                              // COUNTRY
+                            </label>
                             <input
                               type="text"
-                              value={npBranch}
-                              onChange={(e) => setNpBranch(e.target.value)}
-                              placeholder="BRANCH № OR ADDRESS"
+                              value={country}
+                              onChange={(e) => setCountry(e.target.value)}
+                              placeholder="SWITZERLAND / GERMANY / ..."
                               disabled={step === "submitting"}
                               className="w-full font-ibm-mono border border-black px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black disabled:opacity-50 uppercase tracking-wider"
                             />
                           </div>
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400">
+                              // CITY
+                            </label>
+                            <input
+                              type="text"
+                              value={intlCity}
+                              onChange={(e) => setIntlCity(e.target.value)}
+                              placeholder="ZÜRICH / BERLIN / ..."
+                              disabled={step === "submitting"}
+                              className="w-full font-ibm-mono border border-black px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black disabled:opacity-50 uppercase tracking-wider"
+                            />
+                          </div>
+                          <p className="text-[9px] font-ibm-mono text-gray-400 tracking-wider">
+                            // delivery cost for international orders is confirmed after checkout
+                          </p>
                         </motion.div>
                       )}
                     </AnimatePresence>

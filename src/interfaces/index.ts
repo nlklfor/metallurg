@@ -17,6 +17,8 @@ export type {
   TrackOrderModalProps,
   TrackStepDefinition,
   TrackStepProps,
+  NPCity,
+  NPWarehouse,
 } from "./order";
 
 export type { Review, ReviewFormData, ReviewModalProps } from "./review";

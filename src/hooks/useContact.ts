@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { EDGE_FUNCTIONS_BASE_URL } from "@/lib/constants/order";
 
-const CONTACT_FORM_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/contact-form";
+const CONTACT_FORM_URL = `${EDGE_FUNCTIONS_BASE_URL}/contact-form`;
 
 export function useContact() {
   const [name, setName] = useState("");
