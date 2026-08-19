@@ -8,12 +8,9 @@ Workflow for anything here that touches code: new branch → implement → **ask
 
 ## 🔴 Critical — Security / Data Integrity
 
-### 1. Order total is trusted from the client
+### 1. ~~Order total is trusted from the client~~ ✅ Done
 
-**Where:** `src/hooks/useCheckout.ts:50-70`
-**What:** `total_price` is computed in the browser from the Zustand cart (`computeTotal`, itself sourced from `localStorage`) and inserted straight into the Supabase `orders` table via `supabase.from("orders").insert(...)` using the public anon key. Nothing on the server recomputes the price from the `products` table.
-**Risk:** Anyone can edit `localStorage` or intercept the request and submit an order at any price — including near-zero.
-**Fix:** Move order creation behind an edge function (or a Postgres function/trigger) that takes only `product_id` + `size` + `quantity` per line, looks up the live price server-side, computes the total itself, and rejects the client-supplied total if present. The client should never be the source of truth for price.
+Order creation now goes through the `create-order` edge function: it re-fetches live prices from `products`, validates stock, decrements it atomically via the `create_order()` Postgres RPC, and computes the total server-side. The client's cart total is display-only.
 
 ### 2. `contact-form` edge function is an open, unthrottled relay
 
@@ -22,11 +19,9 @@ Workflow for anything here that touches code: new branch → implement → **ask
 **Risk:** Anyone (not just from your site — any script anywhere) can spam your Telegram bot, and crafted input could break/inject Markdown formatting in the delivered message.
 **Fix:** Add a length cap on `name`/`message`, rate-limit by IP (Supabase edge functions can check `x-forwarded-for` or use Upstash/KV), and either escape Telegram Markdown special characters or switch to `parse_mode: "HTML"` with escaping. CORS restriction alone won't stop a determined attacker (they can call the function directly, bypassing browser CORS) but still blocks casual abuse from other sites.
 
-### 3. Three of four edge functions aren't in this repo
+### 3. ~~Three of four edge functions aren't in this repo~~ ✅ Done
 
-**Where:** frontend calls `track-order`, `notify-telegram`, `nova-poshta-track` (see `src/lib/constants/order.ts`, `src/hooks/useNpTracking.ts`, `src/hooks/useTrackOrder.ts`) but only `contact-form` exists under `supabase/functions/`.
-**Risk:** No code review, no version history, no way to verify these functions validate input, rate-limit, or check auth. They're also invisible to anyone else who ever works on this project.
-**Fix:** Pull the source for these three functions into `supabase/functions/<name>/index.ts` in this repo (Supabase CLI: `supabase functions download <name>` if not stored locally, or copy from the dashboard) and deploy from the repo going forward.
+All six edge functions (`contact-form`, `track-order`, `notify-telegram`, `nova-poshta-track`, `create-order`, `nova-poshta-search`) are now vendored under `supabase/functions/` and deployed from the repo.
 
 ### 4. RLS policies aren't verifiable from the codebase
 
@@ -38,12 +33,9 @@ Workflow for anything here that touches code: new branch → implement → **ask
 
 ## 🟡 Medium — Weak Points to Firm Up
 
-### 5. Guest order lookup exposes PII by order code alone
+### 5. ~~Guest order lookup exposes PII by order code alone~~ ✅ Already handled
 
-**Where:** `track-order` edge function (not in repo — see #3), called from `src/hooks/useTrackOrder.ts` and `src/pages/Orders.tsx`.
-**What:** Order number is `MTL-` + 6 chars from a 33-char alphabet (~1.3 billion combinations — reasonable entropy), and knowing it alone returns `customer_name`, `contact`, shipping city/branch, items, and total price.
-**Risk:** Not a high-probability brute-force target given the entropy, but there's no visible rate limiting on the lookup endpoint, and it's a fairly standard "guest tracking" tradeoff many stores accept. Worth confirming the edge function rate-limits lookups (ties into #3).
-**Fix:** Once #3 lands, add basic rate limiting to `track-order` (e.g., N requests/minute per IP) so brute-forcing isn't free even at low probability of success.
+Turns out `track-order` already rate-limits lookups (8 attempts / 10 min per IP, via the `lookup_attempts` table — discovered when vendoring it into the repo for #3). Order number entropy (~1.3 billion combinations) plus that rate limit is an acceptable guest-tracking tradeoff. No further action needed.
 
 ### 6. No tests anywhere in the repo
 
@@ -55,11 +47,9 @@ Workflow for anything here that touches code: new branch → implement → **ask
 
 `.env.example` added in commit `39d0568` — lists all required vars with one-line comments.
 
-### 8. Duplicated / hardcoded edge function base URL
+### 8. ~~Duplicated / hardcoded edge function base URL~~ ✅ Done
 
-**Where:** The full Supabase project URL (`https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/...`) is hardcoded independently in `src/hooks/useContact.ts`, `src/hooks/useNpTracking.ts`, `src/hooks/useTrackOrder.ts`, and `src/lib/constants/order.ts` — the last two even duplicate the exact same `track-order` URL in two separate places.
-**Risk:** If the Supabase project URL ever changes (migration, new environment), four files need editing and it's easy to miss one.
-**Fix:** Add one `EDGE_FUNCTIONS_BASE_URL` (from `import.meta.env.VITE_SUPABASE_URL` + `/functions/v1`) in `src/lib/constants/`, and build each endpoint URL from it.
+`EDGE_FUNCTIONS_BASE_URL` now lives in `src/lib/constants/order.ts`; every edge function URL (`useContact.ts`, `useNpTracking.ts`, `useTrackOrder.ts`, plus the new `create-order`/`nova-poshta-search`) is built from it.
 
 ### 9. `lib/constants/order.ts` mixes unrelated concerns
 
