@@ -23,11 +23,9 @@ Order creation now goes through the `create-order` edge function: it re-fetches 
 
 All six edge functions (`contact-form`, `track-order`, `notify-telegram`, `nova-poshta-track`, `create-order`, `nova-poshta-search`) are now vendored under `supabase/functions/` and deployed from the repo.
 
-### 4. RLS policies aren't verifiable from the codebase
+### 4. ~~RLS policies aren't verifiable from the codebase~~ ✅ Done
 
-**What:** All client tables (`products`, `orders`, `reviews`) are read/written directly from the browser via the anon key, which means table-level security is _entirely_ delegated to Supabase Row Level Security policies that live in the Supabase dashboard, not in this repo.
-**Risk:** A single misconfigured policy (e.g., `SELECT` allowed on all columns of `orders`, or `UPDATE` allowed on `status`) could leak customer PII or let anyone mark their own order "paid"/"completed".
-**Fix:** Export current RLS policies into a migrations folder (`supabase/migrations/`) and commit them, so policy changes are reviewable diffs like everything else. At minimum, verify: `orders` has no public `SELECT`/`UPDATE` (only the edge functions using the service-role key should touch it), and `reviews` insert is restricted to rows where a matching completed `order_id` exists.
+Policies for `products`/`orders`/`reviews` plus `is_admin()` are now committed as an idempotent snapshot (`supabase/migrations/20260819120000_rls_policy_snapshot.sql`). While auditing, found and dropped a live `"Public can insert orders"` policy that let the anon key insert directly into `orders` with an attacker-chosen price — a bypass of the `create-order` edge function from #1. Also ran `get_advisors` and pinned the missing `search_path` on `set_is_international` (`supabase/migrations/20260819120100_pin_search_path_set_is_international.sql`), closing a `function_search_path_mutable` warning.
 
 ---
 
@@ -69,6 +67,7 @@ Turns out `track-order` already rate-limits lookups (8 attempts / 10 min per IP,
 - `package.json` version is stuck at `0.0.0` — bump it or drop the field if you're not tracking releases.
 - `README.md` was stale template boilerplate — now replaced with project-specific content. `.github/copilot-instructions.md` was deleted (was unused GitHub Copilot scaffolding template).
 - `ProductDetails.tsx` (357 lines) and `CheckoutModal.tsx` (317 lines) are getting large; consider splitting presentational sub-sections out as the feature set grows further, not urgent today.
+- `set_is_international()` (Postgres trigger, see `supabase/migrations/20260819120100_pin_search_path_set_is_international.sql`) has inverted logic: it sets `is_international := (shipping_zone = 'Ukraine')`, i.e. the flag is `true` when the order is domestic, not international. Found during the #4 RLS audit; not fixed there since search_path pinning was the only in-scope change. Needs a look at every place `is_international` is read before flipping it, in case something already compensates for the inversion.
 
 ---
 
