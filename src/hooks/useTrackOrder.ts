@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { Order } from "@/interfaces";
-
-const EDGE_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/track-order";
+import { TRACK_URL as EDGE_URL } from "@/lib/constants/order";
 
 export function useTrackOrder() {
   const [order, setOrder] = useState<Order | null>(null);
