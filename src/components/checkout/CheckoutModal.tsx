@@ -19,6 +19,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setName,
     contact,
     setContact,
+    email,
+    setEmail,
     zone,
     setZone,
     selectedCity,
@@ -159,6 +161,20 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         value={contact}
                         onChange={(e) => setContact(e.target.value)}
                         placeholder="@USERNAME OR +380..."
+                        disabled={step === "submitting"}
+                        className="w-full font-ibm-mono border border-black px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black disabled:opacity-50 tracking-wider"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400">
+                        // EMAIL (OPTIONAL — FOR ORDER CONFIRMATION)
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="john@example.com"
                         disabled={step === "submitting"}
                         className="w-full font-ibm-mono border border-black px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black disabled:opacity-50 tracking-wider"
                       />

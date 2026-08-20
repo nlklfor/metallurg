@@ -6,8 +6,20 @@ import { Send } from "lucide-react";
 import { useContact } from "@/hooks/useContact";
 
 export default function Contact() {
-  const { name, setName, message, setMessage, isLoading, sent, error, isValid, submit, reset } =
-    useContact();
+  const {
+    name,
+    setName,
+    email,
+    setEmail,
+    message,
+    setMessage,
+    isLoading,
+    sent,
+    error,
+    isValid,
+    submit,
+    reset,
+  } = useContact();
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
@@ -60,7 +72,8 @@ export default function Contact() {
                   </p>
                   <p className="text-xs text-gray-400 leading-relaxed">
                     We received your message and will get back to you within{" "}
-                    <span className="text-black font-bold">24 hours</span>.
+                    <span className="text-black font-bold">24 hours</span>. Check your inbox for a
+                    confirmation.
                   </p>
                   <button
                     onClick={reset}
@@ -91,6 +104,19 @@ export default function Contact() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
+                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[8px] font-ibm-mono uppercase tracking-[0.35em] text-gray-400 mb-1.5">
+                        YOUR_EMAIL
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="john@example.com"
                         className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors"
                       />
                     </div>
