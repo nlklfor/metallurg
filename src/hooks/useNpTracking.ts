@@ -1,7 +1,6 @@
 import type { Action, NpTrackingData, State } from "@/lib/constants/np";
 import { useReducer, useEffect } from "react";
-
-const EDGE_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/nova-poshta-track";
+import { NOVA_POSHTA_TRACK_URL as EDGE_URL } from "@/lib/constants/order";
 
 function reducer(_: State, action: Action): State {
   switch (action.type) {

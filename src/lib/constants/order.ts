@@ -3,7 +3,7 @@ import { Package, Wrench, Truck, Globe, MapPin, CheckCircle, Archive, Clock } fr
 
 // ─── Shipping ─────────────────────────────────────────────────────────────────
 
-export const SHIPPING_ZONES: ShippingZone[] = ["Ukraine", "Switzerland"];
+export const SHIPPING_ZONES: ShippingZone[] = ["Ukraine", "International"];
 
 // ─── Tracking Routes ──────────────────────────────────────────────────────────
 
@@ -73,10 +73,13 @@ export const STATUS_COLORS: Record<string, string> = {
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
-export const EDGE_FUNCTION_URL =
-  "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/notify-telegram";
+export const EDGE_FUNCTIONS_BASE_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1";
 
-export const TRACK_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1/track-order";
+export const EDGE_FUNCTION_URL = `${EDGE_FUNCTIONS_BASE_URL}/notify-telegram`;
+export const TRACK_URL = `${EDGE_FUNCTIONS_BASE_URL}/track-order`;
+export const CREATE_ORDER_URL = `${EDGE_FUNCTIONS_BASE_URL}/create-order`;
+export const NOVA_POSHTA_SEARCH_URL = `${EDGE_FUNCTIONS_BASE_URL}/nova-poshta-search`;
+export const NOVA_POSHTA_TRACK_URL = `${EDGE_FUNCTIONS_BASE_URL}/nova-poshta-track`;
 
 // Navigation
 export { MAIN_PAGE_BTNS, MAIN_PAGE_LINKS, NAV_LINKS } from "./navigation";
