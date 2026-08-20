@@ -1,5 +1,9 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { render } from "npm:@react-email/render@^2";
+import React from "npm:react@^19";
+import { Resend } from "npm:resend@^6";
+import { OrderConfirmationEmail } from "../_shared/emails/OrderConfirmationEmail.tsx";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +15,14 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
+
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
+const RESEND_FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL") ?? "METALLURG <onboarding@resend.dev>";
+// Resend's constructor throws synchronously on an empty key, so it's only
+// instantiated when a key is actually configured — until then, the
+// confirmation email is skipped but order creation still works.
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Classic Nova Poshta domestic API (api.novaposhta.ua) — apiKey sent directly
 // in every request body. Key comes from new.novaposhta.ua/dashboard/settings/developers.
@@ -54,6 +66,7 @@ interface IncomingItem {
 interface CreateOrderRequest {
   customer_name: string;
   contact: string;
+  customer_email?: string;
   shipping_zone: "Ukraine" | "International";
   city?: string;
   city_ref?: string;
@@ -152,12 +165,19 @@ Deno.serve(async (req: Request) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+    const customerEmail = body.customer_email?.trim() || null;
+    if (customerEmail && !EMAIL_REGEX.test(customerEmail)) {
+      return new Response(JSON.stringify({ error: "VALIDATION_ERROR", detail: "invalid email" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // --- Re-fetch authoritative product data; never trust client price/name/stock ---
     const productIds = [...new Set(body.items.map((i) => i.product_id))];
     const { data: products, error: productsError } = await supabase
       .from("products")
-      .select("id, name, price, weight, stock_status, size_stock, quantity")
+      .select("id, name, price, weight, stock_status, size_stock, quantity, image_url")
       .in("id", productIds);
 
     if (productsError || !products || products.length !== productIds.length) {
@@ -229,6 +249,7 @@ Deno.serve(async (req: Request) => {
         p_items: serverItems,
         p_total_price: totalPrice,
         p_delivery_cost: deliveryCost,
+        p_customer_email: customerEmail,
       });
       if (error) {
         lastError = error;
@@ -264,6 +285,42 @@ Deno.serve(async (req: Request) => {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Confirmation email is best-effort — the order already exists — so a
+    // Resend failure here shouldn't turn a successful order into an error response.
+    if (customerEmail && resend) {
+      try {
+        const emailItems = serverItems.map((item) => ({
+          ...item,
+          imageUrl: productMap.get(item.product_id)?.image_url?.[0] ?? null,
+        }));
+        const html = await render(
+          React.createElement(OrderConfirmationEmail, {
+            orderNumber: order.order_number,
+            customerName: body.customer_name.trim(),
+            items: emailItems,
+            itemsTotal,
+            deliveryCost,
+            totalPrice,
+            shippingZone: body.shipping_zone,
+            city:
+              body.shipping_zone === "Ukraine" ? (body.city ?? null) : (body.city?.trim() ?? null),
+            npBranch: body.shipping_zone === "Ukraine" ? (body.np_branch ?? null) : null,
+          })
+        );
+        const { error: emailError } = await resend.emails.send({
+          from: RESEND_FROM_EMAIL,
+          to: [customerEmail],
+          subject: `Order ${order.order_number} confirmed — METALLURG™`,
+          html,
+        });
+        if (emailError) {
+          console.error("create-order confirmation email error:", emailError);
+        }
+      } catch (emailErr) {
+        console.error("create-order confirmation email error:", emailErr);
+      }
     }
 
     return new Response(JSON.stringify({ order }), {

@@ -5,6 +5,8 @@ import { CREATE_ORDER_URL, EDGE_FUNCTION_URL } from "@/lib/constants/order";
 import { fetchDeliveryCostPreview } from "@/api/novaPoshta";
 import type { NPCity, NPWarehouse, OrderStep, ShippingZone } from "@/interfaces";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const ERROR_MESSAGES: Record<string, string> = {
   RATE_LIMITED: "TOO_MANY_ATTEMPTS — please wait a few minutes and try again.",
   VALIDATION_ERROR: "Please check the form and try again.",
@@ -27,6 +29,7 @@ export function useCheckout() {
   const [errorMsg, setErrorMsg] = useState("");
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
   const [zone, setZone] = useState<ShippingZone>("Ukraine");
 
   const [selectedCity, setSelectedCityState] = useState<NPCity | null>(null);
@@ -48,6 +51,7 @@ export function useCheckout() {
   const isFormValid =
     name.trim().length > 0 &&
     contact.trim().length > 0 &&
+    (email.trim().length === 0 || EMAIL_REGEX.test(email.trim())) &&
     (isUkraine
       ? selectedCity !== null && selectedWarehouse !== null
       : country.trim().length > 0 && intlCity.trim().length > 0);
@@ -92,6 +96,7 @@ export function useCheckout() {
     setStep("form");
     setName("");
     setContact("");
+    setEmail("");
     setZone("Ukraine");
     setSelectedCity(null);
     setCountry("");
@@ -114,6 +119,7 @@ export function useCheckout() {
     const payload = {
       customer_name: name.trim(),
       contact: contact.trim(),
+      ...(email.trim() && { customer_email: email.trim() }),
       shipping_zone: zone,
       ...(isUkraine
         ? {
@@ -175,6 +181,8 @@ export function useCheckout() {
     setName,
     contact,
     setContact,
+    email,
+    setEmail,
     zone,
     setZone,
     selectedCity,
