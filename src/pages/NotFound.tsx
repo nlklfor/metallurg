@@ -4,6 +4,13 @@ import { motion } from "framer-motion";
 export default function NotFound() {
   return (
     <div className="h-screen w-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
+      <img
+        src="/metallurg-void-fallback.png"
+        alt=""
+        aria-hidden="true"
+        className="absolute top-1/2 left-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 opacity-25 pointer-events-none select-none"
+      />
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -18,8 +25,8 @@ export default function NotFound() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="text-[7rem] md:text-[10rem] font-black leading-none tracking-tighter text-white select-none"
-          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
+          className="text-[4rem] md:text-[6rem] leading-none tracking-tighter text-white select-none"
+          style={{ fontFamily: "'Archivo Black', sans-serif" }}
         >
           404
         </motion.h1>
