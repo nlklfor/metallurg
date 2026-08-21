@@ -14,7 +14,7 @@ const STATUS_MAP: Record<string, string> = {
   "2": "Deleted",
   "3": "Not found",
   "4": "In city sender",
-  "5": "Departed",
+  "5": "On the way",
   "6": "In city recipient",
   "7": "Arrived at branch",
   "8": "Undelivered — returning",

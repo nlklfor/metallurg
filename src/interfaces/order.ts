@@ -56,4 +56,5 @@ export interface TrackStepProps {
   currentIndex: number;
   isLast: boolean;
   trackingNumber: string | null;
+  forceShowNp?: boolean;
 }
