@@ -16,9 +16,16 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
 
   const route: TrackStepDefinition[] | null = order
     ? order.shipping_zone === "Ukraine"
-      ? INTERNATIONAL_ROUTE
-      : LOCAL_ROUTE
+      ? LOCAL_ROUTE
+      : INTERNATIONAL_ROUTE
     : null;
+
+  // Ukraine orders pick up from a Nova Poshta branch, so once the shop marks
+  // the order "shipped" the NP tracking panel should surface immediately —
+  // don't make the customer wait for the route to reach its literal last step.
+  const showNpEarly =
+    order?.shipping_zone === "Ukraine" &&
+    (order.status === "shipped" || order.status === "completed");
 
   const handleClose = useCallback(() => {
     reset();
@@ -210,6 +217,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                           currentIndex={order.current_status_index}
                           isLast={i === route.length - 1}
                           trackingNumber={order.tracking_number}
+                          forceShowNp={showNpEarly}
                         />
                       ))}
                     </div>

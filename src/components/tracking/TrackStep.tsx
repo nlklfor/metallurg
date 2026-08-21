@@ -50,6 +50,7 @@ export default function TrackStep({
   currentIndex,
   isLast,
   trackingNumber,
+  forceShowNp,
 }: TrackStepProps) {
   const Icon = step.icon;
   const isCompleted = index < currentIndex;
@@ -126,7 +127,7 @@ export default function TrackStep({
           {step.sublabel}
         </p>
 
-        {isLast && isActive && <NpPanel trackingNumber={trackingNumber} />}
+        {isLast && (isActive || forceShowNp) && <NpPanel trackingNumber={trackingNumber} />}
       </div>
     </div>
   );
