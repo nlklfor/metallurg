@@ -3,21 +3,13 @@ import type { Review, ReviewFormData, ReviewWithOrderItems } from "@/interfaces/
 
 export async function getAllReviews(): Promise<ReviewWithOrderItems[]> {
   const { data, error } = await supabase
-    .from("reviews")
-    .select("*, orders(items)")
+    .from("reviews_with_order_items")
+    .select("*")
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
 
-  return (data ?? []).map((r: Record<string, unknown>) => {
-    const order = r.orders as {
-      items: { name: string; selectedSize: string | number; price: number }[];
-    } | null;
-    return {
-      ...r,
-      order_items: order?.items ?? [],
-    } as ReviewWithOrderItems;
-  });
+  return (data ?? []) as ReviewWithOrderItems[];
 }
 
 export async function getReviewByOrder(orderId: string): Promise<Review | null> {
