@@ -40,8 +40,8 @@ export function useReviewSubmission({ isOpen, orderId }: UseReviewSubmissionPara
       setIsSubmitting(false);
       return result;
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Submission failed.";
-      setError(message);
+      console.error("Review submission failed:", err);
+      setError("Something went wrong submitting your report. Please try again.");
       setIsSubmitting(false);
       throw err;
     }
