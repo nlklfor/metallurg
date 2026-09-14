@@ -10,6 +10,11 @@ export function filterProducts(
     if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1])
       return false;
     if (filters.category && product.category !== filters.category) return false;
+    if (
+      filters.stockStatus.length > 0 &&
+      !filters.stockStatus.includes(product.stock_status as "in_stock" | "pre_order")
+    )
+      return false;
     return true;
   });
 

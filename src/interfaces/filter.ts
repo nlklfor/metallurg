@@ -9,4 +9,5 @@ export interface FilterOptions {
   sizes: string[];
   priceRange: [number, number];
   category: "apparel" | "footwear" | "accessories" | null;
+  stockStatus: ("in_stock" | "pre_order")[];
 }

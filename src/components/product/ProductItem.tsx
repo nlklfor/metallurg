@@ -11,6 +11,7 @@ interface ProductItemProps {
 export default function ProductItem({ product, variant = "light" }: ProductItemProps) {
   const [isHovering, setIsHovering] = useState(false);
   const isOutOfStock = product.stock_status === "out_of_stock";
+  const isPreOrder = product.stock_status === "pre_order";
   const currency = useCurrencyStore((state) => state.currency);
 
   const isDark = variant === "dark";
@@ -45,6 +46,14 @@ export default function ProductItem({ product, variant = "light" }: ProductItemP
         {product.is_new && !isOutOfStock && (
           <div className="absolute top-2 left-2 z-10 border border-black bg-white px-1.5 py-0.5">
             <p className="text-black font-ibm-mono text-[7px] uppercase tracking-[0.2em]">NEW</p>
+          </div>
+        )}
+
+        {isPreOrder && (
+          <div className="absolute top-2 right-2 z-10 border border-blue-500 bg-white px-1.5 py-0.5">
+            <p className="text-blue-500 font-ibm-mono text-[7px] uppercase tracking-[0.2em]">
+              PRE_ORDER
+            </p>
           </div>
         )}
 
