@@ -5,4 +5,5 @@ export const DEFAULT_FILTERS: FilterOptions = {
   sizes: [],
   priceRange: [0, 20000],
   category: null,
+  stockStatus: [],
 };

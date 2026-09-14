@@ -51,6 +51,20 @@ export default function ProductFilters({
     { value: "accessories", label: "ACCESSORIES" },
   ];
 
+  const STOCK_STATUSES: { value: "in_stock" | "pre_order"; label: string }[] = [
+    { value: "in_stock", label: "IN_STOCK" },
+    { value: "pre_order", label: "PRE_ORDER" },
+  ];
+
+  const toggleStockStatus = (value: "in_stock" | "pre_order") => {
+    const isActive = filters.stockStatus.includes(value);
+    onFilterChange({
+      stockStatus: isActive
+        ? filters.stockStatus.filter((s) => s !== value)
+        : [...filters.stockStatus, value],
+    });
+  };
+
   return (
     <div className="px-4 sm:px-8 py-4 sm:py-6 border-b border-gray-200 flex flex-wrap items-center gap-3 sm:gap-4">
       <Select value={filters.sortBy} onValueChange={handleSortChange}>
@@ -79,6 +93,22 @@ export default function ProductFilters({
             }`}
           >
             {cat.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-1">
+        {STOCK_STATUSES.map((s) => (
+          <button
+            key={s.value}
+            onClick={() => toggleStockStatus(s.value)}
+            className={`px-3 py-1.5 text-[10px] font-ibm-mono uppercase tracking-[0.2em] border transition-all duration-150 ${
+              filters.stockStatus.includes(s.value)
+                ? "bg-black text-white border-black"
+                : "bg-white text-black border-gray-300 hover:border-black"
+            }`}
+          >
+            {s.label}
           </button>
         ))}
       </div>
