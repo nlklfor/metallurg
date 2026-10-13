@@ -1,9 +1,26 @@
 import { useState, useMemo, useEffect } from "react";
 import { useCartStore } from "@/stores/useCartStore";
 import { serializeCartItems } from "@/utils";
+import { computeTotal } from "@/utils/computeTotal";
 import { CREATE_ORDER_URL, EDGE_FUNCTION_URL } from "@/lib/constants/order";
 import { fetchDeliveryCostPreview } from "@/api/novaPoshta";
 import type { NPCity, NPWarehouse, OrderStep, ShippingZone } from "@/interfaces";
+
+export interface ConfirmedOrder {
+  order_number: string;
+  created_at: string;
+  customer_name: string;
+  contact: string;
+  shipping_zone: string;
+  total_price: number;
+  delivery_cost: number | null;
+  items: Array<{
+    name: string;
+    selectedSize: string | number;
+    price: number;
+    cart_quantity: number;
+  }>;
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -19,13 +36,18 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 export function useCheckout() {
   const items = useCartStore((state) => state.items);
-  const totalPriceFn = useCartStore((state) => state.totalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
 
-  const itemsTotal = useMemo(() => totalPriceFn(), [totalPriceFn]);
+  // Recompute whenever the loadout changes (quantity edits in the cart while
+  // this hook stays mounted). totalPrice() is a stable function reference, so
+  // memoizing on it alone froze the total at its first value.
+  const itemsTotal = useMemo(() => computeTotal(items), [items]);
 
   const [step, setStep] = useState<OrderStep>("form");
   const [orderNumber, setOrderNumber] = useState("");
+  // The order exactly as create-order saved it (server prices, real delivery
+  // cost) — the receipt is built from this, never from client-side numbers.
+  const [confirmedOrder, setConfirmedOrder] = useState<ConfirmedOrder | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
@@ -102,6 +124,7 @@ export function useCheckout() {
     setCountry("");
     setIntlCity("");
     setErrorMsg("");
+    setConfirmedOrder(null);
   };
 
   const handleClose = (onClose: () => void) => {
@@ -164,6 +187,7 @@ export function useCheckout() {
       });
 
       setOrderNumber(createdOrderNumber);
+      setConfirmedOrder(json.order as ConfirmedOrder);
       setStep("success");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error occurred.";
@@ -176,6 +200,7 @@ export function useCheckout() {
     step,
     setStep,
     orderNumber,
+    confirmedOrder,
     errorMsg,
     name,
     setName,

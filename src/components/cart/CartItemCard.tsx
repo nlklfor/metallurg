@@ -2,6 +2,7 @@ import type { CartItem } from "@/interfaces";
 import { useCartStore } from "@/stores/useCartStore";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import { Trash2 } from "lucide-react";
+import { getMaxQuantity } from "@/utils/stock";
 
 interface CartItemCardProps {
   item: CartItem;
@@ -14,7 +15,7 @@ export default function CartItemCard({ item }: CartItemCardProps) {
 
   const isOutOfStock = item.stock_status === "out_of_stock";
   const currency = useCurrencyStore((state) => state.currency);
-  const atMax = item.cart_quantity >= (item.quantity ?? 99);
+  const atMax = item.cart_quantity >= getMaxQuantity(item, item.selectedSize);
   const atMin = item.cart_quantity <= 1;
 
   return (

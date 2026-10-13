@@ -1,5 +1,6 @@
 import type { CartState } from "@/interfaces";
 import { computeTotal } from "@/utils/computeTotal";
+import { getMaxQuantity } from "@/utils/stock";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -34,7 +35,7 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           items: state.items.map((item) => {
             if (item.id === productId && item.selectedSize === size) {
-              const maxQty = item.quantity ?? 99;
+              const maxQty = getMaxQuantity(item, item.selectedSize);
               const newQty = Math.min((item.cart_quantity ?? 1) + 1, maxQty);
               return { ...item, cart_quantity: newQty };
             }
