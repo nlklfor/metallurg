@@ -1,4 +1,5 @@
 import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+import { convertPrice } from "@/stores/useCurrencyStore";
 
 export interface ReceiptData {
   orderNumber: string;
@@ -11,15 +12,18 @@ export interface ReceiptData {
     price: number;
     cart_quantity?: number;
   }>;
+  deliveryCost?: number;
   total: number;
   date: string;
   currency: "UAH" | "CHF" | "EUR";
 }
 
-function fmt(price: number, currency: "UAH" | "CHF" | "EUR"): string {
-  if (currency === "CHF") return `CHF ${(price / 100).toFixed(2)}`;
-  if (currency === "EUR") return `EUR ${(price / 100).toFixed(2)}`;
-  return `${price.toLocaleString("uk-UA")} UAH`;
+// Prices are stored in UAH; CHF/EUR use the same display rates as the rest of
+// the site (useCurrencyStore). The old version divided by 100, which turned
+// 7,299 UAH into "CHF 72.99".
+function fmt(priceInUAH: number, currency: "UAH" | "CHF" | "EUR"): string {
+  if (currency === "UAH") return `${priceInUAH.toLocaleString("uk-UA")} UAH`;
+  return `${currency} ${convertPrice(priceInUAH, currency).toFixed(2)}`;
 }
 
 function fmtDate(iso: string): string {
@@ -200,6 +204,15 @@ export default function ReceiptDocument({ data }: { data: ReceiptData }) {
             </Text>
           </View>
         ))}
+
+        {data.deliveryCost ? (
+          <View style={[s.tableRow, { marginTop: 4 }]}>
+            <Text style={[s.colProduct, { fontSize: 9 }]}>DELIVERY (NOVA POSHTA)</Text>
+            <Text style={[s.colPrice, { fontSize: 9, textAlign: "right" }]}>
+              {fmt(data.deliveryCost, data.currency)}
+            </Text>
+          </View>
+        ) : null}
 
         <View style={s.dividerDark} />
 

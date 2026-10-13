@@ -6,10 +6,10 @@ export const MAIN_PAGE_BTNS = [
 ];
 
 export const MAIN_PAGE_LINKS = [
-  { href: "https://www.instagram.com/metallurg_official/", label: "INSTAGRAM" },
-  { href: "https://telegram.me/metallurg_official", label: "TELEGRAM" },
-  { href: "https://linkbio.link/metallurg", label: "LINKTREE" },
-  { href: "https://spotify.com/metallurg", label: "SPOTIFY" },
+  { href: "https://www.instagram.com/metallurg.tm", label: "INSTAGRAM" },
+  { href: "https://t.me/+W3cgJ6lB7_s0ODMy", label: "TELEGRAM" },
+  { href: "https://linkbio.co/metallurg", label: "LINKTREE" },
+  { href: "https://open.spotify.com/playlist/2g4MwiVghEPSOBAnUAGxPH", label: "SPOTIFY" },
 ];
 
 export const NAV_LINKS = [

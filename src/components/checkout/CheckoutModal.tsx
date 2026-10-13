@@ -14,6 +14,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     step,
     setStep,
     orderNumber,
+    confirmedOrder,
     errorMsg,
     name,
     setName,
@@ -116,8 +117,11 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                           <span className="text-gray-600 truncate max-w-[60%]">
                             {item.name}{" "}
                             <span className="text-gray-400">SZ_{item.selectedSize}</span>
+                            {item.cart_quantity > 1 && (
+                              <span className="text-gray-400"> ×{item.cart_quantity}</span>
+                            )}
                           </span>
-                          <span>{formatPrice(item.price, currency)}</span>
+                          <span>{formatPrice(item.price * item.cart_quantity, currency)}</span>
                         </div>
                       ))}
                       {isUkraine && (
@@ -338,18 +342,21 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         </span>
                       }
                     >
-                      <ReceiptDownloadLink
-                        data={{
-                          orderNumber,
-                          customerName: name,
-                          contact,
-                          zone,
-                          items,
-                          total,
-                          date: new Date().toISOString(),
-                          currency,
-                        }}
-                      />
+                      {confirmedOrder && (
+                        <ReceiptDownloadLink
+                          data={{
+                            orderNumber: confirmedOrder.order_number,
+                            customerName: confirmedOrder.customer_name,
+                            contact: confirmedOrder.contact,
+                            zone: confirmedOrder.shipping_zone,
+                            items: confirmedOrder.items,
+                            deliveryCost: confirmedOrder.delivery_cost ?? 0,
+                            total: confirmedOrder.total_price,
+                            date: confirmedOrder.created_at,
+                            currency,
+                          }}
+                        />
+                      )}
                     </Suspense>
 
                     <button

@@ -29,6 +29,9 @@ jobs:
       - name: Format check
         run: npx prettier --check .
 
+      - name: Unit tests
+        run: npm test
+
       - name: Build
         run: npm run build
         env:
