@@ -75,7 +75,6 @@ export const STATUS_COLORS: Record<string, string> = {
 
 export const EDGE_FUNCTIONS_BASE_URL = "https://ytynsqcxteyufoynvsir.supabase.co/functions/v1";
 
-export const EDGE_FUNCTION_URL = `${EDGE_FUNCTIONS_BASE_URL}/notify-telegram`;
 export const TRACK_URL = `${EDGE_FUNCTIONS_BASE_URL}/track-order`;
 export const CREATE_ORDER_URL = `${EDGE_FUNCTIONS_BASE_URL}/create-order`;
 export const NOVA_POSHTA_SEARCH_URL = `${EDGE_FUNCTIONS_BASE_URL}/nova-poshta-search`;
