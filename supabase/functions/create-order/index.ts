@@ -41,6 +41,57 @@ function generateOrderNumber(): string {
   return `MTL-${code}`;
 }
 
+const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
+const TELEGRAM_CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID") ?? "";
+
+interface OwnerAlert {
+  orderNumber: string;
+  customerName: string;
+  contact: string;
+  shippingZone: string;
+  city: string | null;
+  npBranch: string | null;
+  country: string | null;
+  items: { name: string; selectedSize: string | number | null; cart_quantity: number }[];
+  deliveryCost: number;
+  totalPrice: number;
+}
+
+// Plain text (no parse_mode), so customer-typed names can't break formatting.
+async function sendOwnerAlert(a: OwnerAlert): Promise<void> {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.error("create-order: TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set, alert skipped");
+    return;
+  }
+  const lines = [
+    `// NEW_ORDER_DETECTED`,
+    ``,
+    `ID: ${a.orderNumber}`,
+    `CUSTOMER: ${a.customerName}`,
+    `CONTACT: ${a.contact}`,
+    `SHIPPING: ${a.shippingZone}`,
+    ...(a.country ? [`COUNTRY: ${a.country}`] : []),
+    ...(a.city ? [`CITY: ${a.city}`] : []),
+    ...(a.npBranch ? [`BRANCH: ${a.npBranch}`] : []),
+    ``,
+    `ITEMS:`,
+    ...a.items.map((i) => `  ${i.name} x${i.cart_quantity} (size: ${i.selectedSize ?? "—"})`),
+    ``,
+    ...(a.deliveryCost ? [`DELIVERY: ${a.deliveryCost} UAH`] : []),
+    `TOTAL: ${a.totalPrice} UAH`,
+  ];
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: lines.join("\n") }),
+    });
+    if (!res.ok) console.error("create-order: telegram alert failed", res.status, await res.text());
+  } catch (err) {
+    console.error("create-order: telegram alert error", err);
+  }
+}
+
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_ATTEMPTS = 5;
 
@@ -286,6 +337,22 @@ Deno.serve(async (req: Request) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // Owner alert in Telegram. Sent from here (not from the browser) so it
+    // can't be skipped by a closed tab or re-triggered for someone else's
+    // order code. Best-effort: a Telegram outage must not fail the order.
+    await sendOwnerAlert({
+      orderNumber: order.order_number,
+      customerName: body.customer_name.trim(),
+      contact: body.contact.trim(),
+      shippingZone: body.shipping_zone,
+      city: body.city?.trim() || null,
+      npBranch: body.shipping_zone === "Ukraine" ? (body.np_branch ?? null) : null,
+      country: body.shipping_zone === "International" ? (body.country?.trim() ?? null) : null,
+      items: serverItems,
+      deliveryCost,
+      totalPrice,
+    });
 
     // Confirmation email is best-effort — the order already exists — so a
     // Resend failure here shouldn't turn a successful order into an error response.

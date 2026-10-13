@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useCartStore } from "@/stores/useCartStore";
 import { serializeCartItems } from "@/utils";
 import { computeTotal } from "@/utils/computeTotal";
-import { CREATE_ORDER_URL, EDGE_FUNCTION_URL } from "@/lib/constants/order";
+import { CREATE_ORDER_URL } from "@/lib/constants/order";
 import { fetchDeliveryCostPreview } from "@/api/novaPoshta";
 import type { NPCity, NPWarehouse, OrderStep, ShippingZone } from "@/interfaces";
 
@@ -169,22 +169,8 @@ export function useCheckout() {
         return;
       }
 
+      // The owner's Telegram alert is sent by create-order itself now.
       const createdOrderNumber: string = json.order.order_number;
-
-      const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-      await fetch(EDGE_FUNCTION_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${supabaseKey}`,
-          apikey: supabaseKey,
-        },
-        body: JSON.stringify({ order_number: createdOrderNumber }),
-      }).catch((err: unknown) => {
-        // Notification failure shouldn't block the success state — the order already
-        // exists — but it shouldn't fail silently either.
-        console.error("notify-telegram failed:", err);
-      });
 
       setOrderNumber(createdOrderNumber);
       setConfirmedOrder(json.order as ConfirmedOrder);
