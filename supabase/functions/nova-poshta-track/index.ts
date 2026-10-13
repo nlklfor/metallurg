@@ -1,4 +1,13 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
+
+// Only TTNs that belong to one of our orders are looked up, so this function
+// can't be used as an open proxy onto our Nova Poshta API key. (A per-IP rate
+// limit doesn't fit here: the Telegram bot calls it for all users from one IP.)
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
 
 const NP_API_URL = "https://api.novaposhta.ua/v2.0/json/";
 const NOVA_POSHTA_API_KEY = Deno.env.get("NOVA_POSHTA_API_KEY") ?? "";
@@ -63,6 +72,27 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    const { data: knownOrder, error: lookupError } = await supabase
+      .from("orders")
+      .select("id")
+      .eq("tracking_number", ttn.trim())
+      .limit(1)
+      .maybeSingle();
+
+    if (lookupError) {
+      console.error("NP track order lookup error:", lookupError);
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!knownOrder) {
+      return new Response(JSON.stringify({ error: "TTN not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const npResponse = await fetch(NP_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -77,7 +107,6 @@ Deno.serve(async (req: Request) => {
     });
 
     const npData = await npResponse.json();
-    console.log("NP response for", ttn, ":", JSON.stringify(npData));
 
     if (!npData.success || !npData.data?.length) {
       const npErrors = npData.errors?.join(", ") ?? "no data returned";
