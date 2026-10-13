@@ -209,17 +209,25 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                       <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-6">
                         // DELIVERY_PIPELINE
                       </p>
-                      {route.map((step: TrackStepDefinition, i: number) => (
-                        <TrackStep
-                          key={step.label}
-                          step={step}
-                          index={i}
-                          currentIndex={order.current_status_index}
-                          isLast={i === route.length - 1}
-                          trackingNumber={order.tracking_number}
-                          forceShowNp={showNpEarly}
-                        />
-                      ))}
+                      {order.status === "cancelled" ? (
+                        // Cancelled orders have no delivery to follow, so don't
+                        // render step 1 as the active stage.
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.2em] uppercase pb-4">
+                          // ORDER_CANCELLED — NO DELIVERY IN PROGRESS
+                        </p>
+                      ) : (
+                        route.map((step: TrackStepDefinition, i: number) => (
+                          <TrackStep
+                            key={step.label}
+                            step={step}
+                            index={i}
+                            currentIndex={order.current_status_index}
+                            isLast={i === route.length - 1}
+                            trackingNumber={order.tracking_number}
+                            forceShowNp={showNpEarly}
+                          />
+                        ))
+                      )}
                     </div>
                   </motion.div>
                 )}

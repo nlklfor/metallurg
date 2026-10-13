@@ -4,5 +4,4 @@ export {
   LOCAL_ROUTE,
   STATUS_LABELS,
   STATUS_COLORS,
-  EDGE_FUNCTION_URL,
 } from "./order";
