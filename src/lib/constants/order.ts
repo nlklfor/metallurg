@@ -80,13 +80,4 @@ export const CREATE_ORDER_URL = `${EDGE_FUNCTIONS_BASE_URL}/create-order`;
 export const NOVA_POSHTA_SEARCH_URL = `${EDGE_FUNCTIONS_BASE_URL}/nova-poshta-search`;
 export const NOVA_POSHTA_TRACK_URL = `${EDGE_FUNCTIONS_BASE_URL}/nova-poshta-track`;
 
-// Navigation
-export { MAIN_PAGE_BTNS, MAIN_PAGE_LINKS, NAV_LINKS } from "./navigation";
-
-// Site
-export { SITE_CONFIG } from "./site";
-
-// Filters
-export { DEFAULT_FILTERS } from "./filters";
-
 // TODO: SPLIT THE CONSTANTS INTO SEPARATE FILES BECAUSE THIS ONES ARE NO FOR ORDERS

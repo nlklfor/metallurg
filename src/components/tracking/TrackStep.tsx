@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import type { TrackStepProps } from "@/interfaces";
 import { useNpTracking } from "@/hooks/useNpTracking";
 import NpTrackingPanel from "@/components/tracking/NpTrackingPanel";

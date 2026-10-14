@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Footer, Navbar } from "@/components";
 import { FAQ } from "@/lib/constants/contact";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";

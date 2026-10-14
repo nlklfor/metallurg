@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import App from "@/App.tsx";
 import WelcomeGate from "@/pages/WelcomeGate.tsx";
 import Shop from "@/pages/Shop";

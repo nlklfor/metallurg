@@ -21,9 +21,9 @@ There is no user authentication system. Every visitor is anonymous; orders and r
 | UI primitives    | `radix-ui` (via `Slot`, `select.tsx`, `slider.tsx`), `class-variance-authority` for variant props, `lucide-react` for icons                                                                                                               | shadcn convention: primitives wrapped in `src/components/ui/`                                                                |
 | State            | `zustand` (+ `zustand/middleware persist` for cart/currency)                                                                                                                                                                              | No Redux/Context — each concern is its own tiny store under `src/stores/`                                                    |
 | Backend          | `@supabase/supabase-js` client (`src/lib/supabase.ts`) talking directly to Postgres tables + Storage from the browser, plus Supabase **Edge Functions** (Deno) for anything that needs a secret (Telegram bot token, Nova Poshta API key) | No custom Node/Express backend — Supabase is the entire backend                                                              |
-| Motion           | `motion` (Framer Motion successor/rebrand — imported as both `motion/react` and `framer-motion` depending on file, they're the same underlying package)                                                                                   | Page transitions, modal enter/exit, scroll-triggered reveals                                                                 |
-| 3D / WebGL       | `@google/model-viewer` (GLB logo on the welcome gate), `ogl` (hand-written WebGL shader for the `Aurora` background effect)                                                                                                               |                                                                                                                              |
-| Maps             | `react-leaflet` + `leaflet`                                                                                                                                                                                                               | Nova Poshta live tracking map (`NpTrackingPanel`), contact page map (`NetworkNodesMap`)                                      |
+| Motion           | `motion` (Framer Motion successor, imported everywhere as `motion/react`)                                                                                                                                                                 | Page transitions, modal enter/exit, scroll-triggered reveals                                                                 |
+| 3D / WebGL       | `@google/model-viewer` (GLB logo on the welcome gate)                                                                                                                                                                                     |                                                                                                                              |
+| Maps             | `react-leaflet` + `leaflet`                                                                                                                                                                                                               | Nova Poshta live tracking map (`NpTrackingPanel`)                                                                            |
 | PDF              | `@react-pdf/renderer`                                                                                                                                                                                                                     | Order receipt generation, lazy-loaded (see §5)                                                                               |
 | Carousel         | `embla-carousel-react`                                                                                                                                                                                                                    | Product image slider, related products slider                                                                                |
 | Toasts           | `react-hot-toast`                                                                                                                                                                                                                         | Wrapped in a custom hook (`useActionToast`) with a fully custom `toast.custom()` render, not the default toast UI            |
@@ -39,13 +39,13 @@ src/
   components/
     cart/        Cart line-item card
     checkout/    Checkout modal, PDF receipt document + its lazy download-link wrapper
-    contact/     Contact page: `NetworkNodesMap` (leaflet map), static social links
-    layout/      Navbar, Footer, BottomBar, Breadcrumbs, PageTransition, AnimatedRoutes (route table), ErrorState, GateGuard (currently unused — see backlog.md)
+    contact/     Contact page: static social links
+    layout/      Navbar, Footer, BottomBar, Breadcrumbs, PageTransition, AnimatedRoutes (route table), ErrorState
     product/     Product list/item/filters/skeletons/image slider/related products/size guide
     review/      Review card/list/modal
     search/      Global search modal
     tracking/    Order tracking modal + Nova Poshta live-status panel + step indicator
-    ui/          shadcn primitives (button, select, slider) + bespoke effects (Aurora WebGL bg, encrypted-text scramble reveal, typing-animation, iphone mockup frame)
+    ui/          shadcn primitives (button, select, slider) + bespoke effects (encrypted-text scramble reveal, typing-animation)
     index.ts     Barrel export (currently just Navbar + Footer — not all components are re-exported here)
   config/        theme.ts — light/dark Tailwind class tokens for pages that toggle Navbar variant
   hooks/         One hook per page/feature concern (see §5) — this is where almost all business logic and data-fetching lives, keeping pages/components close to presentational
@@ -108,7 +108,7 @@ Currency: all prices are stored/entered in UAH. `useCurrencyStore` + `convertPri
 
 ## 7. Notable functionality
 
-- **Welcome gate (`WelcomeGate.tsx`)** — a standalone boot-sequence screen at `/gate/mtl-ch-ua` with a scripted terminal log (`BOOT_LINES`), a rotating 3D GLB logo (`@google/model-viewer`), CRT scanline + grain overlays, and a glitch transition out. Not currently wired into the main navigation flow as an actual access gate (see `GateGuard`/`useGateStore` note in §3 and `backlog.md`) — right now it's reachable as a standalone landing page, not a gatekeeper.
+- **Welcome gate (`WelcomeGate.tsx`)** — a standalone boot-sequence screen at `/gate/mtl-ch-ua` with a scripted terminal log (`BOOT_LINES`), a rotating 3D GLB logo (`@google/model-viewer`), CRT scanline + grain overlays, and a glitch transition out. It's a standalone landing page, not an access gate.
 - **Checkout (`CheckoutModal` + `useCheckout`)** — multi-step modal (form → submitting → success/error), zone-conditional fields (city + Nova Poshta branch only for `Ukraine`), POSTs to the `create-order` edge function, which re-prices the items server-side, decrements stock and inserts the order via the `create_order()` RPC, and sends the owner a Telegram alert. On success, offers a downloadable PDF receipt (`ReceiptDownloadLink` → lazy-loaded `@react-pdf/renderer` document, kept out of the main bundle via `lazy()`/`Suspense`).
 - **Order tracking (`TrackModal` + `useTrackOrder` + `NpTrackingPanel` + `useNpTracking`)** — customer enters an order number; if the order has a Nova Poshta tracking number, a second live-status panel renders using `react-leaflet` to plot city/warehouse coordinates and shows a step progression (`TrackStep`) driven by `INTERNATIONAL_ROUTE`/`LOCAL_ROUTE` in `lib/constants/order.ts`.
 - **Reviews (`ReviewModal`, `ReviewList`, `ReviewCard`, `useAllReviews`, `useReviewSubmission`)** — gated behind order status: `Orders.tsx` looks the order up via `track-order` first and only allows opening the review modal if `status === "completed"`. Supports photo uploads.
@@ -116,7 +116,6 @@ Currency: all prices are stored/entered in UAH. `useCurrencyStore` + `convertPri
 - **Size guide (`SizeGuideModal`)** — static measurement reference modal, no data dependency.
 - **Search (`SearchModal`)** — opened from `Navbar`, debounced client-side search over the already-fetched product list.
 - **Currency switcher (`Navbar`)** — dropdown (UAH/CHF/EUR) backed by `useCurrencyStore`, persisted to localStorage, affects only display formatting (source of truth stays UAH).
-- **Aurora background (`ui/Aurora.tsx`)** — a hand-rolled WebGL fragment shader (simplex noise aurora effect) rendered via `ogl`, independent of Tailwind/CSS — see `design-system.md` for where it's used.
 - **Encrypted text reveal (`ui/encrypted-text.tsx`)** — scrambles-then-reveals text character by character using `requestAnimationFrame`, triggered on scroll-into-view (`useInView` from `motion`); used for the brand wordmark across the site (landing page, navbar logo, welcome gate).
 
 ## 8. Tooling & process
@@ -132,4 +131,3 @@ Currency: all prices are stored/entered in UAH. `useCurrencyStore` + `convertPri
 - Checkout total is client-computed and client-trusted (`backlog.md` #1) — the single highest-priority item in the whole project.
 - 3 of 4 edge functions live outside this repo (`backlog.md` #3) — meaning roughly half the "backend" isn't actually version-controlled here.
 - No automated tests (`backlog.md` #6).
-- `GateGuard`/`useGateStore` are dead code, not wired to any route.

@@ -36,8 +36,6 @@ Accent colors are used sparingly and only for semantic status, never decorativel
 
 Order status colors are centralized in `STATUS_COLORS` (`src/lib/constants/order.ts`) — extend that map rather than inlining new status colors elsewhere.
 
-The `Aurora` WebGL component (`ui/Aurora.tsx`) is the one place with an arbitrary color gradient (`colorStops` prop, default purple→green→purple) — it's a decorative background effect, used sparingly, not part of the core palette.
-
 ## 4. Motion & animation
 
 Two motion systems are layered:
@@ -58,9 +56,9 @@ Two motion systems are layered:
 - **Welcome gate effects** (`.gate-*` classes, ~500 lines of `index.css`): CRT scanline overlay (`gate-scanline-scroll`, 8s linear infinite repeating gradient), film grain (`gate-grain-shift`, SVG turbulence filter + 0.3s stepped position jitter), and a multi-stage **exit glitch** (`gate-exit`/`gate-screen-glitch`/`gate-glitch` — brightness/contrast/invert/hue-rotate keyframes culminating in a hard cut to black) triggered when the user clicks "ENTER_ARCHIVE".
 - **404 glitch** (`.notfound-glitch`): RGB-split duplicate-text effect via `::before`/`::after` with `clip-path` bands + independent horizontal-shift keyframes, plus a periodic (every ~10% of a 4s loop) skew jolt on the base element.
 
-### c) WebGL (non-CSS)
+### c) 3D
 
-- `Aurora` (`ui/Aurora.tsx`) — a full custom vertex/fragment shader pipeline via `ogl` (not `three.js`), rendering an animated simplex-noise aurora gradient into a `<canvas>`, driven by `requestAnimationFrame` and reading `uTime`/`uAmplitude`/`uColorStops`/`uBlend` uniforms. Self-contained — mounts/unmounts its own `WebGLRenderer` and cleans up the GL context on unmount.
+- The welcome gate's rotating logo is a GLB model rendered by `@google/model-viewer` (`src/assets/icons/logo-mtl.glb`). There's no hand-written WebGL in the app.
 
 ## 5. Popups / overlays inventory
 

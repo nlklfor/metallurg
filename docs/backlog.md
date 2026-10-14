@@ -63,7 +63,7 @@ Turns out `track-order` already rate-limits lookups (8 attempts / 10 min per IP,
 
 ## 🟢 Low — Nice to Have
 
-- `src/components/layout/GateGuard.tsx` and `src/stores/useGateStore.ts` are unused dead code — no route imports `GateGuard`, and `/gate/mtl-ch-ua` (`WelcomeGate.tsx`) is reachable directly without ever calling `unlock()`. Either wire it up (if the intent is to gate `/inventory` etc. behind the welcome sequence) or delete it.
+- ~~`GateGuard` / `useGateStore` dead code~~ ✅ Removed in 2026-10 cleanup (along with `Aurora`, `NetworkNodesMap`, `iphone`, `App.css`).
 - `package.json` version is stuck at `0.0.0` — bump it or drop the field if you're not tracking releases.
 - `README.md` was stale template boilerplate — now replaced with project-specific content. `.github/copilot-instructions.md` was deleted (was unused GitHub Copilot scaffolding template).
 - `ProductDetails.tsx` (357 lines) and `CheckoutModal.tsx` (317 lines) are getting large; consider splitting presentational sub-sections out as the feature set grows further, not urgent today.

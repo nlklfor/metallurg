@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { X, Upload, Star } from "lucide-react";
 import type { ReviewModalProps } from "@/interfaces/review";
 import { useReviewSubmission } from "@/hooks/useReviewSubmission";

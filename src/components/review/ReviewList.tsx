@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import ReviewCard from "./ReviewCard";
 import type { Review, ReviewWithOrderItems } from "@/interfaces/review";
 

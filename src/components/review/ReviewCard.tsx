@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Image as ImageIcon } from "lucide-react";
 import type { Review, ReviewWithOrderItems } from "@/interfaces/review";
 import { timeAgo } from "@/utils";

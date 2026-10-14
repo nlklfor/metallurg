@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useTrackOrder } from "@/hooks/useTrackOrder";
 import {
   INTERNATIONAL_ROUTE,
