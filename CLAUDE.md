@@ -13,7 +13,8 @@ This applies to code changes. Read-only investigation, planning, and running thi
 
 ## Things to keep in mind about this codebase
 
-- Checkout currently trusts the client-computed order total (`src/hooks/useCheckout.ts`) — see `FIXES.md` #1 before building anything that touches pricing or payment.
-- Only the `contact-form` edge function is version-controlled under `supabase/functions/`; `track-order`, `notify-telegram`, `nova-poshta-track` exist only in the Supabase dashboard. If you need to change their behavior, that's out-of-repo until `FIXES.md` #3 is addressed — ask before assuming you can edit them from here.
-- No test suite exists yet. If you touch `computeTotal`, `generateOrderNumber`, `serializeCartItems`, or cart quantity logic, treat those as the highest-value places to add a test alongside the change.
+- Orders are created only by the `create-order` edge function: it re-reads prices from `products`, computes delivery and the total server-side, and calls the `create_order()` RPC (atomic stock decrement). The browser total is display-only. The owner's Telegram alert is sent from `create-order` too.
+- All edge functions live under `supabase/functions/`. Deploying them (and applying migrations) is a separate step from merging: Vercel only deploys the frontend.
+- `supabase/schema.sql` is a snapshot of the whole live schema (tables, functions, triggers, RLS, storage, cron). It is not a migration. Make schema changes as new files in `supabase/migrations/`, then refresh the snapshot.
+- Unit tests run with Vitest (`npm test`, also in CI). If you touch `computeTotal`, `generateOrderNumber`, `serializeCartItems`, `getMaxQuantity`, or cart quantity logic, add or update a test alongside the change.
 - Design language is a monochrome black/white "terminal/archive" aesthetic (IBM Plex Mono, Archivo Black, custom "TheNeue" display font) with a consistent `ease: [0.16, 1, 0.3, 1]` motion curve. Check `docs/design-system.md` before introducing new UI patterns, colors, or fonts.

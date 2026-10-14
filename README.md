@@ -32,11 +32,10 @@ npm run dev
 
 See [`.env.example`](./.env.example) for the full list. At minimum, the app needs:
 
-| Variable            | Purpose                                          |
-| ------------------- | ------------------------------------------------ |
-| `VITE_SUPABASE_URL` | Supabase project URL                             |
-| `VITE_SUPABASE_KEY` | Supabase anon/public key                         |
-| `EDGE_FUNCTION_URL` | Base URL for the `notify-telegram` edge function |
+| Variable            | Purpose                  |
+| ------------------- | ------------------------ |
+| `VITE_SUPABASE_URL` | Supabase project URL     |
+| `VITE_SUPABASE_KEY` | Supabase anon/public key |
 
 **Never commit real values** — `.env` is gitignored; only `.env.example` (with placeholder values) should be tracked.
 

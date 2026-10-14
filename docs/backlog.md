@@ -21,7 +21,7 @@ Order creation now goes through the `create-order` edge function: it re-fetches 
 
 ### 3. ~~Three of four edge functions aren't in this repo~~ ✅ Done
 
-All six edge functions (`contact-form`, `track-order`, `notify-telegram`, `nova-poshta-track`, `create-order`, `nova-poshta-search`) are now vendored under `supabase/functions/` and deployed from the repo.
+All edge functions (`contact-form`, `track-order`, `nova-poshta-track`, `create-order`, `nova-poshta-search`) are vendored under `supabase/functions/` and deployed from the repo. `notify-telegram` was retired in 2026-10: `create-order` sends the owner alert itself.
 
 ### 4. ~~RLS policies aren't verifiable from the codebase~~ ✅ Done
 
