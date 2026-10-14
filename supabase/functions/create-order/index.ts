@@ -216,6 +216,8 @@ Deno.serve(async (req: Request) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+    // Free-text field; cap it so it can't bloat the order row or the alert.
+    const country = body.country?.trim().slice(0, 64) || null;
     const customerEmail = body.customer_email?.trim() || null;
     if (customerEmail && !EMAIL_REGEX.test(customerEmail)) {
       return new Response(JSON.stringify({ error: "VALIDATION_ERROR", detail: "invalid email" }), {
@@ -301,6 +303,7 @@ Deno.serve(async (req: Request) => {
         p_total_price: totalPrice,
         p_delivery_cost: deliveryCost,
         p_customer_email: customerEmail,
+        p_country: body.shipping_zone === "International" ? country : null,
       });
       if (error) {
         lastError = error;
@@ -348,7 +351,7 @@ Deno.serve(async (req: Request) => {
       shippingZone: body.shipping_zone,
       city: body.city?.trim() || null,
       npBranch: body.shipping_zone === "Ukraine" ? (body.np_branch ?? null) : null,
-      country: body.shipping_zone === "International" ? (body.country?.trim() ?? null) : null,
+      country: body.shipping_zone === "International" ? country : null,
       items: serverItems,
       deliveryCost,
       totalPrice,
