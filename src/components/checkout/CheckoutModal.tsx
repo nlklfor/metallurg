@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useCheckout } from "@/hooks/useCheckout";
 import { SHIPPING_ZONES } from "@/lib/constants/index";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";

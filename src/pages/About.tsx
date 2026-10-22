@@ -1,7 +1,7 @@
 import { Footer, Navbar } from "@/components";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { PILLARS, TIMELINE, VALUES } from "@/lib/constants/about";
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants } from "motion/react";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },

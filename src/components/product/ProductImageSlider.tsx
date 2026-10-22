@@ -1,6 +1,6 @@
 import type { ProductImageSliderProps } from "@/interfaces/product";
 import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 function Lightbox({

@@ -2,11 +2,7 @@
 // supabase/functions/create-order/index.ts — keep that in sync if this
 // scheme ever changes.
 
-export function formatPrice(price: number): string {
-  return `${price.toLocaleString()} UAH`;
-}
-
-// NOTE: For currency-aware formatting, use formatPrice from @/stores/useCurrencyStore instead.
+// Price formatting lives in @/stores/useCurrencyStore (formatPrice), which is currency-aware.
 
 export function serializeCartItems(
   items: {

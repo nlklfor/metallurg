@@ -11,13 +11,6 @@ export const getProducts = async () => {
   return data;
 };
 
-export const getProductById = async (id: string): Promise<ProductType | null> => {
-  const { data, error } = await supabase.from("products").select("*").eq("id", id).single(); // using .single() to get a single record instead of an array
-
-  if (error) throw new Error(error.message);
-  return data;
-};
-
 export const getProductBySlug = async (slug: string): Promise<ProductType | null> => {
   const { data, error } = await supabase.from("products").select("*").eq("slug", slug).single();
 

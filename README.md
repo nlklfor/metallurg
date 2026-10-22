@@ -10,7 +10,7 @@ For a deep dive into architecture, stack, and functionality, see [`docs/architec
 - **Styling:** Tailwind CSS v4, shadcn/ui ("new-york" style), Radix UI primitives, `class-variance-authority`
 - **State:** Zustand (cart, currency, gate) with `persist` middleware where needed
 - **Backend:** Supabase (Postgres + Storage + Edge Functions), accessed directly from the client via `@supabase/supabase-js`
-- **Motion:** `motion` (Framer Motion), custom CSS keyframes, WebGL shader background (`ogl`)
+- **Motion:** `motion` (Framer Motion), custom CSS keyframes
 - **Other:** `@react-pdf/renderer` (order receipts), `react-leaflet` (Nova Poshta tracking map), `embla-carousel-react` (product image sliders)
 
 ## Getting Started
