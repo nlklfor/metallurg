@@ -22,6 +22,9 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setContact,
     email,
     setEmail,
+    phone,
+    setPhone,
+    phoneInvalid,
     zone,
     setZone,
     selectedCity,
@@ -216,6 +219,41 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                           transition={{ duration: 0.2 }}
                           className="space-y-4 overflow-hidden"
                         >
+                          <div className="space-y-1">
+                            <label
+                              htmlFor="checkout-phone"
+                              className={`text-[9px] font-ibm-mono uppercase tracking-[0.3em] ${
+                                phoneInvalid ? "text-red-500" : "text-gray-400"
+                              }`}
+                            >
+                              // PHONE_FOR_NOVA_POSHTA
+                            </label>
+                            <input
+                              id="checkout-phone"
+                              type="tel"
+                              inputMode="tel"
+                              autoComplete="tel"
+                              value={phone}
+                              onChange={(e) => setPhone(e.target.value)}
+                              placeholder="+380 67 123 45 67"
+                              disabled={step === "submitting"}
+                              aria-invalid={phoneInvalid}
+                              className={`w-full font-ibm-mono border px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none disabled:opacity-50 tracking-wider ${
+                                phoneInvalid
+                                  ? "border-red-500 focus:border-red-500"
+                                  : "border-black focus:border-black"
+                              }`}
+                            />
+                            {phoneInvalid ? (
+                              <p className="text-[10px] font-ibm-mono text-red-500 tracking-[0.1em]">
+                                // ERROR_DETECTED: ENTER A UKRAINIAN MOBILE NUMBER
+                              </p>
+                            ) : (
+                              <p className="text-[10px] font-ibm-mono text-gray-400 tracking-[0.1em]">
+                                NOVA POSHTA SENDS THE PICKUP SMS TO THIS NUMBER
+                              </p>
+                            )}
+                          </div>
                           <div className="space-y-1">
                             <label className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400">
                               // CITY

@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useCartStore } from "@/stores/useCartStore";
 import { serializeCartItems } from "@/utils";
+import { normalizeUaPhone } from "@/utils/phone";
 import { computeTotal } from "@/utils/computeTotal";
 import { CREATE_ORDER_URL } from "@/lib/constants/order";
 import { fetchDeliveryCostPreview } from "@/api/novaPoshta";
@@ -52,6 +53,8 @@ export function useCheckout() {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
+  // Recipient phone for the Nova Poshta waybill (Ukraine only).
+  const [phone, setPhone] = useState("");
   const [zone, setZone] = useState<ShippingZone>("Ukraine");
 
   const [selectedCity, setSelectedCityState] = useState<NPCity | null>(null);
@@ -70,12 +73,13 @@ export function useCheckout() {
   const effectiveIsCalculatingDelivery = showDelivery && isCalculatingDelivery;
   const finalTotal = itemsTotal + (isUkraine ? (effectiveDeliveryCost ?? 0) : 0);
 
+  const normalizedPhone = normalizeUaPhone(phone);
   const isFormValid =
     name.trim().length > 0 &&
     contact.trim().length > 0 &&
     (email.trim().length === 0 || EMAIL_REGEX.test(email.trim())) &&
     (isUkraine
-      ? selectedCity !== null && selectedWarehouse !== null
+      ? selectedCity !== null && selectedWarehouse !== null && normalizedPhone !== null
       : country.trim().length > 0 && intlCity.trim().length > 0);
 
   const setSelectedCity = (city: NPCity | null) => {
@@ -119,6 +123,7 @@ export function useCheckout() {
     setName("");
     setContact("");
     setEmail("");
+    setPhone("");
     setZone("Ukraine");
     setSelectedCity(null);
     setCountry("");
@@ -149,6 +154,8 @@ export function useCheckout() {
             city: selectedCity!.name,
             city_ref: selectedCity!.ref,
             np_branch: selectedWarehouse!.description,
+            warehouse_ref: selectedWarehouse!.ref,
+            recipient_phone: normalizedPhone,
           }
         : { country: country.trim(), city: intlCity.trim() }),
       items: serializedItems,
@@ -194,6 +201,9 @@ export function useCheckout() {
     setContact,
     email,
     setEmail,
+    phone,
+    setPhone,
+    phoneInvalid: phone.trim().length > 0 && normalizedPhone === null,
     zone,
     setZone,
     selectedCity,

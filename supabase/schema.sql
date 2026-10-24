@@ -2,7 +2,7 @@
 -- METALLURG — snapshot of the live database schema (public schema + the bits
 -- of storage/cron it relies on). Supabase project: metallurgStore.
 --
--- Snapshot taken 2026-10-14, after migration 20261014150000_add_country_to_orders.
+-- Snapshot taken 2026-10-24, after migration 20261024120000_np_waybill_fields.
 --
 -- What this file is for:
 --   * One place to read the whole schema instead of piecing it together from
@@ -103,6 +103,10 @@ create table public.orders (
   delivery_cost integer default 0 not null,
   customer_email text,
   country text,                        -- International orders only
+  city_ref text,                       -- Nova Poshta CityRef (Ukraine)
+  warehouse_ref text,                  -- Nova Poshta WarehouseRef (Ukraine)
+  recipient_phone text,                -- 380XXXXXXXXX, for the waybill
+  np_document_ref text,                -- NP InternetDocument Ref of the created TTN
   constraint orders_pkey primary key (id),
   constraint orders_order_number_key unique (order_number)
 );
@@ -170,7 +174,10 @@ create or replace function public.create_order(
   p_total_price bigint,
   p_delivery_cost integer default 0,
   p_customer_email text default null,
-  p_country text default null
+  p_country text default null,
+  p_city_ref text default null,
+  p_warehouse_ref text default null,
+  p_recipient_phone text default null
 ) returns public.orders
 language plpgsql
 security definer
@@ -209,9 +216,14 @@ begin
     if v_rows = 0 then raise exception 'INSUFFICIENT_STOCK:%:%', v_product_id, coalesce(v_size, ''); end if;
   end loop;
 
-  insert into public.orders (order_number, customer_name, contact, shipping_zone, city, np_branch, country, items, total_price, delivery_cost, customer_email, status)
+  insert into public.orders (order_number, customer_name, contact, shipping_zone, city, np_branch, country,
+                             city_ref, warehouse_ref, recipient_phone,
+                             items, total_price, delivery_cost, customer_email, status)
   values (p_order_number, p_customer_name, p_contact, p_shipping_zone, p_city, p_np_branch,
           case when p_shipping_zone = 'Ukraine' then null else nullif(btrim(p_country), '') end,
+          case when p_shipping_zone = 'Ukraine' then p_city_ref end,
+          case when p_shipping_zone = 'Ukraine' then p_warehouse_ref end,
+          nullif(btrim(p_recipient_phone), ''),
           p_items, p_total_price, p_delivery_cost, p_customer_email, 'waiting_for_payment')
   returning * into v_order;
 
@@ -294,12 +306,12 @@ $function$;
 
 
 -- ─── Function grants ─────────────────────────────────────────────────────────
-revoke execute on function public.create_order(text, text, text, text, text, text, jsonb, bigint, integer, text, text) from public, anon, authenticated;
+revoke execute on function public.create_order(text, text, text, text, text, text, jsonb, bigint, integer, text, text, text, text, text) from public, anon, authenticated;
 revoke execute on function public.restock_order_items(jsonb) from public, anon, authenticated;
 revoke execute on function public.handle_order_cancelled() from public, anon, authenticated;
 revoke execute on function public.sync_products_quantity() from public, anon, authenticated;
 revoke execute on function public.is_admin() from public, anon;
-grant execute on function public.create_order(text, text, text, text, text, text, jsonb, bigint, integer, text, text) to service_role;
+grant execute on function public.create_order(text, text, text, text, text, text, jsonb, bigint, integer, text, text, text, text, text) to service_role;
 grant execute on function public.restock_order_items(jsonb) to service_role;
 grant execute on function public.handle_order_cancelled() to service_role;
 grant execute on function public.sync_products_quantity() to service_role;

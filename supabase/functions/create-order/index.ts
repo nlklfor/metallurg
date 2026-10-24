@@ -44,10 +44,21 @@ function generateOrderNumber(): string {
 const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") ?? "";
 const TELEGRAM_CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID") ?? "";
 
+// Same rules as src/utils/phone.ts on the site (keep in sync): 380XXXXXXXXX.
+function normalizeUaPhone(input: string): string | null {
+  const digits = input.replace(/\D/g, "");
+  let n = digits;
+  if (n.length === 9) n = "380" + n;
+  else if (n.length === 10 && n.startsWith("0")) n = "38" + n;
+  else if (n.length === 11 && n.startsWith("80")) n = "3" + n;
+  return /^380\d{9}$/.test(n) ? n : null;
+}
+
 interface OwnerAlert {
   orderNumber: string;
   customerName: string;
   contact: string;
+  phone: string | null;
   shippingZone: string;
   city: string | null;
   npBranch: string | null;
@@ -69,6 +80,7 @@ async function sendOwnerAlert(a: OwnerAlert): Promise<void> {
     `ID: ${a.orderNumber}`,
     `CUSTOMER: ${a.customerName}`,
     `CONTACT: ${a.contact}`,
+    ...(a.phone ? [`PHONE: +${a.phone}`] : []),
     `SHIPPING: ${a.shippingZone}`,
     ...(a.country ? [`COUNTRY: ${a.country}`] : []),
     ...(a.city ? [`CITY: ${a.city}`] : []),
@@ -122,6 +134,8 @@ interface CreateOrderRequest {
   city?: string;
   city_ref?: string;
   np_branch?: string;
+  warehouse_ref?: string;
+  recipient_phone?: string;
   country?: string;
   items: IncomingItem[];
 }
@@ -200,6 +214,19 @@ Deno.serve(async (req: Request) => {
       (body.shipping_zone !== "Ukraine" && body.shipping_zone !== "International")
     ) {
       return new Response(JSON.stringify({ error: "VALIDATION_ERROR" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    // Required for the Nova Poshta waybill. Optional for now so a browser
+    // with the previous site build still checks out; becomes required once
+    // the new checkout is live everywhere.
+    const recipientPhone =
+      body.shipping_zone === "Ukraine" && body.recipient_phone
+        ? normalizeUaPhone(String(body.recipient_phone))
+        : null;
+    if (body.shipping_zone === "Ukraine" && body.recipient_phone && !recipientPhone) {
+      return new Response(JSON.stringify({ error: "VALIDATION_ERROR", detail: "invalid phone" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -304,6 +331,10 @@ Deno.serve(async (req: Request) => {
         p_delivery_cost: deliveryCost,
         p_customer_email: customerEmail,
         p_country: body.shipping_zone === "International" ? country : null,
+        p_city_ref: body.shipping_zone === "Ukraine" ? (body.city_ref ?? null) : null,
+        p_warehouse_ref:
+          body.shipping_zone === "Ukraine" ? (body.warehouse_ref?.slice(0, 64) ?? null) : null,
+        p_recipient_phone: recipientPhone,
       });
       if (error) {
         lastError = error;
@@ -348,6 +379,7 @@ Deno.serve(async (req: Request) => {
       orderNumber: order.order_number,
       customerName: body.customer_name.trim(),
       contact: body.contact.trim(),
+      phone: recipientPhone,
       shippingZone: body.shipping_zone,
       city: body.city?.trim() || null,
       npBranch: body.shipping_zone === "Ukraine" ? (body.np_branch ?? null) : null,
