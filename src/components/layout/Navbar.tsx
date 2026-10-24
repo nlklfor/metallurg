@@ -1,233 +1,284 @@
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { EncryptedText } from "@/components/ui/encrypted-text";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AnimatePresence, motion } from "motion/react";
 import type { NavbarProps } from "@/interfaces";
 import { NAV_LINKS } from "@/lib/constants/navigation";
 import { useCartStore } from "@/stores/useCartStore";
-import { getThemeColors, type ThemeVariant } from "@/config/theme";
-import { useState, useRef, useEffect } from "react";
-import SearchModal from "@/components/search/SearchModal";
 import { useCurrencyStore, CURRENCIES, type CurrencyCode } from "@/stores/useCurrencyStore";
+import SearchModal from "@/components/search/SearchModal";
+import Wordmark from "@/components/brand/Wordmark";
+import { cn } from "@/lib/utils";
+import { DURATION, EASE_MTL } from "@/lib/motion";
+
+const CURRENCY_KEYS: CurrencyCode[] = ["UAH", "CHF", "EUR"];
+
+// Two themes, one structure. ARCHIVE pages (inventory, loadout, orders,
+// contact, about) are light; OBJECT pages (product, protocol) are dark.
+const THEMES = {
+  light: {
+    bar: "bg-paper text-ink border-rule",
+    dim: "text-dim",
+    hoverText: "hover:text-ink",
+    pill: "bg-ink text-paper",
+    menu: "bg-paper text-ink",
+    rule: "border-rule",
+    scramble: "text-dim-dark",
+  },
+  dark: {
+    bar: "bg-ink text-paper border-rule-dark",
+    dim: "text-dim-dark",
+    hoverText: "hover:text-paper",
+    pill: "bg-paper text-ink",
+    menu: "bg-ink text-paper",
+    rule: "border-rule-dark",
+    scramble: "text-dim",
+  },
+} as const;
+
+function SearchIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-4-4" />
+    </svg>
+  );
+}
 
 export default function Navbar({ variant = "light" }: NavbarProps) {
-  const theme = getThemeColors(variant as ThemeVariant);
-  const cartItems = useCartStore((state) => state.items);
+  const t = THEMES[variant];
+  const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.cart_quantity, 0));
+  const currency = useCurrencyStore((s) => s.currency);
+  const setCurrency = useCurrencyStore((s) => s.setCurrency);
+
   const [searchOpen, setSearchOpen] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
-  const currency = useCurrencyStore((state) => state.currency);
-  const setCurrency = useCurrencyStore((state) => state.setCurrency);
-
-  const currencyKeys: CurrencyCode[] = ["UAH", "CHF", "EUR"];
 
   useEffect(() => {
     if (!currencyOpen) return;
-    const handleClick = (e: MouseEvent) => {
+    const onClick = (e: MouseEvent) => {
       if (currencyRef.current && !currencyRef.current.contains(e.target as Node)) {
         setCurrencyOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setCurrencyOpen(false);
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [currencyOpen]);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!menuOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
 
-  const cartCount = cartItems.reduce((total, item) => total + item.cart_quantity, 0);
+  const currencyMenu = (
+    <div ref={currencyRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setCurrencyOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={currencyOpen}
+        className={cn("h-11 px-1 tracking-[0.15em] transition-colors", t.hoverText)}
+      >
+        {currency} <span aria-hidden="true">▾</span>
+      </button>
+      {currencyOpen && (
+        <ul
+          role="listbox"
+          aria-label="Currency"
+          className={cn("absolute right-0 top-full z-50 min-w-[140px] border", t.bar)}
+        >
+          {CURRENCY_KEYS.map((key) => (
+            <li key={key}>
+              <button
+                type="button"
+                role="option"
+                aria-selected={currency === key}
+                onClick={() => {
+                  setCurrency(key);
+                  setCurrencyOpen(false);
+                }}
+                className={cn(
+                  "h-11 w-full px-4 text-left text-[11px] tracking-[0.2em] transition-colors",
+                  currency === key ? "font-bold" : cn(t.dim, t.hoverText)
+                )}
+              >
+                {CURRENCIES[key].label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 
   return (
     <>
-      <nav className={`sticky top-0 z-50 ${theme.bg} border-b ${theme.border} w-full`}>
-        <div className="flex items-center justify-between px-4 sm:px-8 py-4">
-          {/* Desktop nav links */}
-          <div className="hidden md:flex gap-6">
+      <nav
+        aria-label="Main"
+        className={cn("sticky top-0 z-50 w-full border-b font-mono text-[11px] uppercase", t.bar)}
+      >
+        {/* Desktop — 64px, links · wordmark · controls */}
+        <div className="hidden h-bar grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-6 md:grid">
+          <div className="flex gap-6 tracking-[0.15em]">
             {NAV_LINKS.map((link) => (
-              <Link key={link.label} to={link.href}>
-                <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
-                  {link.label}
-                </Button>
-              </Link>
+              <NavLink
+                key={link.href}
+                to={link.href}
+                className={({ isActive }) =>
+                  cn(
+                    "border-b pb-0.5 transition-colors",
+                    isActive ? "border-current" : cn("border-transparent", t.dim, t.hoverText)
+                  )
+                }
+              >
+                {link.label}
+              </NavLink>
             ))}
           </div>
 
-          {/* Mobile burger + search */}
-          <div className="md:hidden flex items-center gap-4">
-            <button
-              className={`flex flex-col justify-center gap-[5px] w-6 h-6 ${theme.text}`}
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-            >
-              <span
-                className={`block h-[1.5px] w-full bg-current transition-all duration-300 ${
-                  menuOpen ? "rotate-45 translate-y-[6.5px]" : ""
-                }`}
-              />
-              <span
-                className={`block h-[1.5px] w-full bg-current transition-all duration-300 ${
-                  menuOpen ? "opacity-0" : ""
-                }`}
-              />
-              <span
-                className={`block h-[1.5px] w-full bg-current transition-all duration-300 ${
-                  menuOpen ? "-rotate-45 -translate-y-[6.5px]" : ""
-                }`}
-              />
-            </button>
-          </div>
-
-          {/* Center logo */}
-          <Link
-            to="/"
-            className={`absolute left-1/2 transform -translate-x-1/2 text-lg sm:text-xl font-bold ${theme.text}`}
-            style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
-          >
-            <EncryptedText
-              text="METALLURG™"
-              encryptedClassName={theme.logoEncrypted}
-              revealedClassName={theme.text}
-              revealDelayMs={150}
-            />
+          <Link to="/" aria-label="METALLURG™ — home" className="text-[22px]">
+            <Wordmark encryptedClassName={t.scramble} />
           </Link>
 
-          {/* Right controls */}
-          <div className="flex items-center gap-3 sm:gap-6">
-            <Button
-              variant="link"
-              className={`${theme.text} ${theme.hover} p-0 hidden md:inline-flex`}
+          <div className="flex items-center justify-end gap-5 tracking-[0.15em]">
+            <button
+              type="button"
               onClick={() => setSearchOpen(true)}
-            >
-              search
-            </Button>
-            <div ref={currencyRef} className="relative hidden sm:block">
-              <Button
-                variant="link"
-                className={`${theme.text} ${theme.hover} p-0`}
-                onClick={() => setCurrencyOpen((o) => !o)}
-              >
-                {CURRENCIES[currency].label}
-              </Button>
-              {currencyOpen && (
-                <div
-                  className={`absolute right-0 top-full mt-2 border ${theme.border} ${theme.bg} z-50 min-w-[140px]`}
-                >
-                  {currencyKeys.map((key) => (
-                    <button
-                      key={key}
-                      onClick={() => {
-                        setCurrency(key);
-                        setCurrencyOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2.5 text-xs uppercase tracking-[0.2em] transition-colors ${
-                        currency === key
-                          ? `${theme.text} font-bold`
-                          : `${theme.textSecondary} hover:${theme.text}`
-                      }`}
-                      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-                    >
-                      {CURRENCIES[key].label}
-                    </button>
-                  ))}
-                </div>
+              aria-label="Search"
+              className={cn(
+                "flex h-11 w-11 items-center justify-center transition-colors",
+                t.hoverText
               )}
-            </div>
-            <Link to="/loadout" className="hidden md:inline-flex">
-              <Button variant="link" className={`${theme.text} ${theme.hover} p-0`}>
-                <span className={`text-xs sm:text-sm font-medium ${theme.text}`}>
-                  loadout ({cartCount})
-                </span>
-              </Button>
+            >
+              <SearchIcon />
+            </button>
+            {currencyMenu}
+            <Link to="/loadout" className={cn("px-2.5 py-1.5", t.pill)}>
+              LOADOUT [ {cartCount} ]
             </Link>
           </div>
         </div>
 
-        <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+        {/* Mobile — 56px top bar: [ MENU ] · wordmark · currency */}
+        <div className="grid h-topbar grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-4 md:hidden">
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            className="h-11 justify-self-start tracking-[0.15em]"
+          >
+            [ MENU ]
+          </button>
+          <Link to="/" aria-label="METALLURG™ — home" className="text-lg">
+            <Wordmark encryptedClassName={t.scramble} />
+          </Link>
+          <div className="justify-self-end">{currencyMenu}</div>
+        </div>
       </nav>
 
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+
       {/* Mobile menu overlay */}
-      {menuOpen && (
-        <div className={`fixed inset-0 z-[60] ${theme.bg} flex flex-col md:hidden`}>
-          {/* Close button */}
-          <div className={`flex items-center justify-between px-4 py-4 border-b ${theme.border}`}>
-            <span
-              className={`text-lg font-bold ${theme.text}`}
-              style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: DURATION.hover, ease: EASE_MTL }}
+            className={cn(
+              "fixed inset-0 z-[60] flex flex-col font-mono uppercase md:hidden",
+              t.menu
+            )}
+          >
+            <div
+              className={cn(
+                "grid h-topbar grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center border-b px-4 text-[11px]",
+                t.rule
+              )}
             >
-              METALLURG™
-            </span>
-            <button
-              className={`w-6 h-6 ${theme.text}`}
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M18 6 6 18" />
-                <path d="m6 6 12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Nav links */}
-          <div className="flex flex-col gap-1 px-4 pt-6">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
+              <span className={cn("eyebrow", t.dim)}>// MENU</span>
+              <Wordmark animated={false} className="text-lg" />
+              <button
+                type="button"
                 onClick={() => setMenuOpen(false)}
-                className={`block py-3 text-sm uppercase tracking-[0.2em] font-medium ${theme.text} border-b ${theme.border}`}
-                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+                className="h-11 justify-self-end tracking-[0.15em]"
               >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Currency selector in mobile menu */}
-          <div className="px-4 pt-6">
-            <p className={`text-[10px] uppercase tracking-[0.3em] mb-3 ${theme.textSecondary}`}>
-              Currency
-            </p>
-            <div className="flex gap-3">
-              {currencyKeys.map((key) => (
-                <button
-                  key={key}
-                  onClick={() => {
-                    setCurrency(key);
-                  }}
-                  className={`px-4 py-2 text-xs uppercase tracking-[0.2em] border transition-colors ${
-                    currency === key
-                      ? `${theme.text} font-bold ${theme.border}`
-                      : `${theme.textSecondary} ${theme.border}`
-                  }`}
-                  style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-                >
-                  {CURRENCIES[key].label}
-                </button>
-              ))}
+                [ CLOSE ]
+              </button>
             </div>
-          </div>
-        </div>
-      )}
+
+            <ul className="flex flex-col px-4 pt-6">
+              {NAV_LINKS.map((link, i) => (
+                <motion.li
+                  key={link.href}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: DURATION.page, ease: EASE_MTL, delay: i * 0.05 }}
+                >
+                  <NavLink
+                    to={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        "display flex h-16 items-center border-b text-3xl",
+                        t.rule,
+                        !isActive && t.dim
+                      )
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                </motion.li>
+              ))}
+            </ul>
+
+            <div className="mt-auto px-4 pb-10">
+              <p className={cn("eyebrow mb-3", t.dim)}>// CURRENCY</p>
+              <div className="flex gap-2">
+                {CURRENCY_KEYS.map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setCurrency(key)}
+                    aria-pressed={currency === key}
+                    className={cn(
+                      "h-11 flex-1 border text-[11px] tracking-[0.2em] transition-colors",
+                      currency === key ? t.pill : t.rule
+                    )}
+                  >
+                    {key}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

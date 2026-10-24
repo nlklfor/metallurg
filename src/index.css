@@ -64,38 +64,76 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════════════════════
+   METALLURG DESIGN TOKENS — see docs/design-system.md
+   Monochrome archive: black / white, 1px rules, radius 0, no shadow.
+   Accent colors are for status only.
+   ═══════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Type — three families, no fourth */
+  --font-wordmark: "TheNeue", "Archivo Black", sans-serif; /* METALLURG™ wordmark only */
+  --font-display: "Archivo Black", sans-serif; /* titles, object names */
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", "Roboto Mono", "Courier New", monospace;
+  /* legacy aliases used across existing components */
+  --font-archivo-black: "Archivo Black", sans-serif;
+  --font-ibm-mono: "IBM Plex Mono", "JetBrains Mono", "Roboto Mono", "Courier New", monospace;
+
+  /* Monochrome */
+  --color-ink: #000000; /* OBJECT_BG */
+  --color-paper: #ffffff; /* ARCHIVE_BG */
+  --color-rule: #e5e7eb; /* RULE_LIGHT */
+  --color-rule-dark: #1f2937; /* RULE_DARK */
+  --color-dim: #6b7280; /* TEXT_2 on light */
+  --color-dim-dark: #9ca3af; /* TEXT_2 on dark */
+
+  /* Status — accent only here */
+  --color-status-ok: #22c55e; /* IN_STOCK / DELIVERED */
+  --color-status-info: #3b82f6; /* PRE_ORDER / PROCESSING */
+  --color-status-wait: #eab308; /* WAITING_FOR_PAYMENT */
+  --color-status-error: #ef4444; /* ERROR / CANCELLED */
+  --color-status-low: #fb923c; /* LOW_STOCK (LAST_2) */
+
+  /* Motion — one curve */
+  --ease-mtl: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --spacing-bar: 4rem; /* mobile bottom bar / desktop navbar height (64px) */
+  --spacing-topbar: 3.5rem; /* mobile top bar (56px) */
+}
+
 :root {
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono);
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: #000000;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --radius: 0.625rem;
+  --radius: 0rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --muted-foreground: oklch(0.551 0.023 264.364);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.637 0.237 25.331);
+  --border: oklch(0.928 0.006 264.531);
+  --input: oklch(0.928 0.006 264.531);
+  --ring: oklch(0 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -111,23 +149,44 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-a {
-  text-decoration: inherit;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  a {
+    text-decoration: inherit;
+    color: inherit;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+}
+
+/* Typography roles */
+@utility display {
+  font-family: var(--font-display);
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.88;
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* Effects are signatures; honour reduced motion everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

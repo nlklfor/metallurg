@@ -4,6 +4,30 @@ How the site actually looks and moves, extracted from the code (not aspirational
 
 ---
 
+## 0. Tokens (redesign v3, 2026-10)
+
+Source of truth: the "METALLURG™ — Archive Redesign" design file (00 SYSTEM). Tokens live in `src/index.css` (`@theme`) and `src/lib/motion.ts`.
+
+| Token                     | Value                                                                                 | Tailwind                            |
+| ------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------- |
+| Wordmark font             | TheNeue Black 900 — **METALLURG™ wordmark and brand marks only**, never headings/body | `font-wordmark` or `<Wordmark />`   |
+| Display font              | Archivo Black, italic, uppercase, -0.05em                                             | `display` (utility), `font-display` |
+| Mono font                 | IBM Plex Mono 400–700 (everything else)                                               | `font-mono` (default on `:root`)    |
+| Eyebrow                   | mono 10px / .3em / uppercase                                                          | `eyebrow`                           |
+| Ink / Paper               | #000 / #fff                                                                           | `bg-ink`, `text-paper`…             |
+| Rules                     | #E5E7EB light, #1F2937 dark                                                           | `border-rule`, `border-rule-dark`   |
+| Secondary text            | #6B7280 on light, #9CA3AF on dark                                                     | `text-dim`, `text-dim-dark`         |
+| Status (accent only here) | ok #22C55E · info #3B82F6 · wait #EAB308 · error #EF4444 · low #FB923C                | `bg-status-ok` …                    |
+| Easing                    | cubic-bezier(0.16, 1, 0.3, 1)                                                         | `ease-mtl`, `EASE_MTL`              |
+| Shape                     | radius 0, 1px borders, no shadows, no gradients                                       | `--radius: 0`                       |
+| Bars                      | 64px navbar / mobile bottom bar, 56px mobile top bar                                  | `h-bar`, `h-topbar`                 |
+
+Theme rule: ARCHIVE pages (inventory, loadout, orders, contact, about, docs) are light; OBJECT pages (landing, gate, product, 404) are dark. `<Navbar variant="light|dark">`.
+
+Buttons: `<Button variant="mtl" size="mtl">` (black, inverts on hover, 52px), `mtl-outline`, `mtl-text`.
+
+`prefers-reduced-motion` collapses CSS animations/transitions and skips the wordmark scramble.
+
 ## 1. Visual identity in one line
 
 A monochrome (black/white) streetwear brand presented as a classified military/tech archive — CRT scanlines, boot logs, glitch transitions, encrypted-text reveals, coordinate watermarks (47.3769°N Zürich / 50.4501°N Kyiv), and terminal-style `// comment` labels used as UI copy throughout (`// STATUS: OPERATIONAL`, `// ABOUT_METALLURG`, `// classified_document`).

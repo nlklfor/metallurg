@@ -1,5 +1,5 @@
 import { TypingAnimation } from "@/components/ui/typing-animation";
-import { EncryptedText } from "./components/ui/encrypted-text";
+import Wordmark from "@/components/brand/Wordmark";
 import { Button } from "./components/ui/button";
 import { Link } from "react-router-dom";
 import { MAIN_PAGE_BTNS } from "@/lib/constants/navigation";
@@ -21,16 +21,8 @@ function App() {
       <div className="absolute inset-0 z-10 bg-black/50" />
 
       <div className="relative z-20 flex h-screen flex-col items-center justify-center gap-4 sm:gap-8 px-4">
-        <h1
-          className="text-2xl sm:text-4xl md:text-5xl tracking-tighter text-white drop-shadow-2xl text-center"
-          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
-        >
-          <EncryptedText
-            text="METALLURG™"
-            encryptedClassName="text-neutral-500"
-            revealedClassName="dark:text-white text-white"
-            revealDelayMs={150}
-          />
+        <h1 className="text-2xl sm:text-4xl md:text-5xl text-white drop-shadow-2xl text-center">
+          <Wordmark encryptedClassName="text-neutral-500" />
         </h1>
         <nav className="flex flex-col gap-3 sm:gap-4 mt-6 sm:mt-10 items-center">
           {MAIN_PAGE_BTNS.map((btn) => (
