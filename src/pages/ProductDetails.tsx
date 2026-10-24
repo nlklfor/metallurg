@@ -7,7 +7,6 @@ import ProductDetailsSkeleton from "@/components/product/ProductDetailsSkeleton"
 import ErrorState from "@/components/layout/ErrorState";
 import { useCartStore } from "@/stores/useCartStore";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
-import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { useActionToast } from "@/hooks/useActionToast";
 import { getThemeColors } from "@/config/theme";
@@ -116,7 +115,6 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   return (
     <div className={`w-full min-h-screen ${theme.bg} ${theme.text} flex flex-col`}>
       <Navbar variant="dark" />
-      <Toaster position="bottom-right" />
       <div className="px-6 md:px-12 pt-6">
         <Breadcrumbs
           items={[

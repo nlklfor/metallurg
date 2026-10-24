@@ -69,11 +69,8 @@ const Cart = () => {
             {/* MTL™ watermark — absolute background */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
               <p
-                className="font-black text-gray-100 tracking-tighter italic leading-none"
-                style={{
-                  fontFamily: "'TheNeue', sans-serif",
-                  fontSize: "clamp(80px, 22vw, 260px)",
-                }}
+                className="font-wordmark font-black text-gray-100 tracking-tighter italic leading-none"
+                style={{ fontSize: "clamp(80px, 22vw, 260px)" }}
               >
                 MTL™
               </p>

@@ -1,34 +1,63 @@
 import { Link } from "react-router-dom";
-import { EncryptedText } from "@/components/ui/encrypted-text";
+import Wordmark from "@/components/brand/Wordmark";
+import { MAIN_PAGE_LINKS, NODES } from "@/lib/constants/navigation";
+
+const ARCHIVE_LINKS = [
+  { to: "/inventory", label: "INVENTORY" },
+  { to: "/orders", label: "ORDERS & REVIEWS" },
+  { to: "/contact", label: "CONTACT" },
+  { to: "/about", label: "ABOUT" },
+];
+
+const DOC_LINKS = [{ to: "/protocol", label: "PROTOCOL" }];
+
+const linkClass = "w-fit transition-colors hover:text-dim-dark";
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-6 pb-24 md:pb-6 px-4 sm:px-8 mt-auto">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
-          <span className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-gray-500 text-center sm:text-left">
-            © 2026 METALLURG™ — ALL RIGHTS RESERVED
-          </span>
-          <Link
-            to="/protocol"
-            className="text-[8px] sm:text-[9px] tracking-[0.18em] sm:tracking-[0.25em] uppercase !text-gray-600 hover:!text-white transition-colors no-underline text-center sm:text-left"
-          >
-            VIEW_PROTOCOL_001
+    // pb-28 on mobile keeps the content clear of the fixed bottom bar.
+    <footer className="mt-auto bg-ink px-4 pt-10 pb-28 font-mono text-paper sm:px-8 md:px-12 md:pb-10">
+      <div className="mx-auto flex max-w-[1344px] flex-col gap-10">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <Link to="/" aria-label="METALLURG™ — home" className="text-4xl md:text-6xl">
+            <Wordmark encryptedClassName="text-dim" />
           </Link>
+          <div className="text-[10px] tracking-[0.15em] text-dim-dark md:text-right">
+            <p>KYIV {NODES.ua.coords}</p>
+            <p>ZÜRICH {NODES.ch.coords}</p>
+          </div>
         </div>
 
-        <Link
-          to="/"
-          className="text-lg sm:text-xl font-bold text-white"
-          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900, fontSize: undefined }}
-        >
-          <EncryptedText
-            text="METALLURG™"
-            encryptedClassName="text-gray-600"
-            revealedClassName="text-white"
-            revealDelayMs={150}
-          />
-        </Link>
+        <div className="grid grid-cols-1 gap-8 text-[11px] leading-[2] tracking-[0.1em] sm:grid-cols-3">
+          <nav aria-label="Channels" className="flex flex-col">
+            <span className="eyebrow mb-2 text-[9px] text-dim-dark">// CHANNELS</span>
+            {MAIN_PAGE_LINKS.map((l) => (
+              <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className={linkClass}>
+                {l.label}
+              </a>
+            ))}
+          </nav>
+          <nav aria-label="Archive" className="flex flex-col">
+            <span className="eyebrow mb-2 text-[9px] text-dim-dark">// ARCHIVE</span>
+            {ARCHIVE_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} className={linkClass}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+          <nav aria-label="Documents" className="flex flex-col">
+            <span className="eyebrow mb-2 text-[9px] text-dim-dark">// DOCS</span>
+            {DOC_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} className={linkClass}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="border-t border-rule-dark pt-4 text-[10px] tracking-[0.15em] text-dim-dark">
+          © 2026 METALLURG™ // KYIV ↔ ZÜRICH
+        </div>
       </div>
     </footer>
   );

@@ -1,79 +1,88 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Home, Search, ShoppingBag, MapPin } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
 import { useCartStore } from "@/stores/useCartStore";
 import SearchModal from "@/components/search/SearchModal";
-import TrackOrderModal from "@/components/tracking/TrackModal";
+import { cn } from "@/lib/utils";
 
-const EXACT_ROUTES = ["/inventory", "/contact", "/about", "/orders", "/loadout"];
+// Mobile-only bar with the four routes a QR / Instagram visitor actually
+// needs. Active tab inverts. 64px + iPhone safe area.
+
+const VISIBLE_ROUTES = ["/inventory", "/contact", "/about", "/orders", "/loadout"];
+
+const icon = {
+  inventory: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
+  search: (
+    <>
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-4-4" />
+    </>
+  ),
+  loadout: <path d="M4 8h16v12H4zM8 8V4h8v4" />,
+  orders: <path d="M5 6h14M5 12h14M5 18h9" />,
+};
+
+function Icon({ children }: { children: React.ReactNode }) {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
+}
+
+const tab =
+  "flex flex-col items-center justify-center gap-1.5 text-[9px] uppercase tracking-[0.15em] transition-colors duration-150";
 
 export default function BottomBar() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const [trackOpen, setTrackOpen] = useState(false);
-  const location = useLocation();
-  const cartItems = useCartStore((state) => state.items);
-  const cartCount = cartItems.reduce((total, item) => total + item.cart_quantity, 0);
+  const { pathname } = useLocation();
+  const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.cart_quantity, 0));
 
-  const { pathname } = location;
-  const visible = EXACT_ROUTES.includes(pathname) || pathname.startsWith("/product/");
+  const visible = VISIBLE_ROUTES.includes(pathname) || pathname.startsWith("/product/");
   if (!visible) return null;
 
-  const isActive = (path: string) => location.pathname === path;
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    cn(tab, isActive ? "bg-ink text-paper" : "text-ink");
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-30 md:hidden bg-white border-t border-gray-200">
-        <div className="grid grid-cols-4 h-16">
-          <Link
-            to="/"
-            className={`flex flex-col items-center justify-center gap-1 transition-colors ${
-              isActive("/") ? "text-black" : "text-gray-400"
-            }`}
-          >
-            <Home size={20} strokeWidth={isActive("/") ? 2.5 : 1.5} />
-            <span className="text-[8px] font-ibm-mono uppercase tracking-[0.15em]">Home</span>
-          </Link>
-
+      <nav
+        aria-label="Quick navigation"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-ink bg-paper font-mono md:hidden"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
+        <div className="grid h-bar grid-cols-4">
+          <NavLink to="/inventory" className={linkClass}>
+            <Icon>{icon.inventory}</Icon>
+            INVENTORY
+          </NavLink>
           <button
+            type="button"
             onClick={() => setSearchOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 text-gray-400 transition-colors active:text-black"
+            className={cn(tab, "text-ink active:bg-ink active:text-paper")}
           >
-            <Search size={20} strokeWidth={1.5} />
-            <span className="text-[8px] font-ibm-mono uppercase tracking-[0.15em]">Search</span>
+            <Icon>{icon.search}</Icon>
+            SEARCH
           </button>
-
-          <Link
-            to="/loadout"
-            className={`flex flex-col items-center justify-center gap-1 transition-colors relative ${
-              isActive("/loadout") ? "text-black" : "text-gray-400"
-            }`}
-          >
-            <div className="relative">
-              <ShoppingBag size={20} strokeWidth={isActive("/loadout") ? 2.5 : 1.5} />
-              {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-black text-white text-[8px] font-ibm-mono w-4 h-4 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </div>
-            <span className="text-[8px] font-ibm-mono uppercase tracking-[0.15em]">Loadout</span>
-          </Link>
-
-          <button
-            onClick={() => setTrackOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 text-gray-400 transition-colors active:text-black"
-          >
-            <MapPin size={20} strokeWidth={1.5} />
-            <span className="text-[8px] font-ibm-mono uppercase tracking-[0.15em]">Track</span>
-          </button>
+          <NavLink to="/loadout" className={linkClass}>
+            <Icon>{icon.loadout}</Icon>
+            LOADOUT [{cartCount}]
+          </NavLink>
+          <NavLink to="/orders" className={linkClass}>
+            <Icon>{icon.orders}</Icon>
+            ORDERS
+          </NavLink>
         </div>
-
-        {/* safe area for iPhone home indicator */}
-        <div className="h-safe-area-inset-bottom bg-white" />
       </nav>
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-      <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
     </>
   );
 }

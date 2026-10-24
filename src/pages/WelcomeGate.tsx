@@ -1,4 +1,4 @@
-import { EncryptedText } from "@/components/ui/encrypted-text";
+import Wordmark from "@/components/brand/Wordmark";
 import "@google/model-viewer";
 import mtlLogoGlb from "@/assets/icons/logo-mtl.glb?url";
 import { useState, useEffect, useRef } from "react";
@@ -85,16 +85,8 @@ export default function WelcomeGate() {
         </div>
 
         {/* Encrypted brand */}
-        <h2
-          className="text-3l tracking-tighter text-white drop-shadow-2xl text-center"
-          style={{ fontFamily: "'TheNeue', sans-serif", fontWeight: 900 }}
-        >
-          <EncryptedText
-            text="METALLURG™"
-            encryptedClassName="text-neutral-500"
-            revealedClassName="dark:text-white text-white"
-            revealDelayMs={200}
-          />
+        <h2 className="text-3xl text-white drop-shadow-2xl text-center">
+          <Wordmark encryptedClassName="text-neutral-500" />
         </h2>
 
         {/* Status + progress */}
