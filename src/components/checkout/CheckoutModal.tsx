@@ -6,6 +6,7 @@ import type { CheckoutModalProps, NPCity, NPWarehouse } from "@/interfaces";
 import { lazy, Suspense, useEffect } from "react";
 import AsyncCombobox from "@/components/checkout/AsyncCombobox";
 import { searchCities, searchWarehouses } from "@/api/novaPoshta";
+import { telegramOrderLink } from "@/lib/constants/navigation";
 
 const ReceiptDownloadLink = lazy(() => import("@/components/checkout/ReceiptDownloadLink"));
 
@@ -366,6 +367,17 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       <p>✓ NOTIFICATION SENT TO STORE</p>
                       <p>◎ WE WILL CONTACT YOU SHORTLY</p>
                     </div>
+
+                    {/* Opens the bot with the order number; the bot links this
+                        chat to the order and messages every status/TTN change. */}
+                    <a
+                      href={telegramOrderLink(orderNumber)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex w-full items-center justify-center gap-2 bg-black py-4 font-ibm-mono text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-gray-900"
+                    >
+                      GET_STATUS_UPDATES_IN_TELEGRAM →
+                    </a>
 
                     <p className="text-[10px] font-ibm-mono text-gray-400 leading-relaxed">
                       USE <span className="text-black font-bold">{orderNumber}</span> IN THE{" "}
