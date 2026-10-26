@@ -2,7 +2,7 @@
 -- METALLURG — snapshot of the live database schema (public schema + the bits
 -- of storage/cron it relies on). Supabase project: metallurgStore.
 --
--- Snapshot taken 2026-10-24, after migration 20261024120000_np_waybill_fields.
+-- Snapshot taken 2026-10-25, after migration 20261025120000_order_telegram_subscription.
 --
 -- What this file is for:
 --   * One place to read the whole schema instead of piecing it together from
@@ -107,6 +107,8 @@ create table public.orders (
   warehouse_ref text,                  -- Nova Poshta WarehouseRef (Ukraine)
   recipient_phone text,                -- 380XXXXXXXXX, for the waybill
   np_document_ref text,                -- NP InternetDocument Ref of the created TTN
+  customer_chat_id bigint,             -- Telegram chat subscribed to status updates (bot)
+  notified_state text,                 -- last "<status>|<ttn>" the bot sent to that chat
   constraint orders_pkey primary key (id),
   constraint orders_order_number_key unique (order_number)
 );
@@ -132,6 +134,7 @@ create table public.reviews (
 -- ─── Indexes ─────────────────────────────────────────────────────────────────
 create index idx_lookup_attempts_identifier_time on public.lookup_attempts using btree (identifier, created_at);
 create index idx_orders_order_number on public.orders using btree (order_number);
+create index idx_orders_customer_chat on public.orders using btree (customer_chat_id) where (customer_chat_id is not null);
 create index idx_reviews_product on public.reviews using btree (product_id);
 
 
