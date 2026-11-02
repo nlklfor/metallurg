@@ -1,5 +1,7 @@
 export interface ProductType {
-  createdAt: string;
+  /** Legacy camelCase field; rows from Supabase carry `created_at`. */
+  createdAt?: string;
+  created_at?: string;
   id: string;
   name: string;
   description?: string;
