@@ -12,7 +12,12 @@ export const getProducts = async () => {
 };
 
 export const getProductBySlug = async (slug: string): Promise<ProductType | null> => {
-  const { data, error } = await supabase.from("products").select("*").eq("slug", slug).single();
+  // maybeSingle: an unknown slug is "not found" (null), not an error.
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
 
   if (error) throw new Error(error.message);
   return data;

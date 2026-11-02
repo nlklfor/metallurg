@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 // Mobile-only bar with the four routes a QR / Instagram visitor actually
 // needs. Active tab inverts. 64px + iPhone safe area.
 
+// Object pages (/product/*) carry their own purchase bar instead.
 const VISIBLE_ROUTES = ["/inventory", "/contact", "/about", "/orders", "/loadout"];
 
 const icon = {
@@ -45,7 +46,7 @@ export default function BottomBar() {
   const { pathname } = useLocation();
   const cartCount = useCartStore((s) => s.items.reduce((n, i) => n + i.cart_quantity, 0));
 
-  const visible = VISIBLE_ROUTES.includes(pathname) || pathname.startsWith("/product/");
+  const visible = VISIBLE_ROUTES.includes(pathname);
   if (!visible) return null;
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
