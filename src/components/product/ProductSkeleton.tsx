@@ -1,17 +1,14 @@
+// Loading card, same frame as ProductItem (InventoryStates: "░ pulse 1.2s").
 export default function ProductSkeleton() {
   return (
-    <div className="bg-gray-200 rounded-sm overflow-hidden w-72 h-106 flex flex-col">
-      <div className="relative w-full h-1/2 bg-gray-200 animate-pulse mt-6" />
-
-      <div className="p-3 space-y-2 flex flex-col justify-end flex-1">
-        <div className="h-4 bg-gray-300 rounded-sm animate-pulse w-3/4" />
-
-        <div className="space-y-1">
-          <div className="h-3 bg-gray-300 rounded-sm animate-pulse" />
-          <div className="h-3 bg-gray-300 rounded-sm animate-pulse w-5/6" />
-        </div>
-
-        <div className="h-4 bg-gray-300 rounded-sm animate-pulse w-1/3" />
+    <div className="flex h-full flex-col border border-rule" aria-hidden="true">
+      <div className="flex aspect-square items-center justify-center bg-[#F3F4F6] text-[11px] tracking-[0.2em] text-[#D1D5DB] animate-[pulse_1.2s_ease-in-out_infinite]">
+        ░░░░
+      </div>
+      <div className="flex flex-col gap-2 p-2.5 sm:px-4 sm:py-3.5">
+        <div className="h-3 w-[85%] bg-[#F3F4F6]" />
+        <div className="h-3 w-[55%] bg-[#F3F4F6]" />
+        <div className="h-2.5 w-[35%] bg-[#F3F4F6]" />
       </div>
     </div>
   );

@@ -15,8 +15,12 @@ import PageTransition from "@/components/layout/PageTransition";
 export default function AnimatedRoutes() {
   const location = useLocation();
 
+  // Each new page starts at the top: scroll once the old page has left.
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence
+      mode="wait"
+      onExitComplete={() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })}
+    >
       <Routes location={location} key={location.pathname}>
         <Route
           path="/"

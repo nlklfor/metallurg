@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export const useProductList = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchProducts = async () => {
