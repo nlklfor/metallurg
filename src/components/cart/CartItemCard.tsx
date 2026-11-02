@@ -1,102 +1,158 @@
+import { Link } from "react-router-dom";
 import type { CartItem } from "@/interfaces";
 import { useCartStore } from "@/stores/useCartStore";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
-import { Trash2 } from "lucide-react";
 import { getMaxQuantity } from "@/utils/stock";
+import { cn } from "@/lib/utils";
 
 interface CartItemCardProps {
   item: CartItem;
+  /** compact = loadout sidebar; default = loadout page row */
+  variant?: "page" | "compact";
+  onNavigate?: () => void;
 }
 
-export default function CartItemCard({ item }: CartItemCardProps) {
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const increaseQuantity = useCartStore((state) => state.increaseQuantity);
-  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
+const STATUS: Record<CartItem["stock_status"], { label: string; color: string; eta: string }> = {
+  pre_order: { label: "PRE_ORDER", color: "text-[#1D4ED8]", eta: "ETA: 10–14 DAYS" },
+  in_stock: { label: "IN_STOCK", color: "text-[#15803D]", eta: "READY_TO_SHIP" },
+  out_of_stock: { label: "UNAVAILABLE", color: "text-status-error", eta: "REMOVE TO CONTINUE" },
+};
 
-  const isOutOfStock = item.stock_status === "out_of_stock";
-  const currency = useCurrencyStore((state) => state.currency);
-  const atMax = item.cart_quantity >= getMaxQuantity(item, item.selectedSize);
+// One loadout line (design file: Loadout-D / Loadout-M).
+// Page: photo · name/size/status · qty stepper · unit × qty · line total.
+// Compact (sidebar): photo · name/size · stepper + remove · line total.
+export default function CartItemCard({ item, variant = "page", onNavigate }: CartItemCardProps) {
+  const removeFromCart = useCartStore((s) => s.removeFromCart);
+  const increaseQuantity = useCartStore((s) => s.increaseQuantity);
+  const decreaseQuantity = useCartStore((s) => s.decreaseQuantity);
+  const currency = useCurrencyStore((s) => s.currency);
+
+  const status = STATUS[item.stock_status] ?? STATUS.in_stock;
+  const unavailable = item.stock_status === "out_of_stock";
+  const max = getMaxQuantity(item, item.selectedSize);
+  const atMax = item.cart_quantity >= max;
   const atMin = item.cart_quantity <= 1;
+  const capText = atMax && max <= 2 && !unavailable ? `LAST_${max} // MAX` : "";
+  const compact = variant === "compact";
+  const sizeText = item.selectedSize === "ONE_SIZE" ? "ONE_SIZE" : `SIZE ${item.selectedSize}`;
 
-  return (
-    <div
-      className={`group flex gap-3 sm:gap-6 p-4 sm:p-5 border border-gray-200 transition-all duration-300 ${
-        isOutOfStock ? "opacity-30 grayscale blur-[1px]" : "hover:border-gray-400"
-      }`}
+  const stepper = (
+    <div className={cn("flex border border-ink", compact ? "h-9 w-[108px]" : "h-11 w-[132px]")}>
+      <button
+        type="button"
+        aria-label="Decrease quantity"
+        onClick={() => decreaseQuantity(item.id, item.selectedSize)}
+        disabled={atMin || unavailable}
+        className="flex-1 text-[16px] disabled:text-[#D1D5DB]"
+      >
+        −
+      </button>
+      <span className="flex flex-1 items-center justify-center border-x border-ink text-[13px] tabular-nums">
+        {item.cart_quantity}
+      </span>
+      <button
+        type="button"
+        aria-label="Increase quantity"
+        onClick={() => increaseQuantity(item.id, item.selectedSize)}
+        disabled={atMax || unavailable}
+        className="flex-1 text-[16px] disabled:text-[#D1D5DB]"
+      >
+        +
+      </button>
+    </div>
+  );
+
+  const remove = (
+    <button
+      type="button"
+      onClick={() => removeFromCart(item.id, item.selectedSize)}
+      className="h-6 self-start text-[10px] tracking-[0.15em] text-dim underline underline-offset-[3px] transition-colors hover:text-status-error"
     >
-      <div className="w-24 sm:w-32 h-28 sm:h-36 bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100 relative">
+      REMOVE
+    </button>
+  );
+
+  const photo = (
+    <Link
+      to={`/product/${item.slug}`}
+      onClick={onNavigate}
+      className={cn(
+        "flex flex-shrink-0 items-center justify-center overflow-hidden border border-rule",
+        compact ? "h-[88px] w-[88px]" : "h-24 w-24 lg:h-[120px] lg:w-[120px]"
+      )}
+    >
+      {item.image_url?.[0] && (
         <img
           src={item.image_url[0]}
           alt={item.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        {item.is_new && !isOutOfStock && (
-          <div className="absolute top-1.5 left-1.5 border border-black bg-white px-1.5 py-0.5">
-            <p className="text-black font-ibm-mono text-[7px] uppercase tracking-[0.2em]">NEW</p>
-          </div>
-        )}
-        {isOutOfStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/60">
-            <p className="text-gray-500 font-black text-[8px] uppercase tracking-[0.2em]">
-              OUT_OF_STOCK
-            </p>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col justify-between flex-grow py-1">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="text-sm sm:text-lg font-bold text-black tracking-tight uppercase">
-              {item.name}
-            </h3>
-            <p className="text-[10px] text-gray-400 mt-1 tracking-[0.2em]">
-              // SIZE: <span className="text-gray-600">{item.selectedSize}</span>
-            </p>
-          </div>
-          <p className="text-sm sm:text-lg font-black text-black italic">
-            {formatPrice(item.price * item.cart_quantity, currency)}
-          </p>
-        </div>
-
-        <div className="flex justify-between items-end mt-4">
-          {isOutOfStock ? (
-            <p className="text-red-400 font-bold text-[9px] uppercase tracking-[0.3em]">
-              UNAVAILABLE
-            </p>
-          ) : (
-            <div className="flex items-center border border-gray-200">
-              <button
-                onClick={() => decreaseQuantity(item.id, item.selectedSize)}
-                disabled={atMin}
-                className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 transition-all text-base leading-none disabled:opacity-25 disabled:cursor-not-allowed"
-                aria-label="Decrease quantity"
-              >
-                −
-              </button>
-              <span className="w-7 h-7 flex items-center justify-center text-[11px] font-black tabular-nums border-x border-gray-200 text-black">
-                {item.cart_quantity}
-              </span>
-              <button
-                onClick={() => increaseQuantity(item.id, item.selectedSize)}
-                disabled={atMax}
-                className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 transition-all text-base leading-none disabled:opacity-25 disabled:cursor-not-allowed"
-                aria-label="Increase quantity"
-              >
-                +
-              </button>
-            </div>
+          className={cn(
+            "h-full w-full object-contain p-1.5",
+            unavailable && "opacity-40 grayscale"
           )}
+        />
+      )}
+    </Link>
+  );
 
-          <button
-            onClick={() => removeFromCart(item.id, item.selectedSize)}
-            className="flex items-center gap-2 text-gray-300 hover:text-red-500 transition-colors text-[10px] font-bold uppercase tracking-[0.2em] ml-auto group/btn"
-          >
-            <Trash2 size={14} className="transition-transform" />
-            <span>Remove</span>
-          </button>
+  const lineTotal = formatPrice(item.price * item.cart_quantity, currency);
+
+  if (compact) {
+    return (
+      <div className="flex gap-3 border-b border-rule py-4">
+        {photo}
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <div className="flex items-start justify-between gap-3">
+            <Link
+              to={`/product/${item.slug}`}
+              onClick={onNavigate}
+              className="display line-clamp-2 text-[15px] leading-none"
+            >
+              {item.name}
+            </Link>
+            <span className="flex-shrink-0 text-[13px] font-bold tabular-nums">{lineTotal}</span>
+          </div>
+          <span className="text-[10px] tracking-[0.12em] text-dim">
+            // {sizeText} · <span className={status.color}>{status.label}</span>
+          </span>
+          <div className="mt-auto flex items-center justify-between gap-2">
+            {stepper}
+            {remove}
+          </div>
+          {capText && (
+            <span className="text-[9px] tracking-[0.12em] text-status-low">{capText}</span>
+          )}
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-[96px_minmax(0,1fr)] gap-x-4 gap-y-3 border-b border-rule py-5 lg:grid-cols-[120px_minmax(0,1fr)_140px_150px_160px] lg:items-center lg:gap-5">
+      {photo}
+      <div className="flex min-w-0 flex-col gap-2">
+        <Link
+          to={`/product/${item.slug}`}
+          className="display text-[18px] leading-none lg:text-[22px]"
+        >
+          {item.name}
+        </Link>
+        <span className="text-[11px] tracking-[0.12em] text-dim">
+          // {sizeText} · <span className={status.color}>{status.label}</span>
+        </span>
+        <span className="text-[11px] text-dim">{status.eta}</span>
+        <span className="text-[14px] font-bold tabular-nums lg:hidden">{lineTotal}</span>
+        {remove}
+      </div>
+      <div className="col-start-2 flex flex-col gap-1.5 lg:col-start-auto">
+        {stepper}
+        {capText && <span className="text-[9px] tracking-[0.12em] text-status-low">{capText}</span>}
+      </div>
+      <span className="hidden text-[13px] tabular-nums text-[#374151] lg:block">
+        {formatPrice(item.price, currency)} × {item.cart_quantity}
+      </span>
+      <span className="hidden text-right text-[16px] font-bold tabular-nums lg:block">
+        {lineTotal}
+      </span>
     </div>
   );
 }

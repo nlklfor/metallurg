@@ -147,7 +147,7 @@ export default function AsyncCombobox<T>({
         disabled={disabled}
         role="combobox"
         aria-expanded={isOpen}
-        className="w-full font-ibm-mono border border-black px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black disabled:opacity-50 uppercase tracking-wider"
+        className="h-12 w-full border border-rule bg-paper px-3.5 font-mono text-[14px] uppercase tracking-[0.04em] placeholder:text-[#9CA3AF] focus:border-ink focus:outline-none disabled:opacity-50 max-sm:h-[52px]"
       />
       {showPanel &&
         panelRect &&
@@ -162,7 +162,7 @@ export default function AsyncCombobox<T>({
               width: panelRect.width,
               zIndex: 9999,
             }}
-            className="mt-1 max-h-56 overflow-y-auto border border-black bg-white shadow-lg"
+            className="max-h-56 overflow-y-auto border border-t-0 border-ink bg-paper"
           >
             {isLoading && (
               <p className="px-4 py-3 text-[10px] font-ibm-mono uppercase tracking-[0.2em] text-gray-400 animate-pulse">
