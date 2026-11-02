@@ -1,3 +1,23 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(Googlebot|Google-InspectionTool|AdsBot-Google|Storebot-Google|bingbot|BingPreview|YandexBot|YandexMobileBot|DuckDuckBot|Baiduspider|Applebot|facebookexternalhit|Facebot|meta-externalagent|Twitterbot|TelegramBot|WhatsApp|Discordbot|Slackbot|LinkedInBot|Pinterest|redditbot|Embedly|SkypeUriPreview|vkShare|Viber|Iframely|OAI-SearchBot|PerplexityBot).*"
+        }
+      ],
+      "destination": "/api/meta?path=/:path*"
+    },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(og-default.png|apple-touch-icon.png|icon-192.png|icon-512.png|favicon-32.png)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+    }
+  ]
 }

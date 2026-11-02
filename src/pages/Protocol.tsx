@@ -1,10 +1,12 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { sections } from "@/lib/constants/protocol";
+import Seo from "@/components/seo/Seo";
 
 export default function Protocol() {
   return (
     <div className="bg-black text-white min-h-screen flex flex-col">
+      <Seo />
       <Navbar variant="dark" />
 
       <div className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-8 py-10 sm:py-20">

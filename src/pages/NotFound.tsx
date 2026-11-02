@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
+import Seo from "@/components/seo/Seo";
 
 export default function NotFound() {
   return (
     <div className="h-screen w-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
+      <Seo
+        title="Not found — METALLURG™"
+        description="This page is not in the archive."
+        index={false}
+      />
       <img
         src="/metallurg-void-fallback.png"
         alt=""

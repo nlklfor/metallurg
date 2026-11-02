@@ -2,6 +2,7 @@ import { Footer, Navbar } from "@/components";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { PILLARS, TIMELINE, VALUES } from "@/lib/constants/about";
 import { motion, type Variants } from "motion/react";
+import Seo from "@/components/seo/Seo";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -15,6 +16,7 @@ const fadeUp: Variants = {
 export default function About() {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
+      <Seo />
       <Navbar variant="light" />
 
       <div className="px-4 sm:px-8 pt-6">

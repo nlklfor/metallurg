@@ -3,6 +3,7 @@ import "@google/model-viewer";
 import mtlLogoGlb from "@/assets/icons/logo-mtl.glb?url";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Seo from "@/components/seo/Seo";
 
 const BOOT_LINES = [
   "[SYS] Initializing METALLURG_CORE v2.6.0...",
@@ -57,6 +58,7 @@ export default function WelcomeGate() {
 
   return (
     <div className={`gate-root ${exiting ? "gate-root--exit" : ""}`}>
+      <Seo />
       <div className="gate-scanlines" />
       <div className="gate-grain" />
 

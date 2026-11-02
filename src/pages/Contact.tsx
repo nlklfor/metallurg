@@ -4,6 +4,7 @@ import { FAQ } from "@/lib/constants/contact";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { Send } from "lucide-react";
 import { useContact } from "@/hooks/useContact";
+import Seo from "@/components/seo/Seo";
 
 export default function Contact() {
   const {
@@ -23,6 +24,7 @@ export default function Contact() {
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
+      <Seo />
       <Navbar variant="light" />
 
       <div className="px-4 sm:px-8 pt-6">
