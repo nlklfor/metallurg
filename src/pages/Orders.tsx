@@ -7,6 +7,7 @@ import ReviewList from "@/components/review/ReviewList";
 import { useAllReviews } from "@/hooks/useAllReviews";
 import { Package, Star } from "lucide-react";
 import { TRACK_URL } from "@/lib/constants/order";
+import Seo from "@/components/seo/Seo";
 
 interface ResolvedOrder {
   id: string;
@@ -67,6 +68,7 @@ export default function Orders() {
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col">
+      <Seo />
       <Navbar variant="light" />
       <div className="px-4 sm:px-8 pt-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders" }]} />

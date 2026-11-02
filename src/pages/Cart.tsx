@@ -11,6 +11,7 @@ import Footer from "@/components/layout/Footer";
 import Wordmark from "@/components/brand/Wordmark";
 import { getProducts } from "@/api/products";
 import type { ProductType } from "@/interfaces";
+import Seo from "@/components/seo/Seo";
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
@@ -56,6 +57,7 @@ export default function Cart() {
 
   return (
     <div className="flex min-h-screen flex-col bg-paper font-mono text-ink">
+      <Seo />
       <Navbar variant="light" />
       <CheckoutModal isOpen={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
       <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />

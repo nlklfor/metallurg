@@ -4,10 +4,12 @@ import { Button } from "./components/ui/button";
 import { Link } from "react-router-dom";
 import { MAIN_PAGE_BTNS } from "@/lib/constants/navigation";
 import subwayVideo from "@/assets/videos/subway.mp4";
+import Seo from "@/components/seo/Seo";
 
 function App() {
   return (
     <div className="h-screen w-screen overflow-hidden bg-black">
+      <Seo />
       <video
         autoPlay
         loop

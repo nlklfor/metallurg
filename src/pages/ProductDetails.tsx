@@ -21,6 +21,8 @@ import {
 import { compareSizes } from "@/utils/filterUtils";
 import { getMaxQuantity } from "@/utils/stock";
 import { cn } from "@/lib/utils";
+import Seo from "@/components/seo/Seo";
+import { breadcrumbJsonLd, productJsonLd, productMeta } from "@/lib/seo";
 import type { ProductType } from "@/interfaces";
 
 // Object page (design file: Object-D / Object-M / ObjectStates).
@@ -155,6 +157,11 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   if (error || !product)
     return (
       <Shell>
+        <Seo
+          title="Object not found — METALLURG™"
+          description="This object is not in the archive."
+          index={false}
+        />
         <NotFound error={error} />
       </Shell>
     );
@@ -285,6 +292,19 @@ function ProductDetailsContent({ slug }: { slug: string }) {
 
   return (
     <Shell>
+      <Seo
+        {...productMeta(product)}
+        path={`/product/${product.slug}`}
+        type="product"
+        jsonLd={[
+          productJsonLd(product),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Inventory", path: "/inventory" },
+            { name: product.name, path: `/product/${product.slug}` },
+          ]),
+        ]}
+      />
       <div className="px-4 py-3 sm:px-8 sm:py-5 md:px-12">
         <Breadcrumbs
           variant="dark"

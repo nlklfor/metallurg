@@ -1,0 +1,8 @@
+# METALLURG™
+User-agent: *
+Allow: /
+Disallow: /loadout
+Disallow: /gate/
+Disallow: /api/
+
+Sitemap: https://metallurg.vercel.app/sitemap.xml

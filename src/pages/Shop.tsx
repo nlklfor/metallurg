@@ -8,6 +8,7 @@ import { useFilters } from "@/hooks/useFilters";
 import { useProductList } from "@/hooks/useProductList";
 import { filterProducts, getCatalogFacets } from "@/utils/filterUtils";
 import { useCurrencyStore } from "@/stores/useCurrencyStore";
+import Seo from "@/components/seo/Seo";
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
@@ -56,6 +57,7 @@ export default function Shop() {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-paper font-mono text-ink">
+      <Seo />
       <Navbar variant="light" />
 
       <div className="px-4 pt-3.5 sm:px-8 sm:pt-5 md:px-12">
