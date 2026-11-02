@@ -65,7 +65,7 @@ export default function Shop() {
       <header className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:px-8 md:px-12 lg:gap-4 lg:pb-8 lg:pt-10">
         <p className="eyebrow text-[9px] text-dim lg:text-[10px]">// CATALOG_V2.0</p>
         <div className="flex items-end justify-between gap-6">
-          <h1 className="display text-[68px] sm:text-[96px] lg:text-[128px]">Inventory</h1>
+          <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">Inventory</h1>
           <p className="hidden pb-2 text-right text-[11px] leading-[1.9] tracking-[0.15em] text-dim md:block">
             {isLoading ? (
               <>

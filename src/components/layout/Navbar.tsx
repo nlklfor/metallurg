@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLoadoutDrawer } from "@/stores/useLoadoutDrawer";
 import { Link, NavLink } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import type { NavbarProps } from "@/interfaces";
@@ -61,6 +62,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const openLoadout = useLoadoutDrawer((st) => st.setOpen);
   const currencyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -173,9 +175,14 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               <SearchIcon />
             </button>
             {currencyMenu}
-            <Link to="/loadout" className={cn("px-2.5 py-1.5", t.pill)}>
+            <button
+              type="button"
+              onClick={() => openLoadout(true)}
+              aria-haspopup="dialog"
+              className={cn("px-2.5 py-1.5 uppercase tracking-[0.15em]", t.pill)}
+            >
               LOADOUT [ {cartCount} ]
-            </Link>
+            </button>
           </div>
         </div>
 

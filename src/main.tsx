@@ -5,12 +5,14 @@ import { Toaster } from "react-hot-toast";
 import "./index.css";
 import AnimatedRoutes from "./components/layout/AnimatedRoutes.tsx";
 import BottomBar from "./components/layout/BottomBar.tsx";
+import LoadoutDrawer from "./components/cart/LoadoutDrawer.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <AnimatedRoutes />
       <BottomBar />
+      <LoadoutDrawer />
       {/* One toaster for the whole app: top-right, just under the 64px navbar. */}
       <Toaster position="top-right" containerStyle={{ top: 72, right: 16, left: 16 }} gutter={8} />
     </BrowserRouter>

@@ -7,7 +7,7 @@ export default function ReceiptDownloadLink({ data }: { data: ReceiptData }) {
     <PDFDownloadLink
       document={<ReceiptDocument data={data} />}
       fileName={`${data.orderNumber}_receipt.pdf`}
-      className="block text-center text-[10px] font-ibm-mono text-gray-400 hover:text-black tracking-[0.2em] uppercase transition-colors"
+      className="flex h-full w-full items-center justify-center text-[11px] uppercase tracking-[0.15em] !text-ink transition-colors hover:bg-ink hover:!text-paper"
     >
       {({ loading }: { loading: boolean }) => (loading ? "GENERATING..." : "↓ DOWNLOAD_RECEIPT")}
     </PDFDownloadLink>
