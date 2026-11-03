@@ -101,7 +101,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           >
             <div className="max-w-4xl mx-auto px-8 py-6">
               <div className="flex items-center justify-between mb-6">
-                <span className="text-[9px] text-gray-500 uppercase tracking-[0.3em]">
+                <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em]">
                   // search_catalog
                 </span>
                 <button
@@ -132,22 +132,22 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="mt-6 max-h-[60vh] overflow-y-auto scrollbar-none">
                   {isLoading ? (
                     <div className="py-8 text-center">
-                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.3em] animate-pulse">
+                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em] animate-pulse">
                         // loading...
                       </p>
                     </div>
                   ) : filtered.length === 0 ? (
                     <div className="py-8 text-center">
-                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.3em]">
+                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em]">
                         // no_results_found
                       </p>
-                      <p className="text-[9px] text-gray-600 tracking-[0.2em] mt-1">
+                      <p className="text-[10px] text-gray-600 tracking-[0.15em] mt-1">
                         QUERY: "{debouncedQuery}" — 0 MATCHES
                       </p>
                     </div>
                   ) : (
                     <>
-                      <p className="text-[9px] text-gray-600 uppercase tracking-[0.3em] mb-4">
+                      <p className="text-[10px] text-gray-600 uppercase tracking-[0.15em] mb-4">
                         // {filtered.length} result{filtered.length !== 1 ? "s" : ""}
                       </p>
                       <div className="space-y-1">
@@ -174,7 +174,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               >
                                 {product.name}
                               </p>
-                              <p className="text-[10px] text-gray-500 tracking-[0.2em] mt-0.5">
+                              <p className="text-[10px] text-gray-500 tracking-[0.15em] mt-0.5">
                                 {product.sku
                                   ? `SKU_${product.sku}`
                                   : product.materials && `// ${product.materials}`}
@@ -186,7 +186,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 {formatPrice(product.price, currency)}
                               </p>
                               {product.stock_status === "out_of_stock" && (
-                                <p className="text-[8px] text-red-400 uppercase tracking-[0.2em]">
+                                <p className="text-[10px] text-red-400 uppercase tracking-[0.15em]">
                                   OUT_OF_STOCK
                                 </p>
                               )}
@@ -205,7 +205,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
               {!showResults && (
                 <div className="mt-6 py-4">
-                  <p className="text-[9px] text-gray-600 uppercase tracking-[0.3em]">
+                  <p className="text-[10px] text-gray-600 uppercase tracking-[0.15em]">
                     // search by name, material, description or sku
                   </p>
                 </div>

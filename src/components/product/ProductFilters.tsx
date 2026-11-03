@@ -35,7 +35,7 @@ const SORTS: { value: FilterOptions["sortBy"]; label: string }[] = [
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
-  return <p className="eyebrow text-[9px] text-dim">{children}</p>;
+  return <p className="eyebrow text-[10px] text-dim">{children}</p>;
 }
 
 /** Square check indicator used by category / availability rows. */

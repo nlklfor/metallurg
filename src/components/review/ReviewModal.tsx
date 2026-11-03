@@ -122,16 +122,13 @@ export default function ReviewModal({
 
               <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-4 sm:px-6 py-4">
                 <div className="min-w-0 mr-4">
-                  <p className="text-[8px] font-ibm-mono uppercase tracking-[0.5em] text-zinc-700">
-                    METALLURG // REPORTS
-                  </p>
-                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.25em] text-zinc-200 mt-0.5 truncate">
+                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.15em] text-zinc-200 mt-0.5 truncate">
                     FIELD_REPORT — {orderNumber}
                   </p>
                 </div>
                 <button
                   onClick={handleClose}
-                  className="text-[10px] font-ibm-mono text-zinc-700 hover:text-white transition-colors tracking-widest"
+                  className="text-[10px] font-ibm-mono text-zinc-500 hover:text-white transition-colors tracking-widest"
                 >
                   [ESC]
                 </button>
@@ -156,7 +153,7 @@ export default function ReviewModal({
                     <span className="text-2xl text-zinc-500">✓</span>
                   </div>
                   <div>
-                    <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase">
+                    <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
                       // ALREADY_REPORTED
                     </p>
                     <p className="text-sm font-archivo-black uppercase tracking-wider mt-1">
@@ -168,7 +165,7 @@ export default function ReviewModal({
                   </div>
                   <button
                     onClick={handleClose}
-                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.3em] uppercase"
+                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.15em] uppercase"
                   >
                     [ DISMISS ]
                   </button>
@@ -181,7 +178,7 @@ export default function ReviewModal({
                   <div className="relative z-10 px-4 sm:px-6 py-5 sm:py-6 space-y-6">
                     {/* Order items list */}
                     <div className="pb-4 border-b border-zinc-900">
-                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
+                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-3">
                         // ORDER_ITEMS
                       </p>
                       <div className="space-y-1.5">
@@ -191,14 +188,14 @@ export default function ReviewModal({
                             className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider"
                           >
                             → {item.name}
-                            <span className="text-zinc-700 ml-2">SIZE: {item.selectedSize}</span>
+                            <span className="text-zinc-500 ml-2">SIZE: {item.selectedSize}</span>
                           </p>
                         ))}
                       </div>
                     </div>
 
                     <div>
-                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-3">
+                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-3">
                         // RATING *
                       </p>
                       <div className="flex items-center gap-1">
@@ -216,7 +213,7 @@ export default function ReviewModal({
                               className={`transition-colors ${
                                 star <= activeRating
                                   ? "fill-white text-white"
-                                  : "fill-transparent text-zinc-700"
+                                  : "fill-transparent text-zinc-500"
                               }`}
                             />
                           </button>
@@ -230,7 +227,7 @@ export default function ReviewModal({
                     </div>
 
                     <div>
-                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-2">
+                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-2">
                         // REPORT_BODY
                       </p>
                       <textarea
@@ -240,15 +237,15 @@ export default function ReviewModal({
                         placeholder="How does the object perform in the field?"
                         maxLength={1000}
                         rows={4}
-                        className="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm font-ibm-mono text-white placeholder-zinc-800 focus:outline-none focus:border-zinc-500 transition-colors resize-none disabled:opacity-50"
+                        className="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm font-ibm-mono text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none disabled:opacity-50"
                       />
-                      <p className="text-[8px] font-ibm-mono text-zinc-800 text-right mt-1">
+                      <p className="text-[10px] font-ibm-mono text-zinc-800 text-right mt-1">
                         {body.length}/1000
                       </p>
                     </div>
 
                     <div>
-                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-2">
+                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-2">
                         // ATTACH_IMAGES ({images.length}/3)
                       </p>
                       <div className="flex gap-2">
@@ -274,7 +271,7 @@ export default function ReviewModal({
                             disabled={isSubmitting}
                             className="w-16 h-16 border border-dashed border-zinc-800 flex items-center justify-center hover:border-zinc-500 transition-colors disabled:opacity-50"
                           >
-                            <Upload size={14} className="text-zinc-700" />
+                            <Upload size={14} className="text-zinc-500" />
                           </button>
                         )}
                       </div>
@@ -291,7 +288,7 @@ export default function ReviewModal({
                     <button
                       onClick={handleSubmit}
                       disabled={rating === 0 || isSubmitting}
-                      className="w-full bg-white text-black py-4 font-archivo-black text-[11px] uppercase tracking-[0.4em] hover:bg-zinc-100 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+                      className="w-full bg-white text-black py-4 font-archivo-black text-[11px] uppercase tracking-[0.15em] hover:bg-zinc-100 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <motion.span
@@ -319,7 +316,7 @@ export default function ReviewModal({
                     <span className="text-2xl font-archivo-black text-black">✓</span>
                   </motion.div>
                   <div>
-                    <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase">
+                    <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
                       // REPORT_LOGGED
                     </p>
                     <p className="text-lg font-archivo-black uppercase tracking-wider mt-1">
@@ -331,7 +328,7 @@ export default function ReviewModal({
                   </div>
                   <button
                     onClick={handleClose}
-                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.3em] uppercase"
+                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.15em] uppercase"
                   >
                     [ DISMISS ]
                   </button>
@@ -344,8 +341,8 @@ export default function ReviewModal({
                     <span className="text-2xl text-red-500">✗</span>
                   </div>
                   <div>
-                    <p className="text-[8px] font-ibm-mono text-red-500 tracking-[0.4em] uppercase">
-                      // TRANSMISSION_FAILED
+                    <p className="text-[10px] font-ibm-mono text-red-500 tracking-[0.15em] uppercase">
+                      // REPORT_NOT_SENT
                     </p>
                     <p className="text-[10px] font-ibm-mono text-zinc-500 mt-2 max-w-xs mx-auto">
                       {error}
@@ -353,7 +350,7 @@ export default function ReviewModal({
                   </div>
                   <button
                     onClick={() => setStep("form")}
-                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.3em] uppercase"
+                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.15em] uppercase"
                   >
                     [ RETRY ]
                   </button>

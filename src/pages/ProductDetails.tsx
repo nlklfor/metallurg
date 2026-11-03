@@ -30,7 +30,7 @@ import type { ProductType } from "@/interfaces";
 // Mobile: swipe gallery, stacked sections, fixed purchase bar at the bottom.
 
 const ONE_SIZE = "ONE_SIZE";
-const sp = "text-[9px] tracking-[0.2em] text-dim-dark";
+const sp = "text-[10px] tracking-[0.15em] text-dim-dark";
 
 const STATUS: Record<ProductType["stock_status"], { label: string; dot: string; eta: string }> = {
   in_stock: { label: "IN_STOCK", dot: "bg-status-ok", eta: "READY_TO_SHIP // NOVA_POSHTA" },
@@ -89,10 +89,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 function NotFound({ error }: { error?: string | null }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-24 text-center">
-      <p aria-hidden="true" className="text-[12px] tracking-[0.3em] text-[#4B5563]">
+      <p aria-hidden="true" className="text-[12px] tracking-[0.15em] text-[#4B5563]">
         ░░░░░░░░░░
       </p>
-      <p className="eyebrow text-dim-dark">// QUERY_RESULT</p>
       <h1 className="display text-[40px] lg:text-[64px]">Object_not_found</h1>
       <p className="max-w-[340px] text-[12px] leading-relaxed text-dim-dark">
         {error ?? "This object is not in the archive, or its link has changed."}
@@ -265,7 +264,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
             mobile ? "tracking-[0.15em]" : "justify-center"
           )}
         >
-          SET_SIZE_UNIT
+          SELECT_SIZE
         </button>
       );
     return (
@@ -275,7 +274,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
         className={cn(base, "group bg-paper text-ink hover:bg-[#E5E7EB]")}
       >
         <span className="flex items-center gap-2">
-          INITIALIZE_ACQUISITION
+          ADD_TO_LOADOUT
           <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
         </span>
         {!mobile && <span className="tabular-nums">{formatPrice(total, currency)}</span>}
@@ -331,7 +330,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
           {/* Title + price + status */}
           <section className="flex flex-col gap-3 border-b border-rule-dark py-6 lg:gap-6 lg:border-0 lg:py-0">
             <div className={cn("flex justify-between", sp)}>
-              <span>{isArchived ? "// OBJECT // ARCHIVE_VALUE" : "// OBJECT"}</span>
+              <span>{isArchived ? "ARCHIVED" : ""}</span>
               {objectNo && <span>SKU_{objectNo}</span>}
             </div>
             <h1
@@ -532,7 +531,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
       >
         {!justAdded && !inLoadout && (
           <div className="flex min-w-[96px] flex-col gap-0.5">
-            <span className="text-[9px] tracking-[0.15em] text-dim-dark">
+            <span className="text-[10px] tracking-[0.15em] text-dim-dark">
               {isArchived
                 ? "ARCHIVED"
                 : ready && selectedSize !== ONE_SIZE

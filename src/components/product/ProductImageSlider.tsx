@@ -46,7 +46,7 @@ function Lightbox({
         <X size={22} />
       </button>
 
-      <span className="absolute top-5 left-5 text-[9px] font-ibm-mono text-zinc-600 tracking-widest">
+      <span className="absolute top-5 left-5 text-[10px] font-ibm-mono text-zinc-600 tracking-widest">
         {String(current + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
       </span>
 
@@ -201,7 +201,7 @@ export default function ProductImageSlider({
               />
 
               <div
-                className="absolute bottom-4 right-4 text-[9px] tracking-widest tabular-nums"
+                className="absolute bottom-4 right-4 text-[10px] tracking-widest tabular-nums"
                 style={{ color: "rgba(255,255,255,0.25)" }}
               >
                 {String(idx + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
@@ -209,7 +209,7 @@ export default function ProductImageSlider({
 
               {isOutOfStock && idx === 0 && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-white font-black text-2xl md:text-3xl uppercase tracking-[0.3em] opacity-60">
+                  <p className="text-white font-black text-2xl md:text-3xl uppercase tracking-[0.15em] opacity-60">
                     OUT_OF_STOCK
                   </p>
                 </div>

@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const ReceiptDownloadLink = lazy(() => import("@/components/checkout/ReceiptDownloadLink"));
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
-const label = "eyebrow text-[9px] tracking-[0.25em] text-dim";
+const label = "eyebrow text-[10px] tracking-[0.15em] text-dim";
 const inputClass =
   "h-12 w-full border border-rule bg-paper px-3.5 text-[14px] tracking-[0.04em] placeholder:text-[#9CA3AF] focus:border-ink focus:outline-none disabled:opacity-50 max-sm:h-[52px]";
 
@@ -130,7 +130,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         <span className={cn("tabular-nums", !deliveryKnown && "text-dim")}>{deliveryText}</span>
       </div>
       <div className="flex items-baseline justify-between border-t border-ink pt-3">
-        <span className="text-[11px] tracking-[0.2em]">TOTAL</span>
+        <span className="text-[11px] tracking-[0.15em]">TOTAL</span>
         <span className="text-[22px] font-bold tabular-nums lg:text-[24px]">
           {formatPrice(c.total, currency)}
           {!deliveryKnown && <span className="text-[13px] font-normal text-dim"> + NP</span>}
@@ -147,7 +147,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
       type="button"
       onClick={c.handleSubmit}
       disabled={!c.isFormValid || busy}
-      className="flex h-14 w-full items-center justify-center bg-ink text-[13px] font-bold tracking-[0.2em] text-paper transition-colors hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-30 lg:h-[60px]"
+      className="flex h-14 w-full items-center justify-center bg-ink text-[13px] font-bold tracking-[0.15em] text-paper transition-colors hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-30 lg:h-[60px]"
     >
       {busy ? (
         <span className="animate-pulse">PROCESSING_ORDER…</span>
@@ -165,8 +165,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     >
       {step === "error" && (
         <div className="flex flex-col gap-2 border border-status-error p-4" role="alert">
-          <p className="text-[11px] font-bold tracking-[0.2em] text-[#B91C1C]">
-            // TRANSMISSION_FAILED
+          <p className="text-[11px] font-bold tracking-[0.15em] text-[#B91C1C]">
+            // ORDER_NOT_SENT
           </p>
           <p className="text-[12px] leading-relaxed">{c.errorMsg}</p>
           <p className="text-[10px] tracking-[0.1em] text-dim">
@@ -443,7 +443,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         <div className="flex h-12 items-stretch justify-center border border-ink">
           <Suspense
             fallback={
-              <span className="text-[10px] tracking-[0.2em] text-dim">↓ DOWNLOAD_RECEIPT</span>
+              <span className="text-[10px] tracking-[0.15em] text-dim">↓ DOWNLOAD_RECEIPT</span>
             }
           >
             {c.confirmedOrder && (
@@ -563,7 +563,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   <div className="h-px bg-rule" />
                   {totals}
                   <div className="mt-2">{confirm}</div>
-                  <p className="text-[9px] leading-relaxed tracking-[0.12em] text-dim">
+                  <p className="text-[10px] leading-relaxed tracking-[0.12em] text-dim">
                     BY CONFIRMING YOU ACCEPT THE PROTOCOL + PRIVACY &amp; TERMS.
                   </p>
                 </div>

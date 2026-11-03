@@ -30,7 +30,7 @@ export default function Footer() {
 
         <div className="grid grid-cols-1 gap-8 text-[11px] leading-[2] tracking-[0.1em] sm:grid-cols-3">
           <nav aria-label="Channels" className="flex flex-col">
-            <span className="eyebrow mb-2 text-[9px] text-dim-dark">// CHANNELS</span>
+            <span className="eyebrow mb-2 text-[10px] text-dim-dark">// CHANNELS</span>
             {MAIN_PAGE_LINKS.map((l) => (
               <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className={linkClass}>
                 {l.label}
@@ -38,7 +38,7 @@ export default function Footer() {
             ))}
           </nav>
           <nav aria-label="Archive" className="flex flex-col">
-            <span className="eyebrow mb-2 text-[9px] text-dim-dark">// ARCHIVE</span>
+            <span className="eyebrow mb-2 text-[10px] text-dim-dark">// ARCHIVE</span>
             {ARCHIVE_LINKS.map((l) => (
               <Link key={l.to} to={l.to} className={linkClass}>
                 {l.label}
@@ -46,7 +46,7 @@ export default function Footer() {
             ))}
           </nav>
           <nav aria-label="Documents" className="flex flex-col">
-            <span className="eyebrow mb-2 text-[9px] text-dim-dark">// DOCS</span>
+            <span className="eyebrow mb-2 text-[10px] text-dim-dark">// DOCS</span>
             {DOC_LINKS.map((l) => (
               <Link key={l.to} to={l.to} className={linkClass}>
                 {l.label}

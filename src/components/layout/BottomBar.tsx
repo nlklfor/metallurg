@@ -39,7 +39,7 @@ function Icon({ children }: { children: React.ReactNode }) {
 }
 
 const tab =
-  "flex flex-col items-center justify-center gap-1.5 text-[9px] uppercase tracking-[0.15em] transition-colors duration-150";
+  "flex flex-col items-center justify-center gap-1.5 text-[10px] uppercase tracking-[0.15em] transition-colors duration-150";
 
 export default function BottomBar() {
   const [searchOpen, setSearchOpen] = useState(false);

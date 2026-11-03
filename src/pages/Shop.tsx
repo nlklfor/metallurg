@@ -27,7 +27,7 @@ function RequestCard({ className = "" }: { className?: string }) {
       to="/contact"
       className={`group flex flex-col gap-2 border border-ink p-4 transition-colors duration-200 hover:bg-ink hover:!text-paper ${className}`}
     >
-      <span className="eyebrow text-[9px] text-dim group-hover:text-dim-dark">
+      <span className="eyebrow text-[10px] text-dim group-hover:text-dim-dark">
         // NOT_IN_ARCHIVE?
       </span>
       <span className="display text-[20px] lg:text-[20px]">Request object</span>
@@ -65,7 +65,6 @@ export default function Shop() {
       </div>
 
       <header className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:px-8 md:px-12 lg:gap-4 lg:pb-8 lg:pt-10">
-        <p className="eyebrow text-[9px] text-dim lg:text-[10px]">// CATALOG_V2.0</p>
         <div className="flex items-end justify-between gap-6">
           <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">Inventory</h1>
           <p className="hidden pb-2 text-right text-[11px] leading-[1.9] tracking-[0.15em] text-dim md:block">

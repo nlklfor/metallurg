@@ -34,14 +34,11 @@ export default function Contact() {
       <div className="px-4 sm:px-8 pt-6 sm:pt-10 pb-6 sm:pb-8">
         <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2 sm:gap-0">
           <div>
-            <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.28em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-3">
-              // CONNECT_WITH_US
-            </p>
             <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
               Contact
             </h2>
           </div>
-          <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase hidden md:block">
+          <p className="text-[10px] text-dim tracking-[0.15em] uppercase hidden md:block">
             METALLURG™ — SUPPORT
           </p>
         </div>
@@ -66,7 +63,7 @@ export default function Contact() {
                   transition={{ duration: 0.4 }}
                   className="border border-gray-200 p-6 sm:p-8 space-y-4"
                 >
-                  <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.4em] uppercase">
+                  <p className="text-[10px] text-dim tracking-[0.15em] uppercase">
                     // MESSAGE_SENT
                   </p>
                   <p className="text-sm font-archivo-black uppercase tracking-widest text-black">
@@ -79,7 +76,7 @@ export default function Contact() {
                   </p>
                   <button
                     onClick={reset}
-                    className="mt-2 text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400 hover:text-black transition-colors border-b border-transparent hover:border-black pb-px"
+                    className="mt-2 text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 hover:text-black transition-colors border-b border-transparent hover:border-black pb-px"
                   >
                     SEND_ANOTHER →
                   </button>
@@ -92,13 +89,13 @@ export default function Contact() {
                   exit={{ opacity: 0 }}
                   className="space-y-4"
                 >
-                  <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.4em] uppercase">
+                  <p className="text-[10px] text-dim tracking-[0.15em] uppercase">
                     // SEND_MESSAGE
                   </p>
 
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-[8px] font-ibm-mono uppercase tracking-[0.35em] text-gray-400 mb-1.5">
+                      <label className="block text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
                         YOUR_NAME
                       </label>
                       <input
@@ -106,12 +103,12 @@ export default function Contact() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
-                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors"
+                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[8px] font-ibm-mono uppercase tracking-[0.35em] text-gray-400 mb-1.5">
+                      <label className="block text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
                         YOUR_EMAIL
                       </label>
                       <input
@@ -119,12 +116,12 @@ export default function Contact() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="john@example.com"
-                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors"
+                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[8px] font-ibm-mono uppercase tracking-[0.35em] text-gray-400 mb-1.5">
+                      <label className="block text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
                         MESSAGE
                       </label>
                       <textarea
@@ -132,7 +129,7 @@ export default function Contact() {
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder="What's on your mind?"
                         rows={5}
-                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors resize-none"
+                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors resize-none"
                       />
                     </div>
                   </div>
@@ -143,7 +140,7 @@ export default function Contact() {
                         initial={{ opacity: 0, y: -4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="text-[9px] font-ibm-mono text-red-500 tracking-[0.2em] uppercase"
+                        className="text-[10px] font-ibm-mono text-red-500 tracking-[0.15em] uppercase"
                       >
                         ✗ {error}
                       </motion.p>
@@ -153,7 +150,7 @@ export default function Contact() {
                   <button
                     onClick={submit}
                     disabled={!isValid || isLoading}
-                    className="w-full bg-black text-white py-4 font-archivo-black text-[11px] uppercase tracking-[0.3em] hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="w-full bg-black text-white py-4 font-archivo-black text-[11px] uppercase tracking-[0.15em] hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <motion.span
@@ -172,9 +169,7 @@ export default function Contact() {
 
             {/* Socials */}
             <div className="space-y-3">
-              <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.4em] uppercase">
-                // CHANNELS
-              </p>
+              <p className="text-[10px] text-dim tracking-[0.15em] uppercase">// CHANNELS</p>
 
               <a
                 href="https://instagram.com/metallurg.tm"
@@ -201,9 +196,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-black uppercase tracking-wider">Instagram</p>
-                  <p className="text-[8px] text-gray-400 tracking-[0.2em]">@metallurg.tm</p>
+                  <p className="text-[10px] text-gray-400 tracking-[0.15em]">@metallurg.tm</p>
                 </div>
-                <span className="ml-auto text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all">
+                <span className="ml-auto text-dim group-hover:text-black group-hover:translate-x-1 transition-all">
                   →
                 </span>
               </a>
@@ -219,9 +214,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-black uppercase tracking-wider">Telegram</p>
-                  <p className="text-[8px] text-gray-400 tracking-[0.2em]">METALLURG_COMMUNITY</p>
+                  <p className="text-[10px] text-gray-400 tracking-[0.15em]">METALLURG_COMMUNITY</p>
                 </div>
-                <span className="ml-auto text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all">
+                <span className="ml-auto text-dim group-hover:text-black group-hover:translate-x-1 transition-all">
                   →
                 </span>
               </a>
@@ -229,7 +224,7 @@ export default function Contact() {
               <div className="border border-gray-200 p-4">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-[8px] font-ibm-mono text-gray-400 tracking-[0.3em] uppercase">
+                  <span className="text-[10px] font-ibm-mono text-gray-400 tracking-[0.15em] uppercase">
                     STATUS: ONLINE — RESPONSE ~24H
                   </span>
                 </div>
@@ -239,9 +234,7 @@ export default function Contact() {
 
           {/* Right — FAQ */}
           <div className="space-y-1">
-            <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-4">
-              // FAQ
-            </p>
+            <p className="text-[10px] text-dim tracking-[0.15em] uppercase mb-4">// FAQ</p>
             {FAQ.map((item, i) => (
               <motion.div
                 key={item.id}
@@ -250,7 +243,7 @@ export default function Contact() {
                 transition={{ duration: 0.3, delay: i * 0.06 }}
                 className="border-b border-gray-100 py-4"
               >
-                <p className="text-[8px] font-ibm-mono uppercase tracking-[0.3em] text-gray-400 mb-1.5">
+                <p className="text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
                   // {item.q}
                 </p>
                 <p className="text-xs text-gray-600 leading-relaxed">{item.a}</p>

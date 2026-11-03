@@ -41,7 +41,7 @@ export default function ReviewCard({ review }: { review: Review | ReviewWithOrde
               <p className="text-[11px] font-archivo-black text-white uppercase tracking-wider">
                 {maskName(review.author_name)}
               </p>
-              <p className="text-[8px] font-ibm-mono text-zinc-600 tracking-[0.3em] uppercase">
+              <p className="text-[10px] font-ibm-mono text-zinc-600 tracking-[0.15em] uppercase">
                 VERIFIED_PURCHASE
               </p>
               {orderItems.length > 0 && (
@@ -49,7 +49,7 @@ export default function ReviewCard({ review }: { review: Review | ReviewWithOrde
                   {orderItems.map((item, i) => (
                     <p
                       key={i}
-                      className="text-[8px] font-ibm-mono text-zinc-500 tracking-[0.2em] uppercase"
+                      className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase"
                     >
                       → {item.name}
                     </p>
@@ -60,7 +60,7 @@ export default function ReviewCard({ review }: { review: Review | ReviewWithOrde
           </div>
           <div className="text-right">
             <RatingBlocks rating={review.rating} />
-            <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.2em] mt-0.5">
+            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] mt-0.5">
               {timeAgo(review.created_at)}
             </p>
           </div>
@@ -68,7 +68,7 @@ export default function ReviewCard({ review }: { review: Review | ReviewWithOrde
 
         <div className="px-5 py-4">
           {review.size_purchased && (
-            <p className="text-[8px] font-ibm-mono text-zinc-600 tracking-[0.3em] uppercase mb-2">
+            <p className="text-[10px] font-ibm-mono text-zinc-600 tracking-[0.15em] uppercase mb-2">
               SIZE: {review.size_purchased}
             </p>
           )}
