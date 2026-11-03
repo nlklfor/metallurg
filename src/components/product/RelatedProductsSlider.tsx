@@ -60,7 +60,6 @@ export default function RelatedProductsSlider({ products, variant = "dark" }: Pr
     <div className="flex flex-col gap-4 lg:gap-5">
       <div className="flex items-end justify-between gap-4 pr-4 sm:pr-0">
         <div className="flex flex-col gap-1.5 lg:gap-2">
-          <span className="eyebrow text-[9px] text-dim-dark">// RECOMMENDED</span>
           <h2 className="display text-[28px] lg:text-[44px]">You may also like</h2>
         </div>
         <div className="hidden gap-2 lg:flex">

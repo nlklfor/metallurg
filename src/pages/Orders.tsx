@@ -94,14 +94,11 @@ export default function Orders() {
       <div className="px-4 sm:px-8 pt-8 sm:pt-16 pb-6 sm:pb-8">
         <div className="flex items-baseline justify-between">
           <div>
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-3">
-              // ORDER_MANAGEMENT
-            </p>
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
               Orders & Reviews
             </h2>
           </div>
-          <p className="text-[10px] text-gray-300 tracking-[0.3em] uppercase hidden md:block">
+          <p className="text-[10px] text-dim tracking-[0.15em] uppercase hidden md:block">
             METALLURG™ — DASHBOARD
           </p>
         </div>
@@ -123,13 +120,10 @@ export default function Orders() {
               <div className="w-14 h-14 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Package size={24} className="text-white" />
               </div>
-              <span className="text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all text-xl">
+              <span className="text-dim group-hover:text-black group-hover:translate-x-1 transition-all text-xl">
                 →
               </span>
             </div>
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">
-              // TRACK_ORDER
-            </p>
             <h3 className="text-xl font-black text-black uppercase tracking-tight mb-2">
               Track Your Order
             </h3>
@@ -145,9 +139,6 @@ export default function Orders() {
                 <Star size={24} className="text-white" />
               </div>
             </div>
-            <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-2">
-              // FIELD_REPORT
-            </p>
             <h3 className="text-xl font-black text-black uppercase tracking-tight mb-3">
               Submit a Review
             </h3>
@@ -161,7 +152,7 @@ export default function Orders() {
                 onChange={(e) => setOrderInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleReviewLookup()}
                 placeholder="MTL-1234"
-                className="flex-1 font-ibm-mono border border-gray-200 px-4 py-3 text-sm bg-white placeholder-gray-300 focus:outline-none focus:border-black uppercase tracking-[0.2em] transition-colors"
+                className="flex-1 font-ibm-mono border border-gray-200 px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:border-black uppercase tracking-[0.15em] transition-colors"
               />
               <button
                 onClick={handleReviewLookup}
@@ -172,7 +163,7 @@ export default function Orders() {
               </button>
             </div>
             {lookupError && (
-              <p className="text-[9px] font-ibm-mono text-red-500 mt-2 tracking-[0.2em] uppercase">
+              <p className="text-[10px] font-ibm-mono text-red-500 mt-2 tracking-[0.15em] uppercase">
                 ✗ {lookupError}
               </p>
             )}
@@ -183,9 +174,6 @@ export default function Orders() {
       {/* All Reviews Section */}
       <div className="bg-black text-white px-4 sm:px-8 py-10 sm:py-16">
         <div className="max-w-5xl mx-auto">
-          <p className="text-[10px] text-zinc-500 tracking-[0.4em] uppercase mb-3">
-            // ALL_FIELD_REPORTS
-          </p>
           <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-10">
             Community Reports
             {stats.count > 0 && (

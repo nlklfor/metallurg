@@ -13,7 +13,7 @@ function NpPanel({ trackingNumber }: { trackingNumber: string | null }) {
       <motion.p
         animate={{ opacity: [1, 0.3, 1] }}
         transition={{ duration: 0.8, repeat: Infinity }}
-        className="mt-3 text-[9px] font-ibm-mono text-zinc-600 tracking-[0.3em] uppercase"
+        className="mt-3 text-[10px] font-ibm-mono text-zinc-600 tracking-[0.15em] uppercase"
       >
         // FETCHING_NP_DATA...
       </motion.p>
@@ -25,7 +25,7 @@ function NpPanel({ trackingNumber }: { trackingNumber: string | null }) {
   return (
     <div className="mt-3 space-y-2">
       {error && (
-        <p className="text-[9px] font-ibm-mono text-red-500 tracking-[0.2em] uppercase">
+        <p className="text-[10px] font-ibm-mono text-red-500 tracking-[0.15em] uppercase">
           // ERR: {error}
         </p>
       )}
@@ -36,7 +36,7 @@ function NpPanel({ trackingNumber }: { trackingNumber: string | null }) {
         href={`https://novaposhta.ua/tracking/?cargo_number=${trackingNumber}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block text-[9px] tracking-[0.2em] text-white border border-zinc-600 px-3 py-1.5 hover:border-white hover:bg-white hover:text-black transition-all uppercase"
+        className="inline-block text-[10px] tracking-[0.15em] text-white border border-zinc-600 px-3 py-1.5 hover:border-white hover:bg-white hover:text-black transition-all uppercase"
       >
         TRACK_ON_NP → {trackingNumber}
       </motion.a>
@@ -110,8 +110,8 @@ export default function TrackStep({
               : {}
           }
           transition={isActive ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" } : {}}
-          className={`text-xs font-bold tracking-[0.2em] uppercase transition-all duration-500 ${
-            isActive ? "text-white" : isCompleted ? "text-zinc-700" : "text-zinc-900"
+          className={`text-xs font-bold tracking-[0.15em] uppercase transition-all duration-500 ${
+            isActive ? "text-white" : isCompleted ? "text-zinc-500" : "text-zinc-900"
           }`}
           style={isFuture ? { opacity: 0.05 } : {}}
         >

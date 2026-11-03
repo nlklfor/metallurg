@@ -73,7 +73,6 @@ export default function Cart() {
       </div>
 
       <header className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:px-8 md:px-12 lg:gap-4 lg:pb-8 lg:pt-10">
-        <p className="eyebrow text-[9px] text-dim lg:text-[10px]">// LOADOUT_MANIFEST</p>
         <div className="flex items-end justify-between gap-6">
           <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">Loadout</h1>
           {items.length > 0 && (
@@ -93,15 +92,14 @@ export default function Cart() {
       {items.length === 0 ? (
         <div className="grid grid-cols-1 gap-8 px-4 pb-16 sm:px-8 md:px-12 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-12">
           <div className="flex flex-col items-center gap-3.5 border border-dashed border-dim-dark px-5 py-8 text-center lg:py-16">
-            <p aria-hidden="true" className="text-[12px] tracking-[0.3em] text-dim-dark">
+            <p aria-hidden="true" className="text-[12px] tracking-[0.15em] text-dim-dark">
               ░░░░░░░░
             </p>
-            <p className="eyebrow text-dim">// STATUS</p>
             <h2 className="display text-[34px] lg:text-[48px]">Cart_empty</h2>
             <p className="text-[11px] tracking-[0.15em] text-dim">NO_ITEMS_DETECTED</p>
             <Link
               to="/inventory"
-              className="mt-1.5 flex h-[52px] w-full max-w-[360px] items-center justify-center bg-ink text-[12px] font-bold tracking-[0.2em] !text-paper hover:bg-[#222]"
+              className="mt-1.5 flex h-[52px] w-full max-w-[360px] items-center justify-center bg-ink text-[12px] font-bold tracking-[0.15em] !text-paper hover:bg-[#222]"
             >
               BROWSE →
             </Link>
@@ -109,7 +107,7 @@ export default function Cart() {
           <div className="flex flex-col gap-2.5">
             {featured && (
               <>
-                <p className="eyebrow text-[9px] text-dim">// FEATURED_OBJECT</p>
+                <p className="eyebrow text-[10px] text-dim">// FEATURED_OBJECT</p>
                 <Link
                   to={`/product/${featured.slug}`}
                   className="flex border border-rule transition-colors hover:border-ink"
@@ -152,7 +150,7 @@ export default function Cart() {
         <div className="grid grid-cols-1 gap-8 px-4 pb-16 sm:px-8 md:px-12 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-12">
           {/* Lines */}
           <div className="flex min-w-0 flex-col">
-            <div className="hidden grid-cols-[120px_minmax(0,1fr)_140px_150px_160px] gap-5 border-b border-ink pb-3 text-[9px] tracking-[0.2em] text-dim lg:grid">
+            <div className="hidden grid-cols-[120px_minmax(0,1fr)_140px_150px_160px] gap-5 border-b border-ink pb-3 text-[10px] tracking-[0.15em] text-dim lg:grid">
               <span>OBJECT</span>
               <span />
               <span>QTY</span>
@@ -178,7 +176,7 @@ export default function Cart() {
               <span className="text-[22px]">
                 <Wordmark />
               </span>
-              <span className="eyebrow text-[9px] text-dim">// SUMMARY</span>
+              <span className="eyebrow text-[10px] text-dim">// SUMMARY</span>
             </div>
             <div className="h-px bg-ink" />
             <ul className="flex flex-col gap-2.5 text-[12px]">
@@ -209,7 +207,7 @@ export default function Cart() {
               </div>
             </div>
             <div className="flex items-baseline justify-between border-t border-ink pt-3.5">
-              <span className="text-[11px] tracking-[0.2em]">TOTAL</span>
+              <span className="text-[11px] tracking-[0.15em]">TOTAL</span>
               <span className="text-[24px] font-bold tabular-nums lg:text-[28px]">
                 {formatPrice(total, currency)}
               </span>
@@ -223,7 +221,7 @@ export default function Cart() {
               type="button"
               onClick={() => setCheckoutOpen(true)}
               disabled={hasUnavailable}
-              className="flex h-[60px] items-center justify-center bg-ink text-[13px] font-bold tracking-[0.2em] text-paper transition-colors hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-[60px] items-center justify-center bg-ink text-[13px] font-bold tracking-[0.15em] text-paper transition-colors hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-40"
             >
               CHECKOUT →
             </button>

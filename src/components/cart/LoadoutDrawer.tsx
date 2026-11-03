@@ -75,16 +75,15 @@ export default function LoadoutDrawer() {
 
             {items.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center gap-3.5 px-8 text-center">
-                <p aria-hidden="true" className="text-[12px] tracking-[0.3em] text-dim-dark">
+                <p aria-hidden="true" className="text-[12px] tracking-[0.15em] text-dim-dark">
                   ░░░░░░░░
                 </p>
-                <p className="eyebrow text-dim">// STATUS</p>
                 <p className="display text-[34px]">Cart_empty</p>
                 <p className="text-[11px] tracking-[0.15em] text-dim">NO_ITEMS_DETECTED</p>
                 <Link
                   to="/inventory"
                   onClick={close}
-                  className="mt-1.5 flex h-[52px] w-full items-center justify-center bg-ink text-[12px] font-bold tracking-[0.2em] !text-paper hover:bg-[#222]"
+                  className="mt-1.5 flex h-[52px] w-full items-center justify-center bg-ink text-[12px] font-bold tracking-[0.15em] !text-paper hover:bg-[#222]"
                 >
                   BROWSE →
                 </Link>
@@ -118,7 +117,7 @@ export default function LoadoutDrawer() {
                   <Link
                     to="/loadout"
                     onClick={close}
-                    className="mt-1 flex h-14 items-center justify-center bg-ink text-[12px] font-bold tracking-[0.2em] !text-paper transition-colors hover:bg-[#222]"
+                    className="mt-1 flex h-14 items-center justify-center bg-ink text-[12px] font-bold tracking-[0.15em] !text-paper transition-colors hover:bg-[#222]"
                   >
                     OPEN_LOADOUT →
                   </Link>

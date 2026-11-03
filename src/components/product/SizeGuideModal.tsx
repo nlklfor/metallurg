@@ -106,10 +106,10 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
               {/* header */}
               <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4 flex-shrink-0">
                 <div>
-                  <p className="text-[9px] font-ibm-mono uppercase tracking-[0.4em] text-zinc-600">
+                  <p className="text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-zinc-600">
                     // HOW_TO_MEASURE
                   </p>
-                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.2em] text-zinc-200 mt-0.5">
+                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.15em] text-zinc-200 mt-0.5">
                     {isFootwear ? "FOOTWEAR" : "APPAREL"}
                   </p>
                 </div>
@@ -126,12 +126,12 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
                 {steps.map((step, i) => (
                   <div key={step.label} className="flex gap-4">
                     <div className="flex-shrink-0 w-6 h-6 border border-zinc-700 flex items-center justify-center mt-0.5">
-                      <span className="text-[9px] font-ibm-mono text-zinc-500">
+                      <span className="text-[10px] font-ibm-mono text-zinc-500">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
                     <div>
-                      <p className="text-[9px] font-ibm-mono uppercase tracking-[0.3em] text-zinc-500 mb-1">
+                      <p className="text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-zinc-500 mb-1">
                         // {step.label}
                       </p>
                       <p className="text-xs text-zinc-300 leading-relaxed">{step.instruction}</p>
@@ -142,7 +142,7 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
 
               {/* footer */}
               <div className="border-t border-zinc-900 px-6 py-4 flex-shrink-0">
-                <p className="text-[9px] font-ibm-mono text-zinc-600 leading-relaxed uppercase tracking-[0.15em]">
+                <p className="text-[10px] font-ibm-mono text-zinc-600 leading-relaxed uppercase tracking-[0.15em]">
                   {isFootwear
                     ? "// IF BETWEEN SIZES — SIZE UP FOR COMFORT."
                     : "// SIZES VARY BY BRAND. IF BETWEEN SIZES — SIZE UP."}

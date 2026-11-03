@@ -10,7 +10,7 @@ export default function Breadcrumbs({ items, variant = "light" }: BreadcrumbsPro
   const activeColor = isDark ? "text-white" : "text-black";
 
   return (
-    <nav className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] font-ibm-mono">
+    <nav className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] font-ibm-mono">
       {items.map((item, i) => {
         const isLast = i === items.length - 1;
         return (

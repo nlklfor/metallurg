@@ -12,11 +12,11 @@ function RatingBar({ label, count, total }: { label: string; count: number; tota
   const pct = total > 0 ? (count / total) * 100 : 0;
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[9px] font-ibm-mono text-zinc-600 w-4 text-right">{label}</span>
+      <span className="text-[10px] font-ibm-mono text-zinc-600 w-4 text-right">{label}</span>
       <div className="flex-1 h-1.5 bg-zinc-900 overflow-hidden">
         <div className="h-full bg-white transition-all duration-500" style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-[9px] font-ibm-mono text-zinc-700 w-6">{count}</span>
+      <span className="text-[10px] font-ibm-mono text-zinc-500 w-6">{count}</span>
     </div>
   );
 }
@@ -40,7 +40,7 @@ export default function ReviewList({ reviews, stats, isLoading }: ReviewListProp
   if (reviews.length === 0) {
     return (
       <div className="border border-zinc-800 py-16 text-center">
-        <p className="text-[10px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase">
+        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
           // NO_FIELD_REPORTS
         </p>
         <p className="text-sm font-ibm-mono text-zinc-600 mt-2">Be the first to submit a report.</p>
@@ -58,11 +58,11 @@ export default function ReviewList({ reviews, stats, isLoading }: ReviewListProp
         <div className="grid grid-cols-[auto_1fr] gap-8">
           <div className="text-center pr-6 border-r border-zinc-800">
             <p className="text-4xl font-archivo-black text-white">{stats.average.toFixed(1)}</p>
-            <p className="text-[9px] font-ibm-mono text-zinc-600 tracking-[0.3em] mt-1">
+            <p className="text-[10px] font-ibm-mono text-zinc-600 tracking-[0.15em] mt-1">
               {"█".repeat(Math.round(stats.average))}
               {"░".repeat(5 - Math.round(stats.average))}
             </p>
-            <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.2em] mt-1.5">
+            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] mt-1.5">
               {stats.count} REPORT{stats.count !== 1 ? "S" : ""}
             </p>
           </div>

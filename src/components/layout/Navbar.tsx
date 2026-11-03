@@ -120,7 +120,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                   setCurrencyOpen(false);
                 }}
                 className={cn(
-                  "h-11 w-full px-4 text-left text-[11px] tracking-[0.2em] transition-colors",
+                  "h-11 w-full px-4 text-left text-[11px] tracking-[0.15em] transition-colors",
                   currency === key ? "font-bold" : cn(t.dim, t.hoverText)
                 )}
               >
@@ -274,7 +274,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                     onClick={() => setCurrency(key)}
                     aria-pressed={currency === key}
                     className={cn(
-                      "h-11 flex-1 border text-[11px] tracking-[0.2em] transition-colors",
+                      "h-11 flex-1 border text-[11px] tracking-[0.15em] transition-colors",
                       currency === key ? t.pill : t.rule
                     )}
                   >

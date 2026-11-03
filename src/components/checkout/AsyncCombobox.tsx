@@ -165,12 +165,12 @@ export default function AsyncCombobox<T>({
             className="max-h-56 overflow-y-auto border border-t-0 border-ink bg-paper"
           >
             {isLoading && (
-              <p className="px-4 py-3 text-[10px] font-ibm-mono uppercase tracking-[0.2em] text-gray-400 animate-pulse">
+              <p className="px-4 py-3 text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 animate-pulse">
                 // searching...
               </p>
             )}
             {!isLoading && options.length === 0 && (
-              <p className="px-4 py-3 text-[10px] font-ibm-mono uppercase tracking-[0.2em] text-gray-400">
+              <p className="px-4 py-3 text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400">
                 // no_results_found
               </p>
             )}

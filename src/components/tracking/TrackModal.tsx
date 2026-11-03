@@ -91,23 +91,20 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
 
               <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-4 sm:px-6 py-4">
                 <div>
-                  <p className="text-[8px] font-ibm-mono uppercase tracking-[0.5em] text-zinc-700">
-                    METALLURG // SYSTEM
-                  </p>
-                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.25em] text-zinc-200 mt-0.5">
+                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.15em] text-zinc-200 mt-0.5">
                     MTL_TRACKING_SYSTEM
                   </p>
                 </div>
                 <button
                   onClick={handleClose}
-                  className="text-[10px] font-ibm-mono text-zinc-700 hover:text-white transition-colors tracking-widest"
+                  className="text-[10px] font-ibm-mono text-zinc-500 hover:text-white transition-colors tracking-widest"
                 >
                   [ESC]
                 </button>
               </div>
 
               <div className="relative z-10 px-4 sm:px-6 pt-5 sm:pt-6 pb-5">
-                <p className="text-[8px] font-ibm-mono uppercase tracking-[0.4em] text-zinc-700 mb-2">
+                <p className="text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-zinc-500 mb-2">
                   // INPUT_ORDER_ID
                 </p>
                 <div className="flex">
@@ -117,7 +114,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleTrack()}
                     placeholder="MTL-1234"
-                    className="flex-1 font-ibm-mono bg-zinc-950 border border-zinc-700 border-r-0 px-4 py-3 text-sm text-white placeholder-zinc-800 focus:outline-none focus:border-zinc-400 uppercase tracking-[0.3em] transition-colors"
+                    className="flex-1 font-ibm-mono bg-zinc-950 border border-zinc-700 border-r-0 px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-400 uppercase tracking-[0.15em] transition-colors"
                   />
                   <button
                     onClick={handleTrack}
@@ -143,7 +140,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="text-[9px] font-ibm-mono text-red-500 mt-3 tracking-[0.2em] uppercase"
+                      className="text-[10px] font-ibm-mono text-red-500 mt-3 tracking-[0.15em] uppercase"
                     >
                       ✗ {error}
                     </motion.p>
@@ -162,7 +159,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                   >
                     <div className="px-4 sm:px-6 py-4 border-b border-zinc-900 grid grid-cols-2 gap-y-3">
                       <div>
-                        <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
                           ORDER_ID
                         </p>
                         <p className="text-sm font-archivo-black tracking-widest text-white mt-0.5">
@@ -170,7 +167,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                         </p>
                       </div>
                       <div>
-                        <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
                           ROUTE_TYPE
                         </p>
                         <p className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider mt-0.5">
@@ -178,7 +175,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                         </p>
                       </div>
                       <div>
-                        <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
                           CUSTOMER
                         </p>
                         <p className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider mt-0.5 uppercase">
@@ -186,7 +183,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                         </p>
                       </div>
                       <div>
-                        <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
                           ZONE
                         </p>
                         <p className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider mt-0.5">
@@ -194,11 +191,11 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                         </p>
                       </div>
                       <div className="col-span-2 pt-1">
-                        <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase mb-1">
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-1">
                           ORDER_STATUS
                         </p>
                         <p
-                          className={`text-[11px] font-archivo-black tracking-[0.2em] uppercase ${STATUS_COLORS[order.status] ?? "text-zinc-400"}`}
+                          className={`text-[11px] font-archivo-black tracking-[0.15em] uppercase ${STATUS_COLORS[order.status] ?? "text-zinc-400"}`}
                         >
                           {STATUS_LABELS[order.status] ?? order.status.toUpperCase()}
                         </p>
@@ -206,13 +203,13 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
                     </div>
 
                     <div className="px-4 sm:px-6 pt-5 sm:pt-6 pb-2">
-                      <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.4em] uppercase mb-6">
+                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-6">
                         // DELIVERY_PIPELINE
                       </p>
                       {order.status === "cancelled" ? (
                         // Cancelled orders have no delivery to follow, so don't
                         // render step 1 as the active stage.
-                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.2em] uppercase pb-4">
+                        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase pb-4">
                           // ORDER_CANCELLED — NO DELIVERY IN PROGRESS
                         </p>
                       ) : (
@@ -234,10 +231,10 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
               </AnimatePresence>
 
               <div className="relative z-10 border-t border-zinc-900 px-4 sm:px-6 py-3 flex justify-between">
-                <span className="text-[8px] font-ibm-mono text-zinc-800 tracking-widest">
+                <span className="text-[10px] font-ibm-mono text-zinc-800 tracking-widest">
                   ENCRYPTED_CHANNEL
                 </span>
-                <span className="text-[8px] font-ibm-mono text-zinc-800 tracking-widest">
+                <span className="text-[10px] font-ibm-mono text-zinc-800 tracking-widest">
                   MTL_V2.0_2026
                 </span>
               </div>

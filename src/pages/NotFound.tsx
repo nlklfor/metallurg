@@ -23,7 +23,7 @@ export default function NotFound() {
         transition={{ duration: 0.6 }}
         className="flex flex-col items-center gap-8 z-10 px-8 text-center"
       >
-        <p className="text-[9px] font-ibm-mono text-white/20 tracking-[0.5em] uppercase">
+        <p className="text-[10px] font-ibm-mono text-white/20 tracking-[0.15em] uppercase">
           // SYSTEM_ERROR :: 404
         </p>
 
@@ -43,10 +43,10 @@ export default function NotFound() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="space-y-2 -mt-4"
         >
-          <p className="font-ibm-mono text-[11px] text-white/40 uppercase tracking-[0.3em]">
+          <p className="font-ibm-mono text-[11px] text-white/40 uppercase tracking-[0.15em]">
             ROUTE_NOT_FOUND
           </p>
-          <p className="font-ibm-mono text-[9px] text-white/20 uppercase tracking-[0.2em]">
+          <p className="font-ibm-mono text-[10px] text-white/20 uppercase tracking-[0.15em]">
             The requested path does not exist in this inventory.
           </p>
         </motion.div>
@@ -58,7 +58,7 @@ export default function NotFound() {
         >
           <Link
             to="/"
-            className="inline-block border border-white/20 px-10 py-4 font-ibm-mono text-[10px] uppercase tracking-[0.3em] text-white/60 hover:border-white hover:text-white transition-all duration-300"
+            className="inline-block border border-white/20 px-10 py-4 font-ibm-mono text-[10px] uppercase tracking-[0.15em] text-white/60 hover:border-white hover:text-white transition-all duration-300"
           >
             RETURN_TO_BASE →
           </Link>
@@ -66,7 +66,7 @@ export default function NotFound() {
       </motion.div>
 
       <div className="absolute bottom-8 z-10">
-        <p className="font-ibm-mono text-[8px] text-white/10 tracking-[0.4em] uppercase">
+        <p className="font-ibm-mono text-[10px] text-white/10 tracking-[0.15em] uppercase">
           METALLURG™ — MTL_STORE_2026
         </p>
       </div>

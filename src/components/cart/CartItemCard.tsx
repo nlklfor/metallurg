@@ -119,7 +119,7 @@ export default function CartItemCard({ item, variant = "page", onNavigate }: Car
             {remove}
           </div>
           {capText && (
-            <span className="text-[9px] tracking-[0.12em] text-status-low">{capText}</span>
+            <span className="text-[10px] tracking-[0.12em] text-status-low">{capText}</span>
           )}
         </div>
       </div>
@@ -145,7 +145,9 @@ export default function CartItemCard({ item, variant = "page", onNavigate }: Car
       </div>
       <div className="col-start-2 flex flex-col gap-1.5 lg:col-start-auto">
         {stepper}
-        {capText && <span className="text-[9px] tracking-[0.12em] text-status-low">{capText}</span>}
+        {capText && (
+          <span className="text-[10px] tracking-[0.12em] text-status-low">{capText}</span>
+        )}
       </div>
       <span className="hidden text-[13px] tabular-nums text-[#374151] lg:block">
         {formatPrice(item.price, currency)} × {item.cart_quantity}

@@ -32,11 +32,11 @@ export default function NpTrackingPanel({ data }: { data: NpTrackingData }) {
     >
       {/* Header */}
       <div className="px-4 py-2.5 border-b border-zinc-900 flex items-center justify-between bg-zinc-950">
-        <p className="text-[8px] font-ibm-mono text-zinc-600 tracking-[0.4em] uppercase">
+        <p className="text-[10px] font-ibm-mono text-zinc-600 tracking-[0.15em] uppercase">
           // NP_LIVE_STATUS
         </p>
         <span
-          className={`text-[9px] font-archivo-black tracking-[0.15em] uppercase ${
+          className={`text-[10px] font-archivo-black tracking-[0.15em] uppercase ${
             data.is_delivered ? "text-green-400" : "text-white"
           }`}
         >
@@ -68,7 +68,7 @@ export default function NpTrackingPanel({ data }: { data: NpTrackingData }) {
       <div className="px-4 py-3 grid grid-cols-2 gap-y-3 bg-zinc-950 border-t border-zinc-900">
         {data.warehouse_recipient && (
           <div className="col-span-2">
-            <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
               BRANCH
             </p>
             <p className="text-[10px] font-ibm-mono text-zinc-300 mt-0.5 leading-snug">
@@ -78,7 +78,7 @@ export default function NpTrackingPanel({ data }: { data: NpTrackingData }) {
         )}
         {data.city_recipient && (
           <div>
-            <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
               CITY
             </p>
             <p className="text-[10px] font-ibm-mono text-zinc-300 mt-0.5">{data.city_recipient}</p>
@@ -86,7 +86,7 @@ export default function NpTrackingPanel({ data }: { data: NpTrackingData }) {
         )}
         {scheduled && !delivered && (
           <div>
-            <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
               EST. DELIVERY
             </p>
             <p className="text-[10px] font-ibm-mono text-zinc-300 mt-0.5">{scheduled}</p>
@@ -94,7 +94,7 @@ export default function NpTrackingPanel({ data }: { data: NpTrackingData }) {
         )}
         {delivered && (
           <div>
-            <p className="text-[8px] font-ibm-mono text-zinc-700 tracking-[0.3em] uppercase">
+            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
               DELIVERED
             </p>
             <p className="text-[10px] font-ibm-mono text-green-400 mt-0.5">{delivered}</p>
@@ -104,14 +104,14 @@ export default function NpTrackingPanel({ data }: { data: NpTrackingData }) {
 
       {/* Footer */}
       <div className="px-4 py-2 bg-zinc-950 border-t border-zinc-900 flex items-center justify-between">
-        <span className="text-[8px] font-ibm-mono text-zinc-400 tracking-widest">
+        <span className="text-[10px] font-ibm-mono text-zinc-400 tracking-widest">
           TTN: {data.ttn}
         </span>
         <a
           href={`https://novaposhta.ua/tracking/?cargo_number=${data.ttn}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[8px] font-ibm-mono text-zinc-600 hover:text-white tracking-[0.2em] uppercase transition-colors"
+          className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white tracking-[0.15em] uppercase transition-colors"
         >
           VIEW_ON_NP →
         </a>

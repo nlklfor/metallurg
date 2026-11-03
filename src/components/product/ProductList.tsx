@@ -53,10 +53,9 @@ export default function ProductList({
   if (products.length === 0)
     return (
       <div className="flex flex-col items-center gap-4 px-4 py-20 text-center sm:px-8">
-        <p aria-hidden="true" className="text-[12px] tracking-[0.3em] text-dim-dark">
+        <p aria-hidden="true" className="text-[12px] tracking-[0.15em] text-dim-dark">
           ░░░░░░░░░░
         </p>
-        <p className="eyebrow text-dim">// QUERY_RESULT</p>
         <h2 className="display text-[40px]">No_units_found</h2>
         <p className="max-w-[300px] text-[12px] leading-relaxed text-[#374151]">
           Nothing in the archive matches these parameters. We can source it for you.
