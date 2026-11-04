@@ -7,6 +7,8 @@ export interface ProductFiltersProps {
   facets: CatalogFacets;
   /** Objects matching the current filters (live count on the sheet CTA). */
   resultCount: number;
+  /** Products are still loading: show placeholders instead of empty facets. */
+  isLoading?: boolean;
 }
 
 export interface FilterOptions {
