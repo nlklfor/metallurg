@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { rememberOrder } from "@/utils/trackUtils";
 import { useCartStore } from "@/stores/useCartStore";
 import { serializeCartItems } from "@/utils";
 import { normalizeUaPhone } from "@/utils/phone";
@@ -180,6 +181,7 @@ export function useCheckout() {
       const createdOrderNumber: string = json.order.order_number;
 
       setOrderNumber(createdOrderNumber);
+      rememberOrder(createdOrderNumber);
       setConfirmedOrder(json.order as ConfirmedOrder);
       setStep("success");
     } catch (err: unknown) {

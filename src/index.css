@@ -479,7 +479,7 @@
 }
 
 .gate-redirect-hint {
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.25em;
   color: rgba(255, 255, 255, 0.25);
   margin-top: 8px;
@@ -574,7 +574,7 @@
 }
 
 .gate-terminal-line {
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.25);
   margin: 0;
@@ -586,7 +586,7 @@
 }
 
 .gate-cursor {
-  font-size: 9px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.4);
   animation: gate-blink 0.8s step-end infinite;
 }
@@ -785,7 +785,7 @@
   right: 24px;
   z-index: 20;
   text-align: right;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.15);
@@ -920,4 +920,19 @@
   98% {
     transform: translate(0);
   }
+}
+
+/* Tracking map: OpenStreetMap tiles darkened to match the dark NP panel. */
+.mtl-dark-tiles {
+  filter: grayscale(1) invert(1) brightness(0.85) contrast(0.9);
+}
+.leaflet-container .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.6);
+  color: #71717a;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 0 4px;
+}
+.leaflet-container .leaflet-control-attribution a {
+  color: #a1a1aa;
 }

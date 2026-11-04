@@ -1,15 +1,19 @@
 import { useState } from "react";
 import type { Order } from "@/interfaces";
 import { TRACK_URL as EDGE_URL } from "@/lib/constants/order";
+import { rememberOrder, toOrderNumber } from "@/utils/trackUtils";
+
+export type TrackError = "not_found" | "rate_limited" | "network";
 
 export function useTrackOrder() {
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<TrackError | null>(null);
 
-  const trackOrder = async (orderNumber: string) => {
-    const trimmed = orderNumber.trim().toUpperCase();
-    if (!trimmed) return;
+  /** Look up an order by its code ("7K2QPX") or full number ("MTL-7K2QPX"). */
+  const trackOrder = async (code: string) => {
+    const orderNumber = toOrderNumber(code);
+    if (orderNumber === "MTL-") return;
 
     setIsLoading(true);
     setError(null);
@@ -19,19 +23,17 @@ export function useTrackOrder() {
       const res = await fetch(EDGE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderNumber: trimmed }),
+        body: JSON.stringify({ orderNumber }),
       });
+      const json = await res.json().catch(() => ({}));
 
-      const json = await res.json();
-
-      if (!res.ok || json.error) {
-        setError("ORDER_NOT_FOUND // Verify your ID and try again.");
-        return;
-      }
+      if (res.status === 429) return setError("rate_limited");
+      if (!res.ok || json.error) return setError("not_found");
 
       setOrder(json as Order);
+      rememberOrder((json as Order).order_number ?? orderNumber);
     } catch {
-      setError("ORDER_NOT_FOUND // Verify your ID and try again.");
+      setError("network");
     } finally {
       setIsLoading(false);
     }
