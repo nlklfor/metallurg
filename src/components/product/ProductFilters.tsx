@@ -381,14 +381,59 @@ function SortSelect({
 
 // ─── Desktop sidebar ────────────────────────────────────────────────────────
 
+/** Sidebar while products load: same sections and rhythm, no fake "00" counts. */
+function FilterSidebarSkeleton() {
+  const bar = "bg-[#F3F4F6]";
+  const rows = (n: number, h = "h-8") =>
+    Array.from({ length: n }).map((_, i) => (
+      <div key={i} className={cn("flex items-center gap-2.5", h)}>
+        <span className="h-3.5 w-3.5 border border-rule" />
+        <span className={cn("h-3 w-24", bar)} />
+      </div>
+    ));
+  return (
+    <div className="flex flex-col gap-7 text-[12px]" aria-hidden="true">
+      <div className="flex flex-col gap-2.5">
+        <Eyebrow>// CATEGORY</Eyebrow>
+        <div className="flex flex-col">{rows(3)}</div>
+      </div>
+      <div className="flex flex-col gap-2.5">
+        <Eyebrow>// SIZE_EU</Eyebrow>
+        <div className="grid grid-cols-4 gap-1.5">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={i} className="h-10 border border-rule" />
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        <Eyebrow>// PRICE_RANGE</Eyebrow>
+        <div className={cn("h-[3px] w-full", bar)} />
+        <div className="flex justify-between">
+          <span className={cn("h-3 w-14", bar)} />
+          <span className={cn("h-3 w-14", bar)} />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2.5">
+        <Eyebrow>// AVAILABILITY</Eyebrow>
+        <div className="flex flex-col">{rows(3)}</div>
+      </div>
+      <div className="flex flex-col gap-2.5">
+        <Eyebrow>// SORT</Eyebrow>
+        <div className="h-11 border border-rule" />
+      </div>
+    </div>
+  );
+}
+
 export function FilterSidebar(props: ProductFiltersProps) {
+  if (props.isLoading) return <FilterSidebarSkeleton />;
   return <FilterPanel layout="sidebar" {...props} />;
 }
 
 // ─── Mobile toolbar + sheet ─────────────────────────────────────────────────
 
 export function MobileFilterBar(props: ProductFiltersProps) {
-  const { filters, onFilterChange, onClearFilters, facets, resultCount } = props;
+  const { filters, onFilterChange, onClearFilters, facets, resultCount, isLoading } = props;
   const [open, setOpen] = useState(false);
   const active = activeFilterCount(filters);
 
@@ -453,15 +498,15 @@ export function MobileFilterBar(props: ProductFiltersProps) {
                 key={c.value}
                 type="button"
                 aria-pressed={on}
-                disabled={count === 0 && !on}
+                disabled={(count === 0 || isLoading) && !on}
                 onClick={() => onFilterChange({ category: on ? null : c.value })}
                 className={cn(
                   "h-9 flex-shrink-0 border px-3 text-[10px] tracking-[0.15em] transition-colors duration-150",
                   on ? "border-ink bg-ink text-paper" : "border-rule",
-                  count === 0 && !on && "text-dim-dark"
+                  count === 0 && !on && !isLoading && "text-dim-dark"
                 )}
               >
-                {c.label} {pad2(count)}
+                {c.label} {isLoading ? "··" : pad2(count)}
               </button>
             );
           })}

@@ -28,11 +28,51 @@ export default function ReviewList({ reviews, stats, isLoading }: ReviewListProp
   }));
 
   if (isLoading) {
+    // Same frame as the loaded list: rating summary, then report cards.
+    const bar = "bg-zinc-900 animate-[pulse_1.2s_ease-in-out_infinite]";
     return (
-      <div className="space-y-3">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-24 bg-zinc-900/50 animate-pulse border border-zinc-800" />
-        ))}
+      <div className="space-y-8" aria-busy="true" aria-label="Loading field reports">
+        <div className="border border-zinc-800 p-5">
+          <div className="grid grid-cols-[auto_1fr] gap-8">
+            <div className="flex flex-col items-center gap-2 border-r border-zinc-800 pr-6">
+              <div className={`h-9 w-14 ${bar}`} />
+              <div className={`h-2.5 w-16 ${bar}`} />
+              <div className={`h-2.5 w-20 ${bar}`} />
+            </div>
+            <div className="flex flex-col justify-center space-y-1.5">
+              {[5, 4, 3, 2, 1].map((n) => (
+                <div key={n} className="flex items-center gap-2">
+                  <span className="w-4 text-right text-[10px] text-zinc-700">{n}</span>
+                  <div className="h-1.5 flex-1 bg-zinc-900" />
+                  <span className="w-6" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="space-y-3">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="border border-zinc-800 bg-zinc-950/50">
+              <div className="flex items-center justify-between border-b border-zinc-900 px-5 py-3">
+                <div className="flex items-center gap-3">
+                  <div className={`h-7 w-7 ${bar}`} />
+                  <div className="flex flex-col gap-1.5">
+                    <div className={`h-3 w-20 ${bar}`} />
+                    <div className={`h-2.5 w-28 ${bar}`} />
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1.5">
+                  <div className={`h-3 w-16 ${bar}`} />
+                  <div className={`h-2.5 w-12 ${bar}`} />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 px-5 py-4">
+                <div className={`h-3 w-[90%] ${bar}`} />
+                <div className={`h-3 w-[60%] ${bar}`} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

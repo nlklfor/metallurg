@@ -131,10 +131,24 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               {showResults && (
                 <div className="mt-6 max-h-[60vh] overflow-y-auto scrollbar-none">
                   {isLoading ? (
-                    <div className="py-8 text-center">
-                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em] animate-pulse">
-                        // loading...
+                    // Same rows as the results list: photo, name + SKU, price.
+                    <div aria-busy="true" aria-label="Loading results">
+                      <p className="mb-4 text-[10px] uppercase tracking-[0.15em] text-gray-600">
+                        // searching<span className="animate-blink-cursor">█</span>
                       </p>
+                      <div className="space-y-1">
+                        {[0, 1, 2].map((i) => (
+                          <div key={i} className="flex items-center gap-4 px-4 py-3">
+                            <div className="h-12 w-12 flex-shrink-0 animate-[pulse_1.2s_ease-in-out_infinite] bg-white/10" />
+                            <div className="flex min-w-0 flex-1 flex-col gap-2">
+                              <div className="h-3.5 w-3/5 bg-white/10" />
+                              <div className="h-2.5 w-1/4 bg-white/5" />
+                            </div>
+                            <div className="h-3.5 w-20 flex-shrink-0 bg-white/10" />
+                            <span className="w-3" />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : filtered.length === 0 ? (
                     <div className="py-8 text-center">

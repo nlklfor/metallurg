@@ -53,6 +53,7 @@ export default function Shop() {
     onClearFilters: clearFilters,
     facets,
     resultCount: visible.length,
+    isLoading,
   };
 
   return (
@@ -87,16 +88,18 @@ export default function Shop() {
         </div>
         <div className="h-px bg-ink" />
         <p className="text-[12px] leading-relaxed lg:text-[13px]">
-          {isLoading ? (
-            <span className="text-dim md:hidden">
-              // FETCHING_OBJECTS<span className="animate-blink-cursor text-ink">█</span>
-            </span>
-          ) : (
-            <>
-              <span className="md:hidden">{pad2(live)} objects indexed. </span>
-              Verified objects. Pre-order units ship 10–14 days.
-            </>
-          )}
+          {/* Same text while loading so nothing below jumps; only the count waits. */}
+          <span className="md:hidden">
+            {isLoading ? (
+              <>
+                <span className="text-dim">·· objects indexed</span>
+                <span className="animate-blink-cursor">█</span>{" "}
+              </>
+            ) : (
+              <>{pad2(live)} objects indexed. </>
+            )}
+          </span>
+          Verified objects. Pre-order units ship 10–14 days.
         </p>
       </header>
 
@@ -104,7 +107,8 @@ export default function Shop() {
         <MobileFilterBar {...filterProps} />
         <div className="flex justify-between px-4 py-3 text-[10px] tracking-[0.15em] text-dim sm:px-8">
           <span>
-            {pad2(visible.length)} {visible.length === 1 ? "OBJECT" : "OBJECTS"}
+            {isLoading ? "··" : pad2(visible.length)}{" "}
+            {visible.length === 1 && !isLoading ? "OBJECT" : "OBJECTS"}
           </span>
           <span>{currency}</span>
         </div>
@@ -119,7 +123,7 @@ export default function Shop() {
         <section className="flex min-w-0 flex-col gap-4" aria-label="Objects">
           <div className="hidden h-5 justify-between text-[10px] tracking-[0.15em] text-dim lg:flex">
             <span>
-              SHOWING {pad2(visible.length)} / {pad2(products.length)}
+              SHOWING {isLoading ? "·· / ··" : `${pad2(visible.length)} / ${pad2(products.length)}`}
               {filters.sizes.length > 0 && ` · SIZE ${filters.sizes.join(", ")} SELECTED`}
             </span>
             <span>{currency}</span>

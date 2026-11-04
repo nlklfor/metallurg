@@ -147,7 +147,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
   if (isLoading)
     return (
       <Shell>
-        <div className="flex-1 pb-16 pt-6">
+        <div className="flex-1">
           <ProductDetailsSkeleton />
         </div>
       </Shell>
