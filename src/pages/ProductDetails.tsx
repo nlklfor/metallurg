@@ -38,12 +38,12 @@ const STATUS: Record<ProductType["stock_status"], { label: string; dot: string; 
   out_of_stock: { label: "OUT_OF_STOCK", dot: "bg-status-error", eta: "ARCHIVED" },
 };
 
-/** "≈ 141 CHF · 151 EUR" — the price in the two currencies not selected. */
+/** "≈ 141 CHF / 151 EUR" — the price in the two currencies not selected. */
 function approxPrices(price: number, current: CurrencyCode): string {
   return (Object.keys(CURRENCIES) as CurrencyCode[])
     .filter((c) => c !== current)
     .map((c) => `${Math.round(convertPrice(price, c)).toLocaleString("en-US")} ${c}`)
-    .join(" · ");
+    .join(" / ");
 }
 
 function useRelated(product: ProductType | null) {
@@ -202,12 +202,6 @@ function ProductDetailsContent({ slug }: { slug: string }) {
       /* share sheet dismissed */
     }
   };
-
-  const stockLine = (() => {
-    if (!hasSizes || !selectedSize) return null;
-    const n = getMaxQuantity(product, selectedSize);
-    return n <= 2 ? `LAST_${n}` : null;
-  })();
 
   // ─── Purchase CTA (desktop inline + mobile bar share the same states) ───
   const cta = (mobile: boolean) => {
@@ -392,7 +386,6 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                 {sizes.map(({ size, stock }) => {
                   const sel = selectedSize === size;
                   const soldOut = stock === 0;
-                  const low = stock !== null && stock > 0 && stock <= 2 && !sel;
                   return (
                     <button
                       key={size}
@@ -400,7 +393,7 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                       onClick={() => pickSize(size, stock)}
                       disabled={soldOut}
                       aria-pressed={sel}
-                      aria-label={`Size ${size}${soldOut ? ", sold out" : stock !== null ? `, ${stock} left` : ""}`}
+                      aria-label={`Size ${size}${soldOut ? ", sold out" : ""}`}
                       className={cn(
                         "relative h-12 border text-[14px] transition-colors duration-150 lg:w-[72px]",
                         sel
@@ -411,12 +404,6 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                       )}
                     >
                       {size}
-                      {low && (
-                        <span
-                          aria-hidden="true"
-                          className="absolute right-[5px] top-[5px] h-[5px] w-[5px] bg-status-low"
-                        />
-                      )}
                     </button>
                   );
                 })}
@@ -459,9 +446,6 @@ function ProductDetailsContent({ slug }: { slug: string }) {
                     +
                   </button>
                 </div>
-                {stockLine && (
-                  <span className="text-[11px] tracking-[0.12em] text-status-low">{stockLine}</span>
-                )}
               </div>
             </section>
           )}
@@ -535,9 +519,9 @@ function ProductDetailsContent({ slug }: { slug: string }) {
               {isArchived
                 ? "ARCHIVED"
                 : ready && selectedSize !== ONE_SIZE
-                  ? `${product.category === "footwear" ? "EU " : ""}${selectedSize} · ${qty} ×`
+                  ? `${product.category === "footwear" ? "EU " : ""}${selectedSize} / ${qty} ×`
                   : product.stock_status === "pre_order"
-                    ? "PRE_ORDER · ETA 10–14D"
+                    ? "PRE_ORDER / ETA 10–14D"
                     : "IN_STOCK"}
             </span>
             <span

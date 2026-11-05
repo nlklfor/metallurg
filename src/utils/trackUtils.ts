@@ -31,13 +31,13 @@ export function maskName(name: string | null | undefined): string {
   return `${first}. ${parts[parts.length - 1][0].toUpperCase()}•••••`;
 }
 
-/** "2026-10-13T14:02:00Z" → "13.10 · 14:02" (local time). */
+/** "2026-10-13T14:02:00Z" → "13.10 14:02" (local time). */
 export function formatStamp(iso: string | null | undefined): string | null {
   if (!iso) return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
   const p = (n: number) => String(n).padStart(2, "0");
-  return `${p(d.getDate())}.${p(d.getMonth() + 1)} · ${p(d.getHours())}:${p(d.getMinutes())}`;
+  return `${p(d.getDate())}.${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
 /** Nova Poshta's public tracking page for a TTN. */

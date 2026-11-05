@@ -1,123 +1,199 @@
-import { motion } from "motion/react";
+import { useMemo, useState } from "react";
+import type { ReviewWithOrderItems } from "@/interfaces/review";
+import { cn } from "@/lib/utils";
 import ReviewCard from "./ReviewCard";
-import type { Review, ReviewWithOrderItems } from "@/interfaces/review";
+
+// Field reports section (design file: Orders-D left stats column + 2-col
+// cards; Orders-M stats row, filter chips, stacked cards, LOAD_MORE).
 
 interface ReviewListProps {
-  reviews: (Review | ReviewWithOrderItems)[];
+  reviews: ReviewWithOrderItems[];
   stats: { average: number; count: number };
   isLoading: boolean;
 }
 
-function RatingBar({ label, count, total }: { label: string; count: number; total: number }) {
-  const pct = total > 0 ? (count / total) * 100 : 0;
+const PAGE = 6;
+const pad2 = (n: number) => String(n).padStart(2, "0");
+const blocks = (avg: number) => {
+  const n = Math.round(avg);
+  return "█".repeat(n) + "░".repeat(5 - n);
+};
+
+type Filter = "all" | "photos";
+
+function Heading() {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-[10px] font-ibm-mono text-zinc-600 w-4 text-right">{label}</span>
-      <div className="flex-1 h-1.5 bg-zinc-900 overflow-hidden">
-        <div className="h-full bg-white transition-all duration-500" style={{ width: `${pct}%` }} />
+    <>
+      <h2 className="display text-[34px] sm:text-[44px] lg:text-[56px]">Field reports</h2>
+      <div className="h-px bg-ink lg:hidden" />
+    </>
+  );
+}
+
+function Stats({
+  stats,
+  distribution,
+}: {
+  stats: ReviewListProps["stats"];
+  distribution: { label: number; count: number }[];
+}) {
+  const avg = stats.count > 0 ? stats.average.toFixed(1) : "—";
+  return (
+    <>
+      {/* phones: two cells */}
+      <div className="grid grid-cols-2 border border-ink lg:hidden">
+        <div className="flex flex-col gap-1.5 border-r border-ink p-3.5">
+          <span className="eyebrow text-[10px] text-dim">AVG_RATING</span>
+          <span className="text-[26px] font-bold leading-none">{avg}</span>
+          <span className="text-[12px] tracking-[0.1em]">{blocks(stats.average)}</span>
+        </div>
+        <div className="flex flex-col gap-1.5 p-3.5">
+          <span className="eyebrow text-[10px] text-dim">REPORTS</span>
+          <span className="text-[26px] font-bold leading-none">{pad2(stats.count)}</span>
+          <span className="text-[10px] text-dim">VERIFIED ORDERS ONLY</span>
+        </div>
       </div>
-      <span className="text-[10px] font-ibm-mono text-zinc-500 w-6">{count}</span>
+
+      {/* desktop: stacked box + distribution */}
+      <div className="hidden flex-col gap-2.5 border border-ink p-5 lg:flex">
+        <span className="eyebrow text-[10px] text-dim">AVG_RATING</span>
+        <span className="text-[44px] font-bold leading-none">{avg}</span>
+        <span className="text-[16px] tracking-[0.1em]">{blocks(stats.average)}</span>
+        <span className="text-[10px] tracking-[0.1em] text-dim">
+          {pad2(stats.count)} {stats.count === 1 ? "REPORT" : "REPORTS"} / VERIFIED ORDERS ONLY
+        </span>
+      </div>
+      <div className="hidden flex-col gap-1.5 text-[11px] lg:flex" aria-label="Rating distribution">
+        {distribution.map((d) => (
+          <div key={d.label} className="flex items-center gap-2.5">
+            <span className="w-[18px]">{d.label}</span>
+            <span className="h-1.5 flex-1 bg-rule">
+              <span
+                className="block h-1.5 bg-ink transition-[width] duration-500 ease-mtl"
+                style={{ width: `${stats.count ? (d.count / stats.count) * 100 : 0}%` }}
+              />
+            </span>
+            <span className="w-6 text-right text-dim tabular-nums">{d.count}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function Skeleton() {
+  const bar = "bg-[#F3F4F6] animate-[pulse_1.2s_ease-in-out_infinite]";
+  return (
+    <div
+      className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-5"
+      aria-busy="true"
+      aria-label="Loading field reports"
+    >
+      {[0, 1, 2, 3].map((i) => (
+        <div key={i} className="flex flex-col gap-3 border border-rule p-3.5 lg:p-5">
+          <div className="flex justify-between">
+            <div className={`h-3.5 w-20 ${bar}`} />
+            <div className={`h-2.5 w-12 ${bar}`} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <div className={`h-4 w-3/4 ${bar}`} />
+            <div className={`h-2.5 w-1/2 ${bar}`} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <div className={`h-2 w-full ${bar}`} />
+            <div className={`h-2 w-[88%] ${bar}`} />
+            <div className={`h-2 w-[54%] ${bar}`} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
 
 export default function ReviewList({ reviews, stats, isLoading }: ReviewListProps) {
-  const distribution = [5, 4, 3, 2, 1].map((star) => ({
-    label: String(star),
-    count: reviews.filter((r) => r.rating === star).length,
-  }));
+  const [filter, setFilter] = useState<Filter>("all");
+  const [shown, setShown] = useState(PAGE);
 
-  if (isLoading) {
-    // Same frame as the loaded list: rating summary, then report cards.
-    const bar = "bg-zinc-900 animate-[pulse_1.2s_ease-in-out_infinite]";
-    return (
-      <div className="space-y-8" aria-busy="true" aria-label="Loading field reports">
-        <div className="border border-zinc-800 p-5">
-          <div className="grid grid-cols-[auto_1fr] gap-8">
-            <div className="flex flex-col items-center gap-2 border-r border-zinc-800 pr-6">
-              <div className={`h-9 w-14 ${bar}`} />
-              <div className={`h-2.5 w-16 ${bar}`} />
-              <div className={`h-2.5 w-20 ${bar}`} />
-            </div>
-            <div className="flex flex-col justify-center space-y-1.5">
-              {[5, 4, 3, 2, 1].map((n) => (
-                <div key={n} className="flex items-center gap-2">
-                  <span className="w-4 text-right text-[10px] text-zinc-700">{n}</span>
-                  <div className="h-1.5 flex-1 bg-zinc-900" />
-                  <span className="w-6" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="space-y-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="border border-zinc-800 bg-zinc-950/50">
-              <div className="flex items-center justify-between border-b border-zinc-900 px-5 py-3">
-                <div className="flex items-center gap-3">
-                  <div className={`h-7 w-7 ${bar}`} />
-                  <div className="flex flex-col gap-1.5">
-                    <div className={`h-3 w-20 ${bar}`} />
-                    <div className={`h-2.5 w-28 ${bar}`} />
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-1.5">
-                  <div className={`h-3 w-16 ${bar}`} />
-                  <div className={`h-2.5 w-12 ${bar}`} />
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 px-5 py-4">
-                <div className={`h-3 w-[90%] ${bar}`} />
-                <div className={`h-3 w-[60%] ${bar}`} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const distribution = useMemo(
+    () =>
+      [5, 4, 3, 2, 1].map((star) => ({
+        label: star,
+        count: reviews.filter((r) => r.rating === star).length,
+      })),
+    [reviews]
+  );
+  const withPhotos = reviews.filter((r) => (r.image_urls ?? []).length > 0).length;
+  const list = filter === "photos" ? reviews.filter((r) => r.image_urls?.length) : reviews;
+  const visible = list.slice(0, shown);
 
-  if (reviews.length === 0) {
-    return (
-      <div className="border border-zinc-800 py-16 text-center">
-        <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
-          // NO_FIELD_REPORTS
-        </p>
-        <p className="text-sm font-ibm-mono text-zinc-600 mt-2">Be the first to submit a report.</p>
-      </div>
-    );
-  }
+  const chip = (value: Filter, label: string, disabled = false) => (
+    <button
+      type="button"
+      aria-pressed={filter === value}
+      disabled={disabled}
+      onClick={() => {
+        setFilter(value);
+        setShown(PAGE);
+      }}
+      className={cn(
+        "h-9 border px-3 text-[10px] tracking-[0.12em] transition-colors duration-150",
+        filter === value ? "border-ink bg-ink text-paper" : "border-rule hover:border-ink",
+        disabled && "cursor-not-allowed text-dim-dark hover:border-rule"
+      )}
+    >
+      {label}
+    </button>
+  );
 
   return (
-    <div className="space-y-8">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="border border-zinc-800 p-5"
-      >
-        <div className="grid grid-cols-[auto_1fr] gap-8">
-          <div className="text-center pr-6 border-r border-zinc-800">
-            <p className="text-4xl font-archivo-black text-white">{stats.average.toFixed(1)}</p>
-            <p className="text-[10px] font-ibm-mono text-zinc-600 tracking-[0.15em] mt-1">
-              {"█".repeat(Math.round(stats.average))}
-              {"░".repeat(5 - Math.round(stats.average))}
-            </p>
-            <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] mt-1.5">
-              {stats.count} REPORT{stats.count !== 1 ? "S" : ""}
-            </p>
-          </div>
-          <div className="space-y-1.5 flex flex-col justify-center">
-            {distribution.map((d) => (
-              <RatingBar key={d.label} label={d.label} count={d.count} total={stats.count} />
-            ))}
-          </div>
-        </div>
-      </motion.div>
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-12">
+      <div className="flex flex-col gap-3 lg:gap-4">
+        <Heading />
+        {isLoading ? (
+          <div className="h-[92px] border border-ink lg:h-[150px]" aria-hidden="true" />
+        ) : (
+          <Stats stats={stats} distribution={distribution} />
+        )}
+      </div>
 
-      <div className="space-y-3">
-        {reviews.map((review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
+      <div className="flex flex-col gap-3 lg:gap-5">
+        {!isLoading && reviews.length > 0 && (
+          <div className="flex gap-1.5">
+            {chip("all", `ALL ${pad2(reviews.length)}`)}
+            {chip("photos", `WITH_PHOTOS ${pad2(withPhotos)}`, withPhotos === 0)}
+          </div>
+        )}
+
+        {isLoading ? (
+          <Skeleton />
+        ) : reviews.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 border border-dashed border-dim-dark px-5 py-12 text-center">
+            <p aria-hidden="true" className="text-[12px] tracking-[0.15em] text-dim-dark">
+              ░░░░░░░░
+            </p>
+            <p className="eyebrow text-[11px]">// NO_FIELD_REPORTS_YET</p>
+            <p className="text-[12px] text-dim">
+              Reports appear here once delivered orders file them.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-5">
+              {visible.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
+            </div>
+            {list.length > shown && (
+              <button
+                type="button"
+                onClick={() => setShown((n) => n + PAGE)}
+                className="h-12 border border-ink text-[11px] tracking-[0.15em] transition-colors hover:bg-ink hover:text-paper"
+              >
+                LOAD_MORE ↓ ({pad2(list.length - shown)})
+              </button>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

@@ -42,6 +42,8 @@ export interface CheckoutModalProps {
 export interface TrackOrderModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Code typed outside the modal (Orders page): looked up as soon as it opens. */
+  initialCode?: string;
 }
 
 export interface TrackStepDefinition {

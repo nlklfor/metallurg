@@ -92,7 +92,7 @@ export default function LoadoutDrawer() {
               <>
                 <div className="flex justify-between px-6 pt-4 text-[10px] tracking-[0.15em] text-dim">
                   <span>
-                    {pad2(items.length)} LINES · {pad2(units)} UNITS
+                    {pad2(items.length)} LINES / {pad2(units)} UNITS
                   </span>
                 </div>
                 <div className="flex-1 overflow-y-auto px-6">
@@ -129,7 +129,7 @@ export default function LoadoutDrawer() {
                     }}
                     className="flex h-12 items-center justify-center border border-ink text-[11px] tracking-[0.15em] transition-colors hover:bg-ink hover:text-paper"
                   >
-                    CHECKOUT · {formatPrice(total, currency)}
+                    CHECKOUT / {formatPrice(total, currency)}
                   </button>
                 </div>
               </>

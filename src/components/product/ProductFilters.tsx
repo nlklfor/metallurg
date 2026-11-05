@@ -332,7 +332,7 @@ function FilterPanel({
               onClick={onClearFilters}
               className="mt-1 h-11 self-start text-[11px] tracking-[0.15em] underline underline-offset-[5px] hover:text-dim"
             >
-              RESET_FILTERS · {pad2(resultCount)} SHOWN
+              RESET_FILTERS ({pad2(resultCount)} SHOWN)
             </button>
           )}
         </div>
@@ -506,7 +506,7 @@ export function MobileFilterBar(props: ProductFiltersProps) {
                   count === 0 && !on && !isLoading && "text-dim-dark"
                 )}
               >
-                {c.label} {isLoading ? "··" : pad2(count)}
+                {c.label} {isLoading ? "--" : pad2(count)}
               </button>
             );
           })}

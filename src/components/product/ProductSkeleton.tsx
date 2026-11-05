@@ -1,5 +1,5 @@
 // Loading card: same frame and text rhythm as ProductItem (square photo, name
-// in 2–3 lines, price + sizes — stacked on phones, one row from sm).
+// in 2–3 lines, price).
 const bar = "bg-[#F3F4F6]";
 
 export default function ProductSkeleton() {
@@ -15,10 +15,7 @@ export default function ProductSkeleton() {
           {/* phone names usually wrap to a 3rd line */}
           <div className={`h-[13px] w-[40%] sm:hidden ${bar}`} />
         </div>
-        <div className="mt-auto flex flex-col gap-1 pt-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
-          <div className={`h-[14px] w-[45%] sm:h-[16px] sm:w-[35%] ${bar}`} />
-          <div className={`h-[10px] w-[35%] sm:w-[25%] ${bar}`} />
-        </div>
+        <div className={`mt-auto h-[14px] w-[45%] sm:h-[16px] sm:w-[35%] ${bar}`} />
       </div>
     </div>
   );

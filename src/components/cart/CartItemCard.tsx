@@ -32,7 +32,7 @@ export default function CartItemCard({ item, variant = "page", onNavigate }: Car
   const max = getMaxQuantity(item, item.selectedSize);
   const atMax = item.cart_quantity >= max;
   const atMin = item.cart_quantity <= 1;
-  const capText = atMax && max <= 2 && !unavailable ? `LAST_${max} // MAX` : "";
+  const capText = atMax && max <= 2 && !unavailable ? "MAX_QTY" : "";
   const compact = variant === "compact";
   const sizeText = item.selectedSize === "ONE_SIZE" ? "ONE_SIZE" : `SIZE ${item.selectedSize}`;
 
@@ -112,7 +112,7 @@ export default function CartItemCard({ item, variant = "page", onNavigate }: Car
             <span className="flex-shrink-0 text-[13px] font-bold tabular-nums">{lineTotal}</span>
           </div>
           <span className="text-[10px] tracking-[0.12em] text-dim">
-            // {sizeText} · <span className={status.color}>{status.label}</span>
+            // {sizeText} / <span className={status.color}>{status.label}</span>
           </span>
           <div className="mt-auto flex items-center justify-between gap-2">
             {stepper}
@@ -137,7 +137,7 @@ export default function CartItemCard({ item, variant = "page", onNavigate }: Car
           {item.name}
         </Link>
         <span className="text-[11px] tracking-[0.12em] text-dim">
-          // {sizeText} · <span className={status.color}>{status.label}</span>
+          // {sizeText} / <span className={status.color}>{status.label}</span>
         </span>
         <span className="text-[11px] text-dim">{status.eta}</span>
         <span className="text-[14px] font-bold tabular-nums lg:hidden">{lineTotal}</span>

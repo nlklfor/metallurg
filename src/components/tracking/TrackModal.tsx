@@ -74,7 +74,7 @@ function OrderSummary({ order }: { order: Order }) {
       <div className="flex justify-between lg:flex-col lg:gap-1">
         <span className="text-zinc-500">LINES</span>
         <span>
-          {pad2(items.length)} · {pad2(units)} {units === 1 ? "UNIT" : "UNITS"}
+          {pad2(items.length)} / {pad2(units)} {units === 1 ? "UNIT" : "UNITS"}
         </span>
       </div>
       <div className="flex justify-between lg:flex-col lg:gap-1">
@@ -85,7 +85,7 @@ function OrderSummary({ order }: { order: Order }) {
   );
 }
 
-export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProps) {
+export default function TrackOrderModal({ isOpen, onClose, initialCode }: TrackOrderModalProps) {
   const [code, setCode] = useState("");
   const [recent, setRecent] = useState<RecentOrder[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -114,6 +114,22 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen, handleClose]);
+
+  // Code passed in from the Orders page: look it up once per open.
+  const trackRef = useRef(trackOrder);
+  useEffect(() => {
+    trackRef.current = trackOrder;
+  });
+  useEffect(() => {
+    if (!isOpen || !initialCode) return;
+    const c = normalizeOrderCode(initialCode);
+    if (c.length < 4) return;
+    const raf = requestAnimationFrame(() => {
+      setCode(c);
+      void trackRef.current(c);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [isOpen, initialCode]);
 
   const canLocate = code.length >= 4 && !isLoading;
   const locate = (value = code) => {
@@ -229,7 +245,7 @@ export default function TrackOrderModal({ isOpen, onClose }: TrackOrderModalProp
             >
               <span>{r.orderNumber}</span>
               <span className="text-[10px] text-zinc-500">
-                {formatStamp(r.at)?.split(" · ")[0]} →
+                {formatStamp(r.at)?.split(" ")[0]} →
               </span>
             </button>
           ))}

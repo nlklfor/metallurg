@@ -138,7 +138,7 @@ export default async function handler(req: Request): Promise<Response> {
   html = html.replace(/<!--seo:start-->[\s\S]*?<!--seo:end-->/, headTags(path, r));
   html = html.replace(
     "<!--seo:body-->",
-    `<main><h1>${escapeHtml(r.meta.title)}</h1><p>${escapeHtml(r.bodyText)}</p><nav><a href="/inventory">Inventory</a> · <a href="/about">About</a> · <a href="/contact">Contact</a> · <a href="/orders">Orders &amp; Reviews</a></nav></main>`
+    `<main><h1>${escapeHtml(r.meta.title)}</h1><p>${escapeHtml(r.bodyText)}</p><nav><a href="/inventory">Inventory</a> / <a href="/about">About</a> / <a href="/contact">Contact</a> / <a href="/orders">Orders &amp; Reviews</a></nav></main>`
   );
 
   return new Response(html, {
