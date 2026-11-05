@@ -77,14 +77,14 @@ export default function Cart() {
           <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">Loadout</h1>
           {items.length > 0 && (
             <span className="hidden pb-2 text-[10px] tracking-[0.15em] text-dim sm:block lg:text-[11px]">
-              {pad2(items.length)} LINES · {pad2(units)} UNITS
+              {pad2(items.length)} LINES / {pad2(units)} UNITS
             </span>
           )}
         </div>
         <div className="h-px bg-ink" />
         {items.length > 0 && (
           <span className="text-[10px] tracking-[0.15em] text-dim sm:hidden">
-            {pad2(items.length)} LINES · {pad2(units)} UNITS
+            {pad2(items.length)} LINES / {pad2(units)} UNITS
           </span>
         )}
       </header>

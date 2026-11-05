@@ -119,7 +119,7 @@ export default function Pipeline({ steps, currentIndex, firstStamp }: PipelinePr
                 )}
               >
                 {step.sublabel}
-                {i === 0 && firstStamp && ` · ${firstStamp}`}
+                {i === 0 && firstStamp && ` // ${firstStamp}`}
               </span>
             </div>
           </li>

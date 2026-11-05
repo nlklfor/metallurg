@@ -108,7 +108,7 @@ function RouteMap({
       <Marker position={end} icon={branch ? markerIcon : nodeIcon}>
         <Tooltip permanent direction="top" offset={[0, -6]} opacity={1} className={TOOLTIP}>
           {to?.label ?? "BRANCH"}
-          {branch && " · BRANCH"}
+          {branch && " // BRANCH"}
         </Tooltip>
       </Marker>
     </MapContainer>

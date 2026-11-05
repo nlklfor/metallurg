@@ -1,13 +1,18 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { Footer, Navbar } from "@/components";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import { useState } from "react";
 import TrackOrderModal from "@/components/tracking/TrackModal";
 import ReviewModal from "@/components/review/ReviewModal";
 import ReviewList from "@/components/review/ReviewList";
 import { useAllReviews } from "@/hooks/useAllReviews";
-import { Package, Star } from "lucide-react";
 import { TRACK_URL } from "@/lib/constants/order";
+import { DURATION, EASE_MTL } from "@/lib/motion";
+import { cn } from "@/lib/utils";
+import { normalizeOrderCode, toOrderNumber } from "@/utils/trackUtils";
 import Seo from "@/components/seo/Seo";
+
+// Orders & field reports (design file: Orders-D / Orders-M).
 
 interface ResolvedOrder {
   id: string;
@@ -16,39 +21,98 @@ interface ResolvedOrder {
   items: { name: string; selectedSize: string | number; price: number }[];
 }
 
+type ReportError = "not_found" | "not_delivered" | "rate_limited" | "network";
+
+const REPORT_ERRORS: Record<ReportError, { title: string; text: string }> = {
+  not_found: {
+    title: "// ORDER_NOT_FOUND",
+    text: "No order with this ID. Check the 6 characters after MTL-.",
+  },
+  not_delivered: {
+    title: "// NOT_DELIVERED_YET",
+    text: "Reports unlock once the order is in your hands. Track it to see where it is.",
+  },
+  rate_limited: {
+    title: "// TOO_MANY_ATTEMPTS",
+    text: "Too many lookups in a row. Try again in 10 minutes.",
+  },
+  network: {
+    title: "// NO_CONNECTION",
+    text: "Couldn't reach the server. Check your connection and try again.",
+  },
+};
+
+/** MTL- prefix + code input, shared by both cards. */
+function CodeField({
+  id,
+  value,
+  onChange,
+  invalid,
+  className,
+  children,
+}: {
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  invalid?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex h-[52px] border border-ink text-[16px] focus-within:outline focus-within:outline-1 focus-within:outline-offset-2 focus-within:outline-ink lg:h-[60px] lg:text-[20px]",
+        className
+      )}
+    >
+      <label htmlFor={id} className="flex items-center pl-3 text-dim lg:pl-4">
+        MTL-
+      </label>
+      <input
+        id={id}
+        value={value}
+        onChange={(e) => onChange(normalizeOrderCode(e.target.value))}
+        onPaste={(e) => {
+          e.preventDefault();
+          onChange(normalizeOrderCode(e.clipboardData.getData("text")));
+        }}
+        placeholder="XXXXXX"
+        autoComplete="off"
+        autoCapitalize="characters"
+        spellCheck={false}
+        aria-invalid={invalid}
+        className="h-full min-w-0 flex-1 bg-transparent pr-3 font-semibold uppercase tracking-[0.06em] outline-none placeholder:font-normal placeholder:text-dim-dark"
+      />
+      {children}
+    </div>
+  );
+}
+
 export default function Orders() {
   const [trackOpen, setTrackOpen] = useState(false);
-  const [reviewOpen, setReviewOpen] = useState(false);
+  const [trackCode, setTrackCode] = useState("");
+  const [reportCode, setReportCode] = useState("");
   const [reviewOrder, setReviewOrder] = useState<ResolvedOrder | null>(null);
-  const [orderInput, setOrderInput] = useState("");
-  const [lookupError, setLookupError] = useState("");
+  const [reportError, setReportError] = useState<ReportError | null>(null);
   const [isLookingUp, setIsLookingUp] = useState(false);
   const { reviews, stats, isLoading: reviewsLoading, refetch } = useAllReviews();
 
-  const handleReviewLookup = async () => {
-    const trimmed = orderInput.trim().toUpperCase();
-    if (!trimmed) return;
+  const openTrack = () => setTrackOpen(true);
 
+  const lookupForReport = async () => {
+    if (reportCode.length < 4 || isLookingUp) return;
     setIsLookingUp(true);
-    setLookupError("");
-
+    setReportError(null);
     try {
       const res = await fetch(TRACK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderNumber: trimmed }),
+        body: JSON.stringify({ orderNumber: toOrderNumber(reportCode) }),
       });
-      const data = await res.json();
-
-      if (!res.ok || data.error) {
-        setLookupError("Order not found — please check the order number and try again.");
-        return;
-      }
-
-      if (data.status !== "completed") {
-        setLookupError("ORDER_NOT_COMPLETED — Only delivered orders can be reviewed.");
-        return;
-      }
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 429) return setReportError("rate_limited");
+      if (!res.ok || data.error) return setReportError("not_found");
+      if (data.status !== "completed") return setReportError("not_delivered");
 
       setReviewOrder({
         id: data.id,
@@ -56,34 +120,31 @@ export default function Orders() {
         customer_name: data.customer_name,
         items: data.items,
       });
-      setReviewOpen(true);
-      setOrderInput("");
-      setLookupError("");
+      setReportCode("");
     } catch {
-      setLookupError("Order not found — please check the order number and try again.");
+      setReportError("network");
     } finally {
       setIsLookingUp(false);
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-paper font-mono text-ink">
       <Seo />
       <Navbar variant="light" />
-      <div className="px-4 sm:px-8 pt-6">
-        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders" }]} />
-      </div>
-      <TrackOrderModal isOpen={trackOpen} onClose={() => setTrackOpen(false)} />
+      <TrackOrderModal
+        isOpen={trackOpen}
+        initialCode={trackCode}
+        onClose={() => {
+          setTrackOpen(false);
+          setTrackCode("");
+        }}
+      />
       {reviewOrder && (
         <ReviewModal
-          isOpen={reviewOpen}
-          onClose={() => {
-            setReviewOpen(false);
-            setReviewOrder(null);
-          }}
-          onSubmitted={() => {
-            refetch();
-          }}
+          isOpen
+          onClose={() => setReviewOrder(null)}
+          onSubmitted={() => refetch()}
           orderNumber={reviewOrder.order_number}
           customerName={reviewOrder.customer_name}
           orderId={reviewOrder.id}
@@ -91,98 +152,141 @@ export default function Orders() {
         />
       )}
 
-      <div className="px-4 sm:px-8 pt-8 sm:pt-16 pb-6 sm:pb-8">
-        <div className="flex items-baseline justify-between">
-          <div>
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
-              Orders & Reviews
-            </h2>
-          </div>
-          <p className="text-[10px] text-dim tracking-[0.15em] uppercase hidden md:block">
-            METALLURG™ — DASHBOARD
-          </p>
-        </div>
-        <div className="border-t border-gray-200 mt-6 pt-6">
-          <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
-            Track your orders and share your experience with the community.
-          </p>
-        </div>
+      <div className="px-4 pt-3.5 sm:px-8 sm:pt-5 md:px-12">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Orders" }]} />
       </div>
 
-      <div className="px-4 sm:px-8 pb-8 sm:pb-16">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Track Order Card */}
-          <button
-            onClick={() => setTrackOpen(true)}
-            className="border border-gray-200 p-5 sm:p-10 text-left hover:border-black transition-all group"
+      <header className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:px-8 md:px-12 lg:gap-4 lg:pb-8 lg:pt-10">
+        <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">Orders</h1>
+        <div className="h-px bg-ink" />
+        <p className="text-[12px] leading-relaxed lg:text-[13px]">
+          Track an acquisition. File a field report once it's in your hands.
+        </p>
+      </header>
+
+      {/* ─── Actions ─── */}
+      <section
+        className="grid grid-cols-1 gap-3 px-4 sm:px-8 md:grid-cols-2 md:px-12 lg:gap-6"
+        aria-label="Order actions"
+      >
+        {/* 01 — track */}
+        <div className="flex flex-col gap-3 border border-ink p-4 lg:gap-4 lg:p-6">
+          <span className="eyebrow text-[10px]">01 // TRACK_BY_CODE</span>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              openTrack();
+            }}
           >
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-14 h-14 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Package size={24} className="text-white" />
-              </div>
-              <span className="text-dim group-hover:text-black group-hover:translate-x-1 transition-all text-xl">
-                →
-              </span>
-            </div>
-            <h3 className="text-xl font-black text-black uppercase tracking-tight mb-2">
-              Track Your Order
-            </h3>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Enter your order ID to see real-time delivery status and tracking information.
-            </p>
-          </button>
-
-          {/* Reviews Card */}
-          <div className="border border-gray-200 p-5 sm:p-10 text-left hover:border-black transition-all group">
-            <div className="flex items-start justify-between mb-6">
-              <div className="w-14 h-14 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Star size={24} className="text-white" />
-              </div>
-            </div>
-            <h3 className="text-xl font-black text-black uppercase tracking-tight mb-3">
-              Submit a Review
-            </h3>
-            <p className="text-sm text-gray-400 leading-relaxed mb-6">
-              Share your field report. Enter your completed order ID to begin.
-            </p>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={orderInput}
-                onChange={(e) => setOrderInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleReviewLookup()}
-                placeholder="MTL-1234"
-                className="flex-1 font-ibm-mono border border-gray-200 px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:border-black uppercase tracking-[0.15em] transition-colors"
-              />
+            <CodeField id="orders-track" value={trackCode} onChange={setTrackCode}>
               <button
-                onClick={handleReviewLookup}
-                disabled={isLookingUp || !orderInput.trim()}
-                className="bg-black text-white px-5 font-archivo-black text-[10px] uppercase tracking-widest hover:bg-gray-900 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+                type="submit"
+                aria-label="Locate order"
+                className="flex w-14 items-center justify-center bg-ink text-[12px] font-bold tracking-[0.15em] text-paper transition-colors hover:bg-[#222] lg:w-auto lg:px-7"
               >
-                {isLookingUp ? "..." : "GO →"}
+                <span className="hidden lg:inline">LOCATE →</span>
+                <span className="lg:hidden" aria-hidden="true">
+                  →
+                </span>
               </button>
-            </div>
-            {lookupError && (
-              <p className="text-[10px] font-ibm-mono text-red-500 mt-2 tracking-[0.15em] uppercase">
-                ✗ {lookupError}
-              </p>
-            )}
-          </div>
+            </CodeField>
+          </form>
+          <p className="text-[11px] leading-relaxed text-dim">
+            The 6-character code from your confirmation screen, receipt or Telegram message.
+          </p>
         </div>
-      </div>
 
-      {/* All Reviews Section */}
-      <div className="bg-black text-white px-4 sm:px-8 py-10 sm:py-16">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-10">
-            Community Reports
-            {stats.count > 0 && (
-              <span className="text-zinc-600 text-lg ml-3 not-italic">({stats.count})</span>
+        {/* 02 — field report */}
+        <div className="flex flex-col gap-3 border border-rule p-4 lg:gap-4 lg:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <span className="eyebrow text-[10px]">02 // WRITE_FIELD_REPORT</span>
+            <span className="border border-status-ok px-1.5 py-0.5 text-[10px] tracking-[0.12em] text-[#15803D]">
+              DELIVERED ONLY
+            </span>
+          </div>
+          <form
+            className="flex flex-col gap-2 lg:flex-row"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void lookupForReport();
+            }}
+          >
+            <CodeField
+              id="orders-report"
+              value={reportCode}
+              onChange={(v) => {
+                setReportCode(v);
+                setReportError(null);
+              }}
+              invalid={!!reportError}
+              className="border-rule focus-within:border-ink lg:flex-1"
+            >
+              {null}
+            </CodeField>
+            <button
+              type="submit"
+              disabled={reportCode.length < 4 || isLookingUp}
+              className="flex h-12 items-center justify-center border border-ink px-6 text-[11px] tracking-[0.15em] transition-colors hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-ink lg:h-[60px] lg:text-[12px]"
+            >
+              {isLookingUp ? (
+                <>
+                  CHECKING<span className="animate-blink-cursor">█</span>
+                </>
+              ) : (
+                "FILE_REPORT →"
+              )}
+            </button>
+          </form>
+          <AnimatePresence initial={false} mode="wait">
+            {reportError ? (
+              <motion.div
+                key={reportError}
+                role="alert"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DURATION.chip, ease: EASE_MTL }}
+                className="flex flex-col gap-1.5 border border-status-error p-3"
+              >
+                <span className="text-[10px] font-bold tracking-[0.15em] text-[#B91C1C]">
+                  {REPORT_ERRORS[reportError].title}
+                </span>
+                <span className="text-[12px]">{REPORT_ERRORS[reportError].text}</span>
+                {reportError === "not_delivered" && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTrackCode(reportCode);
+                      openTrack();
+                    }}
+                    className="h-9 self-start text-[11px] tracking-[0.15em] underline underline-offset-[5px]"
+                  >
+                    TRACK_THIS_ORDER →
+                  </button>
+                )}
+              </motion.div>
+            ) : (
+              <motion.p
+                key="hint"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-[11px] leading-relaxed text-dim"
+              >
+                Enter a delivered order ID to unlock the report form.
+              </motion.p>
             )}
-          </h2>
-          <ReviewList reviews={reviews} stats={stats} isLoading={reviewsLoading} />
+          </AnimatePresence>
         </div>
-      </div>
+      </section>
+
+      {/* ─── Field reports ─── */}
+      <section
+        className="px-4 pb-16 pt-12 sm:px-8 md:px-12 lg:pb-24 lg:pt-[72px]"
+        aria-label="Field reports"
+      >
+        <ReviewList reviews={reviews} stats={stats} isLoading={reviewsLoading} />
+      </section>
 
       <Footer />
     </div>

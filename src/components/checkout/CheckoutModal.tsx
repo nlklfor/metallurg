@@ -109,7 +109,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
             </span>
           </div>
           <span className="text-[10px] text-dim">
-            {formatPrice(item.price, currency)} × {item.cart_quantity} ·{" "}
+            {formatPrice(item.price, currency)} × {item.cart_quantity} //{" "}
             {item.stock_status === "pre_order" ? "PRE_ORDER" : "IN_STOCK"}
           </span>
         </div>
