@@ -1,10 +1,108 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Footer, Navbar } from "@/components";
-import { FAQ } from "@/lib/constants/contact";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import { Send } from "lucide-react";
+import { FAQ } from "@/lib/constants/contact";
+import { TELEGRAM_BOT } from "@/lib/constants/navigation";
+import { DURATION, EASE_MTL } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import { useContact } from "@/hooks/useContact";
 import Seo from "@/components/seo/Seo";
+
+// Contact (design file: Contact-D / Contact-M). The NETWORK_NODES map from
+// the design is left out (no Zürich/Kyiv routing on the site); its column
+// holds the FAQ instead, folded so the page stays quiet.
+
+const CHANNELS = [
+  { href: "https://t.me/+W3cgJ6lB7_s0ODMy", label: "TELEGRAM_CHANNEL", note: "" },
+  { href: `https://t.me/${TELEGRAM_BOT}`, label: "TELEGRAM_BOT", note: "ORDERS / ALERTS" },
+  { href: "https://www.instagram.com/metallurg.tm", label: "INSTAGRAM", note: "@metallurg.tm" },
+];
+
+const fieldClass =
+  "w-full border border-rule bg-transparent px-3.5 text-[16px] text-ink outline-none transition-colors placeholder:text-dim-dark focus:border-ink lg:text-[14px]";
+
+function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
+  return (
+    <label htmlFor={htmlFor} className="eyebrow text-[10px] text-dim">
+      {children}
+    </label>
+  );
+}
+
+function Channels() {
+  return (
+    <div className="flex flex-col">
+      <span className="eyebrow mb-2 text-[10px] text-dim">// CHANNELS</span>
+      <ul className="border-t border-ink">
+        {CHANNELS.map((c) => (
+          <li key={c.label}>
+            <a
+              href={c.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-14 items-center justify-between border-b border-rule text-[12px] tracking-[0.08em] lg:h-[60px] lg:text-[13px]"
+            >
+              <span>
+                {c.label}
+                {c.note && <span className="ml-2 text-[11px] text-dim">// {c.note}</span>}
+              </span>
+              <span className="transition-transform duration-200 ease-mtl group-hover:translate-x-1">
+                →
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Faq() {
+  const [open, setOpen] = useState<string | null>(null);
+  return (
+    <div className="flex flex-col">
+      <span className="eyebrow mb-2 text-[10px] text-dim">// FAQ</span>
+      <ul className="border-t border-ink">
+        {FAQ.map((item) => {
+          const isOpen = open === item.id;
+          return (
+            <li key={item.id} className="border-b border-rule">
+              <button
+                type="button"
+                aria-expanded={isOpen}
+                aria-controls={`faq-${item.id}`}
+                onClick={() => setOpen(isOpen ? null : item.id)}
+                className="flex h-14 w-full items-center justify-between text-left text-[12px] tracking-[0.08em] lg:h-[60px] lg:text-[13px]"
+              >
+                {item.q}
+                <span aria-hidden="true" className="text-dim">
+                  {isOpen ? "−" : "+"}
+                </span>
+              </button>
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    id={`faq-${item.id}`}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: DURATION.page, ease: EASE_MTL }}
+                    className="overflow-hidden"
+                  >
+                    <p className="max-w-[560px] pb-4 text-[12px] leading-relaxed text-[#374151] lg:text-[13px]">
+                      {item.a}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
 
 export default function Contact() {
   const {
@@ -22,234 +120,145 @@ export default function Contact() {
     reset,
   } = useContact();
 
+  const form = (
+    <AnimatePresence mode="wait" initial={false}>
+      {sent ? (
+        <motion.div
+          key="sent"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: DURATION.page, ease: EASE_MTL }}
+          className="flex flex-col gap-3 border border-ink p-5 lg:p-6"
+          role="status"
+        >
+          <span className="eyebrow text-[10px] text-[#15803D]">// MESSAGE_SENT</span>
+          <p className="text-[13px] leading-relaxed">
+            We'll answer within 24 hours. For anything urgent, write to us in Telegram.
+          </p>
+          <button
+            type="button"
+            onClick={reset}
+            className="h-10 self-start text-[11px] tracking-[0.15em] underline underline-offset-[5px]"
+          >
+            SEND_ANOTHER →
+          </button>
+        </motion.div>
+      ) : (
+        <motion.form
+          key="form"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="flex flex-col gap-3.5 lg:gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void submit();
+          }}
+        >
+          <span className="eyebrow text-[10px] text-dim">// MESSAGE_FORM</span>
+          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact-name">// NAME</Label>
+              <input
+                id="contact-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="ENTER_NAME"
+                autoComplete="name"
+                className={cn(fieldClass, "h-[52px]")}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact-email">// EMAIL</Label>
+              <input
+                id="contact-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@domain.com"
+                autoComplete="email"
+                className={cn(fieldClass, "h-[52px]")}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="contact-message">// MESSAGE</Label>
+            <textarea
+              id="contact-message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Order ID, object, question…"
+              rows={6}
+              className={cn(fieldClass, "h-40 resize-none py-3.5 lg:h-[200px]")}
+            />
+          </div>
+
+          <AnimatePresence initial={false}>
+            {error && (
+              <motion.div
+                role="alert"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DURATION.chip, ease: EASE_MTL }}
+                className="flex flex-col gap-1.5 border border-status-error p-3"
+              >
+                <span className="text-[10px] font-bold tracking-[0.15em] text-[#B91C1C]">
+                  // MESSAGE_NOT_SENT
+                </span>
+                <span className="text-[12px]">
+                  Something went wrong. Your text is kept — try again, or write to us in Telegram.
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button
+            type="submit"
+            disabled={!isValid || isLoading}
+            className="flex h-14 items-center justify-center bg-ink text-[13px] font-bold tracking-[0.15em] text-paper transition-colors hover:bg-[#222] disabled:cursor-not-allowed disabled:opacity-40 lg:h-[60px]"
+          >
+            {isLoading ? (
+              <>
+                SENDING<span className="animate-blink-cursor">█</span>
+              </>
+            ) : (
+              "SEND_MESSAGE →"
+            )}
+          </button>
+        </motion.form>
+      )}
+    </AnimatePresence>
+  );
+
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-paper font-mono text-ink">
       <Seo />
       <Navbar variant="light" />
 
-      <div className="px-4 sm:px-8 pt-6">
+      <div className="px-4 pt-3.5 sm:px-8 sm:pt-5 md:px-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
       </div>
 
-      <div className="px-4 sm:px-8 pt-6 sm:pt-10 pb-6 sm:pb-8">
-        <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2 sm:gap-0">
-          <div>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
-              Contact
-            </h2>
+      <header className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:px-8 md:px-12 lg:gap-4 lg:pb-8 lg:pt-10">
+        <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">Contact</h1>
+        <div className="h-px bg-ink" />
+        <p className="text-[12px] leading-relaxed lg:text-[13px]">
+          Fastest line: Telegram. The form reaches the same people.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-10 px-4 pb-16 sm:px-8 md:px-12 lg:grid-cols-12 lg:gap-x-6 lg:pb-24">
+        {/* Phones: channels first (fastest), then form, then FAQ. */}
+        <div className="flex flex-col gap-10 lg:col-span-5 lg:gap-12">
+          <div className="order-2 lg:order-1">{form}</div>
+          <div className="order-1 lg:order-2">
+            <Channels />
           </div>
-          <p className="text-[10px] text-dim tracking-[0.15em] uppercase hidden md:block">
-            METALLURG™ — SUPPORT
-          </p>
         </div>
-        <div className="border-t border-gray-200 mt-4 sm:mt-6 pt-4 sm:pt-6">
-          <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
-            Have a question or want to get in touch? Drop us a message and we'll get back to you.
-          </p>
-        </div>
-      </div>
-
-      <div className="px-4 sm:px-8 pb-10 sm:pb-16 flex-1">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 items-start">
-          {/* Left — Form + Socials */}
-          <div className="space-y-8">
-            <AnimatePresence mode="wait">
-              {sent ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="border border-gray-200 p-6 sm:p-8 space-y-4"
-                >
-                  <p className="text-[10px] text-dim tracking-[0.15em] uppercase">
-                    // MESSAGE_SENT
-                  </p>
-                  <p className="text-sm font-archivo-black uppercase tracking-widest text-black">
-                    TRANSMISSION_COMPLETE
-                  </p>
-                  <p className="text-xs text-gray-400 leading-relaxed">
-                    We received your message and will get back to you within{" "}
-                    <span className="text-black font-bold">24 hours</span>. Check your inbox for a
-                    confirmation.
-                  </p>
-                  <button
-                    onClick={reset}
-                    className="mt-2 text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 hover:text-black transition-colors border-b border-transparent hover:border-black pb-px"
-                  >
-                    SEND_ANOTHER →
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="form"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="space-y-4"
-                >
-                  <p className="text-[10px] text-dim tracking-[0.15em] uppercase">
-                    // SEND_MESSAGE
-                  </p>
-
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
-                        YOUR_NAME
-                      </label>
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="John Doe"
-                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
-                        YOUR_EMAIL
-                      </label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="john@example.com"
-                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
-                        MESSAGE
-                      </label>
-                      <textarea
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="What's on your mind?"
-                        rows={5}
-                        className="w-full bg-white border border-gray-200 px-4 py-3 text-sm font-ibm-mono text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors resize-none"
-                      />
-                    </div>
-                  </div>
-
-                  <AnimatePresence>
-                    {error && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        className="text-[10px] font-ibm-mono text-red-500 tracking-[0.15em] uppercase"
-                      >
-                        ✗ {error}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-
-                  <button
-                    onClick={submit}
-                    disabled={!isValid || isLoading}
-                    className="w-full bg-black text-white py-4 font-archivo-black text-[11px] uppercase tracking-[0.15em] hover:bg-zinc-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    {isLoading ? (
-                      <motion.span
-                        animate={{ opacity: [1, 0.3, 1] }}
-                        transition={{ duration: 0.8, repeat: Infinity }}
-                      >
-                        TRANSMITTING...
-                      </motion.span>
-                    ) : (
-                      "SEND_MESSAGE →"
-                    )}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Socials */}
-            <div className="space-y-3">
-              <p className="text-[10px] text-dim tracking-[0.15em] uppercase">// CHANNELS</p>
-
-              <a
-                href="https://instagram.com/metallurg.tm"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 sm:gap-4 group border border-gray-200 p-4 hover:border-black transition-all"
-              >
-                <div className="w-9 h-9 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <svg
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-white"
-                  >
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <circle cx="12" cy="12" r="4" />
-                    <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-black uppercase tracking-wider">Instagram</p>
-                  <p className="text-[10px] text-gray-400 tracking-[0.15em]">@metallurg.tm</p>
-                </div>
-                <span className="ml-auto text-dim group-hover:text-black group-hover:translate-x-1 transition-all">
-                  →
-                </span>
-              </a>
-
-              <a
-                href="https://t.me/+W3cgJ6lB7_s0ODMy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 sm:gap-4 group border border-gray-200 p-4 hover:border-black transition-all"
-              >
-                <div className="w-9 h-9 bg-black flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <Send size={16} className="text-white" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-black uppercase tracking-wider">Telegram</p>
-                  <p className="text-[10px] text-gray-400 tracking-[0.15em]">METALLURG_COMMUNITY</p>
-                </div>
-                <span className="ml-auto text-dim group-hover:text-black group-hover:translate-x-1 transition-all">
-                  →
-                </span>
-              </a>
-
-              <div className="border border-gray-200 p-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-[10px] font-ibm-mono text-gray-400 tracking-[0.15em] uppercase">
-                    STATUS: ONLINE — RESPONSE ~24H
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right — FAQ */}
-          <div className="space-y-1">
-            <p className="text-[10px] text-dim tracking-[0.15em] uppercase mb-4">// FAQ</p>
-            {FAQ.map((item, i) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.06 }}
-                className="border-b border-gray-100 py-4"
-              >
-                <p className="text-[10px] font-ibm-mono uppercase tracking-[0.15em] text-gray-400 mb-1.5">
-                  // {item.q}
-                </p>
-                <p className="text-xs text-gray-600 leading-relaxed">{item.a}</p>
-              </motion.div>
-            ))}
-          </div>
+        <div className="lg:col-span-6 lg:col-start-7">
+          <Faq />
         </div>
       </div>
 
