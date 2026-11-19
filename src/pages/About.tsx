@@ -1,260 +1,215 @@
+import { motion } from "motion/react";
 import { Footer, Navbar } from "@/components";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { PILLARS, TIMELINE, VALUES } from "@/lib/constants/about";
-import { motion, type Variants } from "motion/react";
+import { EASE_MTL } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import Seo from "@/components/seo/Seo";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
+// About — original content, new layout (design file: About-D / About-M):
+// statement, black pillars band, specs grid, timeline, philosophy.
+
+const reveal = (i = 0) => ({
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-40px" },
+  transition: { duration: 0.6, delay: i * 0.08, ease: EASE_MTL },
+});
+
+/** "FULL_TRANSPARENCY" → may break after "_" instead of mid-word. */
+function Breakable({ text }: { text: string }) {
+  const parts = text.split("_");
+  return (
+    <>
+      {parts.map((part, j) => (
+        <span key={j}>
+          {part}
+          {j < parts.length - 1 && (
+            <>
+              _<wbr />
+            </>
+          )}
+        </span>
+      ))}
+    </>
+  );
+}
 
 export default function About() {
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-paper font-mono text-ink">
       <Seo />
       <Navbar variant="light" />
 
-      <div className="px-4 sm:px-8 pt-6">
+      <div className="px-4 pt-3.5 sm:px-8 sm:pt-5 md:px-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
       </div>
-      <div className="px-4 sm:px-8 pt-6 sm:pt-10 pb-6 sm:pb-8">
-        <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2 sm:gap-0">
-          <div>
-            <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.28em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-3">
-              // ABOUT_METALLURG
-            </p>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-black uppercase tracking-tighter italic">
-              About
-            </h2>
-          </div>
-          <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase hidden md:block">
+
+      {/* ─── Header ─── */}
+      <header className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:px-8 md:px-12 lg:gap-4 lg:pb-8 lg:pt-10">
+        <div className="flex items-end justify-between gap-6">
+          <h1 className="display text-[36px] sm:text-[48px] lg:text-[64px]">About</h1>
+          <span className="hidden pb-2 text-[11px] tracking-[0.15em] text-dim md:block">
             METALLURG™ — EST. 2024
-          </p>
+          </span>
         </div>
-        <div className="border-t border-gray-200 mt-4 sm:mt-6 pt-4 sm:pt-6">
-          <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
-            A curated inventory of streetwear and sportswear. Not a store — an access point.
-            Sourced, verified, and delivered through trusted channels.
-          </p>
-        </div>
-      </div>
+        <div className="h-px bg-ink" />
+        <p className="max-w-2xl text-[12px] leading-relaxed lg:text-[13px]">
+          A curated inventory of streetwear and sportswear. Not a store — an access point. Sourced,
+          verified, and delivered through trusted channels.
+        </p>
+      </header>
 
-      <section className="px-4 sm:px-8 py-8 sm:py-16">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12">
-            <div className="lg:col-span-4 mb-8 lg:mb-0">
-              <p className="text-[9px] sm:text-[10px] text-gray-300 tracking-[0.28em] sm:tracking-[0.4em] uppercase mb-3 sm:mb-4">
-                // MANIFESTO
-              </p>
-              <div className="border-l-2 border-black pl-4 sm:pl-6 space-y-3 sm:space-y-4">
-                <div>
-                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-                    50.4501° N, 30.5234° E
-                  </p>
-                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-                    KYIV, UKRAINE
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-                    TYPE: CURATED_INVENTORY
-                  </p>
-                  <p className="text-[8px] sm:text-[9px] text-gray-300 tracking-[0.22em] sm:tracking-[0.3em] uppercase">
-                    SECTOR: STREETWEAR / SPORT
-                  </p>
-                </div>
-              </div>
+      {/* ─── Manifesto ─── */}
+      <section
+        className="grid grid-cols-1 gap-8 px-4 pb-12 pt-6 sm:px-8 md:px-12 lg:grid-cols-12 lg:gap-x-6 lg:pb-16 lg:pt-10"
+        aria-label="Manifesto"
+      >
+        <div className="flex flex-col gap-4 lg:col-span-4">
+          <span className="eyebrow text-[10px] text-dim">// MANIFESTO</span>
+          <div className="flex flex-col gap-3 border-l-2 border-ink pl-4 text-[10px] tracking-[0.15em] text-dim lg:pl-6">
+            <div className="flex flex-col gap-0.5">
+              <span>50.4501° N, 30.5234° E</span>
+              <span>KYIV, UKRAINE</span>
             </div>
-            <div className="lg:col-span-8 space-y-4 sm:space-y-6">
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-lg sm:text-2xl md:text-3xl font-black text-black uppercase tracking-tight leading-tight"
-              >
-                This is not a store.
-                <br />
-                This is an <span className="italic text-gray-400">inventory</span> — we source,
-                verify, and deliver what's worth wearing.
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.15 }}
-                className="text-sm text-gray-400 leading-relaxed max-w-xl"
-              >
-                METALLURG™ operates between Kyiv and Zürich. We source streetwear and sportswear —
-                pieces that fit your rotation. Each item verified and shipped through trusted
-                networks. The inventory is the product.
-              </motion.p>
+            <div className="flex flex-col gap-0.5">
+              <span>TYPE: CURATED_INVENTORY</span>
+              <span>SECTOR: STREETWEAR / SPORT</span>
             </div>
           </div>
         </div>
-      </section>
-
-      <div className="px-8">
-        <div className="max-w-5xl mx-auto border-t border-gray-200" />
-      </div>
-
-      <section className="px-8 py-16">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">
-            // HOW_WE_OPERATE
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-            {PILLARS.map((pillar, i) => (
-              <motion.div
-                key={pillar.title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="border border-gray-200 p-8 hover:border-black transition-all group -ml-px -mt-px first:ml-0 first:mt-0"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="text-[9px] text-gray-300 tracking-[0.2em]">0{i + 1}</span>
-                  <div className="flex-1 h-px bg-gray-200 group-hover:bg-black transition-colors" />
-                </div>
-                <p className="text-sm font-black uppercase tracking-[0.15em] text-black mb-4">
-                  {pillar.title}
-                </p>
-                <p className="text-xs text-gray-400 leading-relaxed">{pillar.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="px-8">
-        <div className="max-w-5xl mx-auto border-t border-gray-200" />
-      </div>
-
-      <section className="px-8 py-16">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">
-            // CORE_SPECS
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {VALUES.map((item, i) => (
-              <motion.div
-                key={item.label}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="border border-gray-200 p-6 hover:border-black transition-all group"
-              >
-                <p className="text-[9px] text-gray-300 tracking-[0.3em] uppercase mb-4">
-                  // {item.label}
-                </p>
-                <p className="text-4xl font-black text-black italic tracking-tight mb-3 group-hover:scale-105 transition-transform origin-left">
-                  {item.value}
-                </p>
-                <p className="text-xs text-gray-400 leading-relaxed">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="px-8">
-        <div className="max-w-5xl mx-auto border-t border-gray-200" />
-      </div>
-
-      <section className="px-8 py-16">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-[10px] text-gray-300 tracking-[0.4em] uppercase mb-10">// TIMELINE</p>
-          <div className="space-y-0">
-            {TIMELINE.map((item, i) => (
-              <motion.div
-                key={item.year}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-6 border-t border-gray-200 py-6 sm:py-10 group"
-              >
-                <div className="sm:col-span-2 mb-1 sm:mb-0">
-                  <p className="text-2xl sm:text-3xl font-black text-gray-200 italic tracking-tight group-hover:text-black transition-colors">
-                    {item.year}
-                  </p>
-                </div>
-                <div className="sm:col-span-3 mb-1 sm:mb-0">
-                  <p className="text-xs sm:text-sm font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] text-black">
-                    {item.title}
-                  </p>
-                </div>
-                <div className="sm:col-span-7">
-                  <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-            <div className="flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-6 border-t border-gray-200 py-6 sm:py-10">
-              <div className="sm:col-span-2 mb-1 sm:mb-0">
-                <p className="text-2xl sm:text-3xl font-black text-gray-200 italic tracking-tight">
-                  ????
-                </p>
-              </div>
-              <div className="sm:col-span-3 mb-1 sm:mb-0">
-                <p className="text-xs sm:text-sm font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] text-gray-300">
-                  NEXT_CHAPTER
-                </p>
-              </div>
-              <div className="sm:col-span-7">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                    Sourcing in progress...
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="px-8">
-        <div className="max-w-5xl mx-auto border-t border-gray-200" />
-      </div>
-
-      <section className="px-8 py-20">
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+        <div className="flex flex-col gap-5 lg:col-span-8 lg:gap-6">
+          <motion.p
+            {...reveal()}
+            className="display text-[26px] leading-[1.02] sm:text-[36px] lg:text-[48px]"
           >
-            <p className="text-[8px] text-gray-300 tracking-[0.5em] uppercase mb-6">
-              // PHILOSOPHY
-            </p>
-            <blockquote className="text-4xl md:text-5xl font-black text-black uppercase tracking-tighter italic leading-tight max-w-3xl mx-auto">
-              "Good pieces.
-              <br />
-              Right people.{" "}
-              <span className="text-gray-300 hover:text-black transition-colors duration-500">
-                No noise.
+            This is not a store.
+            <br />
+            This is an <span className="text-dim-dark">inventory</span> — we source, verify, and
+            deliver what's worth wearing.
+          </motion.p>
+          <motion.p
+            {...reveal(1)}
+            className="max-w-xl text-[13px] leading-[1.75] text-[#374151] lg:text-[15px]"
+          >
+            METALLURG™ operates between Kyiv and Zürich. We source streetwear and sportswear —
+            pieces that fit your rotation. Each item verified and shipped through trusted networks.
+            The inventory is the product.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ─── How we operate ─── */}
+      <section
+        className="flex flex-col bg-ink px-4 py-8 text-paper sm:px-8 md:px-12 lg:gap-6 lg:py-14"
+        aria-label="How we operate"
+      >
+        <span className="eyebrow mb-4 text-[10px] text-dim-dark lg:mb-0">// HOW_WE_OPERATE</span>
+        <div className="grid grid-cols-1 border-t border-[#374151] lg:grid-cols-3">
+          {PILLARS.map((p, i) => (
+            <motion.div
+              key={p.title}
+              {...reveal(i)}
+              className={cn(
+                "flex flex-col gap-2.5 border-b border-[#374151] py-5 lg:gap-3.5 lg:border-b-0 lg:py-0 lg:pt-7",
+                i === 0 && "lg:pr-7",
+                i === 1 && "lg:border-x lg:px-7",
+                i === 2 && "lg:pl-7"
+              )}
+            >
+              <span className="text-[10px] text-dim-dark lg:text-[11px]">0{i + 1}</span>
+              <span className="display text-[32px] lg:text-[30px] xl:text-[44px]">
+                <Breakable text={p.title} />
               </span>
-              "
-            </blockquote>
-            <div className="mt-8 flex items-center justify-center gap-3">
-              <div className="w-8 h-px bg-gray-300" />
-              <p className="text-[10px] text-gray-400 tracking-[0.3em] uppercase">METALLURG™</p>
-              <div className="w-8 h-px bg-gray-300" />
-            </div>
-          </motion.div>
+              <p className="text-[12px] leading-[1.7] text-[#D1D5DB] lg:text-[13px]">
+                {p.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Core specs ─── */}
+      <section
+        className="flex flex-col gap-3 px-4 pt-12 sm:px-8 md:px-12 lg:gap-4 lg:pt-16"
+        aria-label="Core specs"
+      >
+        <span className="eyebrow text-[10px] text-dim">// CORE_SPECS</span>
+        <div className="grid grid-cols-2 border-l border-t border-ink lg:grid-cols-4">
+          {VALUES.map((v, i) => (
+            <motion.div
+              key={v.label}
+              {...reveal(i)}
+              className="flex flex-col gap-1.5 border-b border-r border-ink px-4 py-5 lg:gap-2 lg:p-6"
+            >
+              <span className="eyebrow text-[10px] text-dim">{v.label}</span>
+              <span className="display text-[32px] leading-none lg:text-[56px]">{v.value}</span>
+              <span className="text-[11px] leading-relaxed text-dim lg:text-[12px]">
+                {v.description}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Timeline ─── */}
+      <section className="flex flex-col px-4 pt-12 sm:px-8 md:px-12 lg:pt-16" aria-label="Timeline">
+        <span className="eyebrow mb-3 text-[10px] text-dim lg:mb-4">// TIMELINE</span>
+        <ol className="border-t border-ink">
+          {TIMELINE.map((t, i) => (
+            <motion.li
+              key={t.year}
+              {...reveal(i)}
+              className="group grid grid-cols-1 gap-2 border-b border-rule py-6 lg:grid-cols-12 lg:gap-6 lg:py-8"
+            >
+              <span className="text-[30px] font-bold leading-none text-dim transition-colors duration-300 group-hover:text-ink lg:col-span-2 lg:text-[40px]">
+                {t.year}
+              </span>
+              <span className="text-[13px] font-semibold tracking-[0.12em] lg:col-span-3 lg:pt-2 lg:text-[14px]">
+                {t.title}
+              </span>
+              <p className="text-[12px] leading-relaxed text-[#374151] lg:col-span-7 lg:pt-2 lg:text-[13px]">
+                {t.description}
+              </p>
+            </motion.li>
+          ))}
+          <li className="grid grid-cols-1 gap-2 border-b border-rule py-6 lg:grid-cols-12 lg:gap-6 lg:py-8">
+            <span className="text-[30px] font-bold leading-none text-dim-dark lg:col-span-2 lg:text-[40px]">
+              ????
+            </span>
+            <span className="text-[13px] font-semibold tracking-[0.12em] text-dim lg:col-span-3 lg:pt-2 lg:text-[14px]">
+              NEXT_CHAPTER
+            </span>
+            <span className="flex items-center gap-2 text-[12px] text-dim lg:col-span-7 lg:pt-2 lg:text-[13px]">
+              <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse bg-status-ok" />
+              Sourcing in progress...
+            </span>
+          </li>
+        </ol>
+      </section>
+
+      {/* ─── Philosophy ─── */}
+      <section
+        className="flex flex-col items-center gap-6 px-4 py-16 text-center sm:px-8 md:px-12 lg:py-24"
+        aria-label="Philosophy"
+      >
+        <span className="eyebrow text-[10px] text-dim">// PHILOSOPHY</span>
+        <motion.blockquote
+          {...reveal()}
+          className="display max-w-3xl text-[32px] leading-[1.02] sm:text-[44px] lg:text-[56px]"
+        >
+          "Good pieces.
+          <br />
+          Right people.{" "}
+          <span className="text-dim-dark transition-colors duration-500 hover:text-ink">
+            No noise.
+          </span>
+          "
+        </motion.blockquote>
+        <div className="flex items-center gap-3">
+          <span aria-hidden="true" className="h-px w-8 bg-dim-dark" />
+          <span className="text-[10px] tracking-[0.15em] text-dim">METALLURG™</span>
+          <span aria-hidden="true" className="h-px w-8 bg-dim-dark" />
         </div>
       </section>
 
