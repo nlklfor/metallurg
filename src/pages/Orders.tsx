@@ -282,7 +282,8 @@ export default function Orders() {
 
       {/* ─── Field reports ─── */}
       <section
-        className="px-4 pb-16 pt-12 sm:px-8 md:px-12 lg:pb-24 lg:pt-[72px]"
+        id="field-reports"
+        className="scroll-mt-20 px-4 pb-16 pt-12 sm:px-8 md:px-12 lg:pb-24 lg:pt-[72px]"
         aria-label="Field reports"
       >
         <ReviewList reviews={reviews} stats={stats} isLoading={reviewsLoading} />
