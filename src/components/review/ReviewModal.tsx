@@ -1,11 +1,40 @@
-import type { ChangeEvent } from "react";
-import { useState, useRef } from "react";
+import type { ChangeEvent, DragEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Upload, Star } from "lucide-react";
 import type { ReviewModalProps } from "@/interfaces/review";
 import { useReviewSubmission } from "@/hooks/useReviewSubmission";
+import { TypingAnimation } from "@/components/ui/typing-animation";
+import { DURATION, EASE_MTL } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
-type ModalStep = "form" | "submitting" | "success" | "error";
+// Field report modal (design files: Review-D, Review-M, Review-D-Done).
+// Desktop: one panel (items + rating left, text + photos right).
+// Phones: two steps (1 items + rating → 2 text + photos). One report per order.
+
+type Step = "rating" | "body" | "done" | "error";
+
+const MAX_IMAGES = 3;
+const MAX_MB = 8;
+const MAX_BODY = 1000;
+const TYPES = ["image/jpeg", "image/png", "image/webp"];
+const RATING_WORDS = ["", "POOR", "WEAK", "OK", "SOLID", "PERFECT"];
+const blocks = (n: number) => "█".repeat(n) + "░".repeat(5 - n);
+
+const scanlines = {
+  backgroundImage:
+    "repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 3px)",
+};
+
+function Label({ children, htmlFor }: { children: React.ReactNode; htmlFor?: string }) {
+  const cls = "eyebrow text-[10px] text-gray-400";
+  return htmlFor ? (
+    <label htmlFor={htmlFor} className={cls}>
+      {children}
+    </label>
+  ) : (
+    <span className={cls}>{children}</span>
+  );
+}
 
 export default function ReviewModal({
   isOpen,
@@ -20,345 +49,512 @@ export default function ReviewModal({
     isChecking,
     isAlreadyReviewed,
     isSubmitting,
-    error,
     submit,
     reset: resetHook,
   } = useReviewSubmission({ isOpen, orderId });
 
-  const [step, setStep] = useState<ModalStep>("form");
+  const [step, setStep] = useState<Step>("rating");
   const [rating, setRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
   const [body, setBody] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [imageNote, setImageNote] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const activeRating = hoverRating || rating;
-
-  const reset = () => {
-    setStep("form");
+  const handleClose = useCallback(() => {
+    previews.forEach((p) => URL.revokeObjectURL(p));
+    setStep("rating");
     setRating(0);
-    setHoverRating(0);
     setBody("");
     setImages([]);
     setPreviews([]);
+    setImageNote(null);
     resetHook();
-  };
-
-  const handleClose = () => {
-    reset();
     onClose();
-  };
+  }, [previews, resetHook, onClose]);
 
-  const handleImageAdd = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    const allowed = files.filter((f) => ["image/jpeg", "image/png", "image/webp"].includes(f.type));
-    const remaining = 3 - images.length;
-    const toAdd = allowed.slice(0, remaining);
+  useEffect(() => {
+    if (!isOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && !isSubmitting && handleClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [isOpen, isSubmitting, handleClose]);
 
+  const addFiles = (files: File[]) => {
+    const ok = files.filter((f) => TYPES.includes(f.type) && f.size <= MAX_MB * 1024 * 1024);
+    const toAdd = ok.slice(0, MAX_IMAGES - images.length);
+    setImageNote(
+      ok.length < files.length
+        ? `Only JPG / PNG / WEBP up to ${MAX_MB}MB.`
+        : files.length > toAdd.length
+          ? `Max ${MAX_IMAGES} photos.`
+          : null
+    );
+    if (toAdd.length === 0) return;
     setImages((prev) => [...prev, ...toAdd]);
     setPreviews((prev) => [...prev, ...toAdd.map((f) => URL.createObjectURL(f))]);
+  };
 
+  const onPick = (e: ChangeEvent<HTMLInputElement>) => {
+    addFiles(Array.from(e.target.files ?? []));
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeImage = (index: number) => {
-    URL.revokeObjectURL(previews[index]);
-    setImages((prev) => prev.filter((_, i) => i !== index));
-    setPreviews((prev) => prev.filter((_, i) => i !== index));
+  const onDrop = (e: DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    addFiles(Array.from(e.dataTransfer.files ?? []));
+  };
+
+  const removeImage = (i: number) => {
+    URL.revokeObjectURL(previews[i]);
+    setImages((prev) => prev.filter((_, j) => j !== i));
+    setPreviews((prev) => prev.filter((_, j) => j !== i));
+    setImageNote(null);
   };
 
   const handleSubmit = async () => {
-    if (rating === 0) return;
-    setStep("submitting");
-
+    if (rating === 0 || isSubmitting) return;
     const result = await submit(
-      {
-        order_id: orderId,
-        author_name: customerName,
-        rating,
-        body: body.trim(),
-      },
+      { order_id: orderId, author_name: customerName, rating, body: body.trim() },
       images
     ).catch(() => null);
-
     if (result) {
-      setStep("success");
+      setStep("done");
       onSubmitted();
     } else {
       setStep("error");
     }
   };
 
+  const viewReports = () => {
+    handleClose();
+    requestAnimationFrame(() =>
+      document.getElementById("field-reports")?.scrollIntoView({ behavior: "smooth" })
+    );
+  };
+
+  // ─── Pieces ─────────────────────────────────────────────────────────────
+
+  const items = (
+    <div className="flex flex-col gap-3">
+      <Label>01 // ITEMS_IN_THIS_ORDER</Label>
+      <ul className="flex flex-col gap-2">
+        {orderItems.map((item, i) => (
+          <li key={i} className="flex flex-col gap-1 border border-[#374151] px-3 py-2.5">
+            <span className="display text-[14px] leading-tight">{item.name}</span>
+            <span className="text-[10px] tracking-[0.1em] text-gray-400">
+              SIZE {item.selectedSize}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  const ratingPicker = (
+    <div className="flex flex-col gap-3">
+      <Label>02 // RATING</Label>
+      <div className="grid grid-cols-5 gap-1.5" role="radiogroup" aria-label="Rating">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={rating === n}
+            aria-label={`${n} of 5`}
+            onClick={() => setRating(n)}
+            disabled={isSubmitting}
+            className={cn(
+              "h-14 text-[14px] transition-colors duration-150",
+              n <= rating ? "bg-paper text-ink" : "border border-[#374151] hover:border-gray-400"
+            )}
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center justify-between text-[14px] tracking-[0.1em]">
+        <span>{blocks(rating)}</span>
+        <span className="text-[11px] text-gray-400">
+          {rating > 0 ? `${rating} / 5 — ${RATING_WORDS[rating]}` : "TAP TO RATE"}
+        </span>
+      </div>
+    </div>
+  );
+
+  const bodyField = (
+    <div className="flex flex-col gap-3">
+      <div className="flex justify-between">
+        <Label htmlFor="rv-body">03 // REPORT_BODY</Label>
+        <span className="text-[10px] tabular-nums text-gray-400">
+          {String(body.length).padStart(3, "0")} / {MAX_BODY}
+        </span>
+      </div>
+      <textarea
+        id="rv-body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        maxLength={MAX_BODY}
+        disabled={isSubmitting}
+        placeholder="Fit, condition on arrival, box, delivery time…"
+        className="h-48 resize-none border border-gray-400 bg-transparent p-4 text-[16px] leading-relaxed text-paper outline-none transition-colors placeholder:text-gray-600 focus:border-paper disabled:opacity-50 lg:h-[248px] lg:text-[15px]"
+      />
+    </div>
+  );
+
+  const photos = (
+    <div className="flex flex-col gap-3">
+      <div className="flex justify-between">
+        <Label>04 // ATTACH_IMAGES</Label>
+        <span className="text-[10px] text-gray-400">
+          {images.length} / {MAX_IMAGES}
+          <span className="hidden lg:inline"> · DRAG &amp; DROP</span>
+        </span>
+      </div>
+      <div className="grid grid-cols-3 gap-2 lg:gap-2.5">
+        {previews.map((src, i) => (
+          <div key={src} className="relative aspect-square bg-paper lg:aspect-auto lg:h-[120px]">
+            <img src={src} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
+            <button
+              type="button"
+              onClick={() => removeImage(i)}
+              disabled={isSubmitting}
+              aria-label={`Remove photo ${i + 1}`}
+              className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center bg-ink text-[12px] text-paper"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+        {images.length < MAX_IMAGES && (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={onDrop}
+            disabled={isSubmitting}
+            className={cn(
+              "flex aspect-square flex-col items-center justify-center gap-1.5 border border-dashed text-[10px] tracking-[0.1em] text-gray-400 transition-colors lg:aspect-auto lg:h-[120px]",
+              dragOver ? "border-paper text-paper" : "border-gray-500 hover:border-gray-300"
+            )}
+          >
+            <span className="text-[20px] text-paper">+</span>
+            <span className="hidden lg:inline">DROP OR BROWSE</span>
+            <span className="lg:hidden">ADD</span>
+          </button>
+        )}
+      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={TYPES.join(",")}
+        multiple
+        onChange={onPick}
+        className="hidden"
+      />
+      <p className={cn("text-[10px]", imageNote ? "text-status-wait" : "text-gray-500")}>
+        {imageNote ?? `JPG / PNG / WEBP · MAX ${MAX_MB}MB EACH · OPTIONAL`}
+      </p>
+    </div>
+  );
+
+  const submitButton = (className?: string) => (
+    <button
+      type="button"
+      onClick={handleSubmit}
+      disabled={rating === 0 || isSubmitting}
+      className={cn(
+        "flex h-14 items-center justify-center bg-paper px-8 text-[12px] font-bold tracking-[0.15em] text-ink transition-colors hover:bg-gray-200 disabled:cursor-not-allowed disabled:bg-[#374151] disabled:text-gray-400",
+        className
+      )}
+    >
+      {isSubmitting ? (
+        <>
+          SENDING<span className="animate-blink-cursor">█</span>
+        </>
+      ) : (
+        "SUBMIT_REPORT →"
+      )}
+    </button>
+  );
+
+  const header = (
+    <div className="flex h-14 flex-shrink-0 items-center justify-between gap-3 border-b border-[#1F2937] px-4 lg:grid lg:h-[60px] lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:px-6">
+      <span className="eyebrow text-[10px]">
+        // FIELD_REPORT
+        {(step === "rating" || step === "body") && !isAlreadyReviewed && (
+          <span className="lg:hidden"> / {step === "rating" ? "1" : "2"} OF 2</span>
+        )}
+      </span>
+      <span className="hidden text-[10px] tracking-[0.15em] text-gray-400 lg:block">
+        ORDER {orderNumber} / <span className="leading-[inherit] text-status-ok">DELIVERED</span>
+      </span>
+      <button
+        type="button"
+        onClick={handleClose}
+        disabled={isSubmitting}
+        className="h-11 justify-self-end text-[11px] tracking-[0.15em] text-gray-400 hover:text-paper"
+      >
+        [ESC]
+      </button>
+    </div>
+  );
+
+  // ─── States ─────────────────────────────────────────────────────────────
+
+  let content: React.ReactNode;
+
+  if (isChecking) {
+    content = (
+      <div className="flex flex-col gap-2 p-6" aria-busy="true">
+        {[0, 1].map((i) => (
+          <div key={i} className="h-14 animate-pulse border border-[#1F2937] bg-[#111827]" />
+        ))}
+      </div>
+    );
+  } else if (isAlreadyReviewed) {
+    content = (
+      <div className="flex flex-col items-start gap-4 p-6 lg:p-10">
+        <span className="eyebrow text-[10px] text-gray-400">// ALREADY_REPORTED</span>
+        <p className="display text-[32px] lg:text-[48px]">Report already filed.</p>
+        <p className="text-[13px] leading-relaxed text-gray-300">
+          This order already has a field report. Thanks for sharing it.
+        </p>
+        <button
+          type="button"
+          onClick={viewReports}
+          className="mt-2 h-12 border border-paper px-5 text-[11px] tracking-[0.15em]"
+        >
+          VIEW_REPORTS →
+        </button>
+      </div>
+    );
+  } else if (step === "done") {
+    content = (
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="flex flex-col gap-6 px-4 py-10 lg:gap-7 lg:border-r lg:border-[#1F2937] lg:px-10 lg:py-12">
+          <div className="text-[11px] leading-[2.2] text-gray-400 lg:text-[12px]">
+            <div>
+              <TypingAnimation duration={25} className="leading-[inherit]">
+                {"// SENDING_REPORT... "}
+              </TypingAnimation>
+              <TypingAnimation delay={700} className="leading-[inherit] text-status-ok">
+                OK
+              </TypingAnimation>
+            </div>
+            {images.length > 0 && (
+              <div>
+                <TypingAnimation delay={900} duration={25} className="leading-[inherit]">
+                  {`// UPLOADING_IMAGES ${images.length}/${images.length}... `}
+                </TypingAnimation>
+                <TypingAnimation delay={1700} className="leading-[inherit] text-status-ok">
+                  OK
+                </TypingAnimation>
+              </div>
+            )}
+            <div>
+              <TypingAnimation
+                delay={images.length > 0 ? 1900 : 1000}
+                duration={25}
+                className="leading-[inherit]"
+              >
+                // FILED TO FIELD_REPORTS
+              </TypingAnimation>
+            </div>
+          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: EASE_MTL }}
+            className="display text-[44px] leading-[0.9] lg:text-[88px]"
+          >
+            Thank you, operator.
+          </motion.p>
+          <p className="max-w-[520px] text-[13px] leading-[1.7] text-gray-300 lg:text-[14px]">
+            Your field report is live in Field reports. It helps the next person pick the right
+            size.
+          </p>
+          <div className="flex flex-col gap-2 lg:mt-2 lg:flex-row lg:gap-2.5">
+            <button
+              type="button"
+              onClick={viewReports}
+              className="flex h-14 items-center justify-center bg-paper px-7 text-[12px] font-bold tracking-[0.15em] text-ink hover:bg-gray-200"
+            >
+              VIEW_REPORT →
+            </button>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="h-12 px-4 text-[11px] tracking-[0.15em] text-gray-400 hover:text-paper lg:h-14"
+            >
+              CLOSE
+            </button>
+          </div>
+        </div>
+
+        {/* filed report preview (desktop) */}
+        <div className="hidden flex-col gap-3.5 px-6 py-8 lg:flex">
+          <span className="eyebrow text-[10px] text-gray-400">// FILED_REPORT</span>
+          <div className="flex flex-col gap-3 border border-[#374151] p-4">
+            <div className="flex justify-between text-[13px] tracking-[0.08em]">
+              <span>{blocks(rating)}</span>
+              <span className="text-[10px] text-gray-400">JUST NOW</span>
+            </div>
+            <span className="display text-[15px] leading-tight">
+              {orderItems.map((i) => i.name).join(" / ")}
+            </span>
+            {body.trim() && (
+              <p className="line-clamp-4 text-[12px] leading-relaxed text-gray-300">
+                {body.trim()}
+              </p>
+            )}
+            {previews.length > 0 && (
+              <div className="flex gap-1.5">
+                {previews.map((src) => (
+                  <img key={src} src={src} alt="" className="h-16 w-16 object-cover" />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  } else if (step === "error") {
+    content = (
+      <div className="flex flex-col items-start gap-4 p-6 lg:p-10">
+        <span className="text-[10px] font-bold tracking-[0.15em] text-red-400">
+          // REPORT_NOT_SENT
+        </span>
+        <p className="text-[13px] leading-relaxed text-gray-300">
+          Something went wrong. Your rating, text and photos are kept — try again.
+        </p>
+        <button
+          type="button"
+          onClick={() => setStep("rating")}
+          className="h-12 border border-paper px-5 text-[11px] tracking-[0.15em]"
+        >
+          TRY_AGAIN →
+        </button>
+      </div>
+    );
+  } else {
+    content = (
+      <>
+        <div className="flex-1 overflow-y-auto">
+          <p className="px-4 pt-5 text-[10px] tracking-[0.15em] text-gray-400 lg:hidden">
+            ORDER {orderNumber} /{" "}
+            <span className="leading-[inherit] text-status-ok">DELIVERED</span>
+          </p>
+          <div className="grid grid-cols-1 lg:grid-cols-[380px_minmax(0,1fr)]">
+            <div
+              className={cn(
+                "flex flex-col gap-6 px-4 py-5 lg:flex lg:border-r lg:border-[#1F2937] lg:p-6",
+                step === "body" && "hidden"
+              )}
+            >
+              {items}
+              {ratingPicker}
+            </div>
+            <div
+              className={cn(
+                "flex flex-col gap-6 px-4 py-5 lg:flex lg:p-6",
+                step === "rating" && "hidden"
+              )}
+            >
+              <div className="flex justify-between text-[11px] lg:hidden">
+                <span className="truncate pr-3">{orderItems.map((i) => i.name).join(" / ")}</span>
+                <span className="flex-shrink-0">{blocks(rating)}</span>
+              </div>
+              {bodyField}
+              {photos}
+            </div>
+          </div>
+        </div>
+
+        {/* footer */}
+        <div className="flex flex-shrink-0 gap-2 border-t border-[#1F2937] p-4 lg:items-center lg:justify-between lg:px-6">
+          <span className="hidden text-[10px] tracking-[0.15em] text-gray-500 lg:block">
+            PUBLISHED IN FIELD REPORTS ON /ORDERS
+          </span>
+          {/* phones */}
+          {step === "rating" ? (
+            <button
+              type="button"
+              onClick={() => setStep("body")}
+              disabled={rating === 0}
+              className="flex h-14 flex-1 items-center justify-center bg-paper text-[12px] font-bold tracking-[0.15em] text-ink disabled:bg-[#374151] disabled:text-gray-400 lg:hidden"
+            >
+              {rating === 0 ? "RATE TO CONTINUE" : "NEXT →"}
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => setStep("rating")}
+                disabled={isSubmitting}
+                className="h-14 border border-paper px-4 text-[11px] tracking-[0.12em] lg:hidden"
+              >
+                ← BACK
+              </button>
+              {submitButton("flex-1 lg:hidden")}
+            </>
+          )}
+          {/* desktop */}
+          <div className="hidden gap-2.5 lg:flex">
+            <button
+              type="button"
+              onClick={handleClose}
+              disabled={isSubmitting}
+              className="h-14 border border-[#374151] px-5 text-[11px] tracking-[0.12em] text-gray-400 hover:text-paper"
+            >
+              CANCEL
+            </button>
+            {submitButton()}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div
+          className="fixed inset-0 z-[80] font-mono"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Field report for order ${orderNumber}`}
+        >
           <motion.div
-            key="backdrop"
+            className="absolute inset-0 bg-ink/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleClose}
-            className="fixed inset-0 bg-black/85 z-40 backdrop-blur-md"
+            transition={{ duration: DURATION.page }}
+            onClick={() => !isSubmitting && handleClose()}
           />
-
           <motion.div
-            key="modal"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: DURATION.modal, ease: EASE_MTL }}
+            style={scanlines}
+            className="absolute inset-0 flex flex-col bg-ink text-paper lg:inset-auto lg:left-1/2 lg:top-[88px] lg:max-h-[calc(100vh-120px)] lg:w-[980px] lg:max-w-[calc(100vw-48px)] lg:-translate-x-1/2 lg:border lg:border-[#374151]"
           >
-            <div className="relative w-full max-w-md bg-black text-white border border-zinc-800 overflow-hidden max-h-[90vh] overflow-y-auto">
-              <div
-                className="absolute inset-0 pointer-events-none z-0"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px)",
-                }}
-              />
-
-              <div className="relative z-10 flex items-center justify-between border-b border-zinc-800 px-4 sm:px-6 py-4">
-                <div className="min-w-0 mr-4">
-                  <p className="text-[11px] font-archivo-black uppercase tracking-[0.15em] text-zinc-200 mt-0.5 truncate">
-                    FIELD_REPORT — {orderNumber}
-                  </p>
-                </div>
-                <button
-                  onClick={handleClose}
-                  className="text-[10px] font-ibm-mono text-zinc-500 hover:text-white transition-colors tracking-widest"
-                >
-                  [ESC]
-                </button>
-              </div>
-
-              {isChecking && (
-                <div className="relative z-10 px-4 sm:px-6 py-12">
-                  <div className="space-y-2">
-                    {[...Array(2)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-14 bg-zinc-900/50 animate-pulse border border-zinc-800"
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {!isChecking && isAlreadyReviewed && (
-                <div className="relative z-10 px-4 sm:px-6 py-12 text-center space-y-5">
-                  <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 mx-auto flex items-center justify-center">
-                    <span className="text-2xl text-zinc-500">✓</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
-                      // ALREADY_REPORTED
-                    </p>
-                    <p className="text-sm font-archivo-black uppercase tracking-wider mt-1">
-                      Order already reviewed
-                    </p>
-                    <p className="text-[10px] font-ibm-mono text-zinc-600 mt-2">
-                      A field report for this order has already been submitted.
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleClose}
-                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.15em] uppercase"
-                  >
-                    [ DISMISS ]
-                  </button>
-                </div>
-              )}
-
-              {!isChecking &&
-                !isAlreadyReviewed &&
-                (step === "form" || step === "submitting" || isSubmitting) && (
-                  <div className="relative z-10 px-4 sm:px-6 py-5 sm:py-6 space-y-6">
-                    {/* Order items list */}
-                    <div className="pb-4 border-b border-zinc-900">
-                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-3">
-                        // ORDER_ITEMS
-                      </p>
-                      <div className="space-y-1.5">
-                        {orderItems.map((item, i) => (
-                          <p
-                            key={i}
-                            className="text-[10px] font-ibm-mono text-zinc-400 tracking-wider"
-                          >
-                            → {item.name}
-                            <span className="text-zinc-500 ml-2">SIZE: {item.selectedSize}</span>
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-3">
-                        // RATING *
-                      </p>
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            onMouseEnter={() => setHoverRating(star)}
-                            onMouseLeave={() => setHoverRating(0)}
-                            onClick={() => setRating(star)}
-                            disabled={isSubmitting}
-                            className="p-1 transition-all disabled:opacity-50"
-                          >
-                            <Star
-                              size={20}
-                              className={`transition-colors ${
-                                star <= activeRating
-                                  ? "fill-white text-white"
-                                  : "fill-transparent text-zinc-500"
-                              }`}
-                            />
-                          </button>
-                        ))}
-                        <span className="ml-3 text-[10px] font-ibm-mono text-zinc-600 tracking-wider">
-                          {activeRating > 0
-                            ? `${"█".repeat(activeRating)}${"░".repeat(5 - activeRating)}`
-                            : "░░░░░"}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-2">
-                        // REPORT_BODY
-                      </p>
-                      <textarea
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                        disabled={isSubmitting}
-                        placeholder="How does the object perform in the field?"
-                        maxLength={1000}
-                        rows={4}
-                        className="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm font-ibm-mono text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none disabled:opacity-50"
-                      />
-                      <p className="text-[10px] font-ibm-mono text-zinc-800 text-right mt-1">
-                        {body.length}/1000
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase mb-2">
-                        // ATTACH_IMAGES ({images.length}/3)
-                      </p>
-                      <div className="flex gap-2">
-                        {previews.map((src, i) => (
-                          <div key={i} className="relative w-16 h-16 border border-zinc-800 group">
-                            <img
-                              src={src}
-                              alt={`Upload ${i + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                            <button
-                              onClick={() => removeImage(i)}
-                              disabled={isSubmitting}
-                              className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <X size={10} className="text-white" />
-                            </button>
-                          </div>
-                        ))}
-                        {images.length < 3 && (
-                          <button
-                            onClick={() => fileInputRef.current?.click()}
-                            disabled={isSubmitting}
-                            className="w-16 h-16 border border-dashed border-zinc-800 flex items-center justify-center hover:border-zinc-500 transition-colors disabled:opacity-50"
-                          >
-                            <Upload size={14} className="text-zinc-500" />
-                          </button>
-                        )}
-                      </div>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        multiple
-                        onChange={handleImageAdd}
-                        className="hidden"
-                      />
-                    </div>
-
-                    <button
-                      onClick={handleSubmit}
-                      disabled={rating === 0 || isSubmitting}
-                      className="w-full bg-white text-black py-4 font-archivo-black text-[11px] uppercase tracking-[0.15em] hover:bg-zinc-100 transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <motion.span
-                          animate={{ opacity: [1, 0.3, 1] }}
-                          transition={{ duration: 0.8, repeat: Infinity }}
-                          className="font-ibm-mono"
-                        >
-                          TRANSMITTING...
-                        </motion.span>
-                      ) : (
-                        "SUBMIT_REPORT →"
-                      )}
-                    </button>
-                  </div>
-                )}
-
-              {step === "success" && (
-                <div className="relative z-10 px-4 sm:px-6 py-12 text-center space-y-5">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="w-16 h-16 bg-white mx-auto flex items-center justify-center"
-                  >
-                    <span className="text-2xl font-archivo-black text-black">✓</span>
-                  </motion.div>
-                  <div>
-                    <p className="text-[10px] font-ibm-mono text-zinc-500 tracking-[0.15em] uppercase">
-                      // REPORT_LOGGED
-                    </p>
-                    <p className="text-lg font-archivo-black uppercase tracking-wider mt-1">
-                      Thank you, operator.
-                    </p>
-                    <p className="text-[10px] font-ibm-mono text-zinc-600 mt-2">
-                      Your field report has been recorded.
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleClose}
-                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.15em] uppercase"
-                  >
-                    [ DISMISS ]
-                  </button>
-                </div>
-              )}
-
-              {step === "error" && (
-                <div className="relative z-10 px-4 sm:px-6 py-12 text-center space-y-5">
-                  <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 mx-auto flex items-center justify-center">
-                    <span className="text-2xl text-red-500">✗</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-ibm-mono text-red-500 tracking-[0.15em] uppercase">
-                      // REPORT_NOT_SENT
-                    </p>
-                    <p className="text-[10px] font-ibm-mono text-zinc-500 mt-2 max-w-xs mx-auto">
-                      {error}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setStep("form")}
-                    className="text-[10px] font-ibm-mono text-zinc-600 hover:text-white transition-colors tracking-[0.15em] uppercase"
-                  >
-                    [ RETRY ]
-                  </button>
-                </div>
-              )}
-            </div>
+            {header}
+            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">{content}</div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
