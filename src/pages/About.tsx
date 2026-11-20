@@ -92,9 +92,8 @@ export default function About() {
             {...reveal(1)}
             className="max-w-xl text-[13px] leading-[1.75] text-[#374151] lg:text-[15px]"
           >
-            METALLURG™ operates between Kyiv and Zürich. We source streetwear and sportswear —
-            pieces that fit your rotation. Each item verified and shipped through trusted networks.
-            The inventory is the product.
+            METALLURG™ sources streetwear and sportswear — pieces that fit your rotation. Each item
+            verified and shipped through trusted networks. The inventory is the product.
           </motion.p>
         </div>
       </section>

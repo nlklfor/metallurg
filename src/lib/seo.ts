@@ -24,7 +24,7 @@ export interface PageMeta {
 }
 
 export const DEFAULT_META: PageMeta = {
-  title: "METALLURG™ — Sneaker & Streetwear Archive / Kyiv ↔ Zürich",
+  title: "METALLURG™ — Sneaker & Streetwear Archive",
   description:
     "Verified sneakers and streetwear sourced in Switzerland and delivered across Ukraine by Nova Poshta. Pick from stock or pre-order with 10–14 day delivery.",
   index: true,
@@ -42,7 +42,7 @@ export const ROUTE_META: Record<string, PageMeta> = {
   "/about": {
     title: "About — METALLURG™",
     description:
-      "METALLURG™ is a small archive moving verified sneakers and streetwear between Zürich and Kyiv. Every pair is checked before it ships.",
+      "METALLURG™ is a small archive of verified sneakers and streetwear. Every pair is checked before it ships.",
     index: true,
   },
   "/contact": {

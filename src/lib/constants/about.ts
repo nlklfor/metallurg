@@ -28,7 +28,7 @@ export const VALUES = [
   {
     label: "NETWORK",
     value: "GLOBAL",
-    description: "Sourced through trusted contacts across Europe. UA and CH nodes active.",
+    description: "Sourced through trusted contacts across Europe.",
   },
   {
     label: "INVENTORY_SIZE",
@@ -57,6 +57,6 @@ export const PILLARS = [
   {
     title: "DIRECT_ACCESS",
     description:
-      "Kyiv to Zürich, no middlemen. You contact us, we sort the details and ship. Fast, direct, and without the noise of a typical store.",
+      "Direct contact, no middlemen. You contact us, we sort the details and ship. Fast, direct, and without the noise of a typical store.",
   },
 ];

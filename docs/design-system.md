@@ -30,7 +30,7 @@ Buttons: `<Button variant="mtl" size="mtl">` (black, inverts on hover, 52px), `m
 
 ## 1. Visual identity in one line
 
-A monochrome (black/white) streetwear brand presented as a classified military/tech archive — CRT scanlines, boot logs, glitch transitions, encrypted-text reveals, coordinate watermarks (47.3769°N Zürich / 50.4501°N Kyiv), and terminal-style `// comment` labels used as UI copy throughout (`// STATUS: OPERATIONAL`, `// ABOUT_METALLURG`, `// classified_document`).
+A monochrome (black/white) streetwear brand presented as a classified military/tech archive — CRT scanlines, boot logs, glitch transitions, encrypted-text reveals, coordinate watermarks (50.4501°N Kyiv), and terminal-style `// comment` labels used as UI copy throughout (`// STATUS: OPERATIONAL`, `// ABOUT_METALLURG`, `// classified_document`).
 
 ## 2. Typography
 
