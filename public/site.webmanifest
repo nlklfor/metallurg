@@ -1,7 +1,7 @@
 {
   "name": "METALLURG™",
   "short_name": "METALLURG",
-  "description": "Sneaker & streetwear archive, Kyiv ↔ Zürich.",
+  "description": "Sneaker & streetwear archive.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

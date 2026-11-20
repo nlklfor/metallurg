@@ -10,7 +10,7 @@ import { useContact } from "@/hooks/useContact";
 import Seo from "@/components/seo/Seo";
 
 // Contact (design file: Contact-D / Contact-M). The NETWORK_NODES map from
-// the design is left out (no Zürich/Kyiv routing on the site); its column
+// the design is left out (no city-to-city routing on the site); its column
 // holds the FAQ instead, folded so the page stays quiet.
 
 const CHANNELS = [

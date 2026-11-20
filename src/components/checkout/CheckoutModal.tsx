@@ -323,7 +323,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   autoComplete="address-level2"
                   value={c.intlCity}
                   onChange={(e) => c.setIntlCity(e.target.value)}
-                  placeholder="Zürich"
+                  placeholder="Berlin"
                   disabled={busy}
                   className={inputClass}
                 />

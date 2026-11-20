@@ -24,7 +24,6 @@ export default function Footer() {
           </Link>
           <div className="text-[10px] tracking-[0.15em] text-dim-dark md:text-right">
             <p>KYIV {NODES.ua.coords}</p>
-            <p>ZÜRICH {NODES.ch.coords}</p>
           </div>
         </div>
 

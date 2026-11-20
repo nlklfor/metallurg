@@ -22,7 +22,6 @@ export const telegramOrderLink = (orderNumber: string) =>
 // Node coordinates used across the brand surfaces (landing, footer, gate).
 export const NODES = {
   ua: { city: "KYIV, UKRAINE", coords: "50.4501° N, 30.5234° E" },
-  ch: { city: "ZÜRICH, SWITZERLAND", coords: "47.3769° N, 8.5417° E" },
 } as const;
 
 export const NAV_LINKS = [
