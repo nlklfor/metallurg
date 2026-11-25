@@ -2,7 +2,7 @@
 -- METALLURG — snapshot of the live database schema (public schema + the bits
 -- of storage/cron it relies on). Supabase project: metallurgStore.
 --
--- Snapshot taken 2026-10-25, after migration 20261025120000_order_telegram_subscription.
+-- Snapshot taken 2026-11-25, after migration 20261125120100_bot_db_role.
 --
 -- What this file is for:
 --   * One place to read the whole schema instead of piecing it together from
@@ -48,10 +48,20 @@ create table public.admins (
 
 -- Telegram users who started the bot (written by the bot over a direct DB connection).
 create table public.bot_users (
-  tg_username text not null,
-  chat_id bigint not null,
+  tg_username text,                     -- lowercased @username, optional
+  chat_id bigint not null,              -- = Telegram user id (private chats only)
   created_at timestamp with time zone default now(),
-  constraint bot_users_pkey primary key (tg_username)
+  drop_alerts boolean not null default true,     -- wants "new in archive" messages
+  blocked_at timestamp with time zone,           -- user blocked the bot
+  constraint bot_users_pkey primary key (chat_id),
+  constraint bot_users_tg_username_key unique (tg_username)
+);
+
+-- Key/value state for the bot's loops (drop-alert timestamps).
+create table public.bot_state (
+  key text primary key,
+  value text not null,
+  updated_at timestamp with time zone not null default now()
 );
 
 -- Rate-limit log for the public edge functions. Cleaned daily by pg_cron.
@@ -355,17 +365,35 @@ create view public.reviews_with_order_items as
      join public.orders o on ((o.id = r.order_id)));
 
 
+-- ─── Telegram bot role ───────────────────────────────────────────────────────
+-- Created without a password; set it in the SQL editor, never in the repo.
+create role metallurg_bot login noinherit;
+grant usage on schema public to metallurg_bot;
+grant select on public.products to metallurg_bot;
+grant select on public.orders to metallurg_bot;
+grant update (customer_chat_id, notified_state) on public.orders to metallurg_bot;
+grant select, insert, update on public.bot_users to metallurg_bot;
+grant select, insert, update on public.bot_state to metallurg_bot;
+
+
 -- ─── Row Level Security ──────────────────────────────────────────────────────
 -- admins and lookup_attempts have RLS on and no policies: only service_role
 -- (edge functions) and SECURITY DEFINER functions can touch them.
 alter table public.admins enable row level security;
 alter table public.bot_users enable row level security;
+alter table public.bot_state enable row level security;
 alter table public.lookup_attempts enable row level security;
 alter table public.orders enable row level security;
 alter table public.products enable row level security;
 alter table public.reviews enable row level security;
 
 create policy "Admins can select bot_users" on public.bot_users for select to authenticated using (is_admin());
+
+-- Telegram bot role (metallurg_bot, see migration 20261125120100_bot_db_role).
+create policy "Bot manages bot_users" on public.bot_users for all to metallurg_bot using (true) with check (true);
+create policy "Bot manages bot_state" on public.bot_state for all to metallurg_bot using (true) with check (true);
+create policy "Bot can select orders" on public.orders for select to metallurg_bot using (true);
+create policy "Bot can link chats to orders" on public.orders for update to metallurg_bot using (true) with check (true);
 
 -- Customers never read orders directly: tracking goes through the
 -- track-order edge function, checkout through create-order.

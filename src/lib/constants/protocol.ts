@@ -9,7 +9,7 @@ export const sections = [
     id: "02",
     title: "ACQUISITION_LOGIC",
     content:
-      'The transfer of any objects listed within the inventory is handled exclusively through encrypted communication channels (Telegram: @metallurg_tm). An "Acquisition" is considered finalized only after direct verification by the Operator. We reserve the right to deny access to the inventory to any individual without prior notice.',
+      'The transfer of any objects listed within the inventory is handled exclusively through encrypted communication channels (Telegram: @mtl_support). An "Acquisition" is considered finalized only after direct verification by the Operator. We reserve the right to deny access to the inventory to any individual without prior notice.',
   },
   {
     id: "03",
