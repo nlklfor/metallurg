@@ -1,6 +1,6 @@
 # METALLURG — Fixes & Hardening Backlog
 
-Living action list from the 2026-08-16 project review. Each item has: what's wrong, where, why it matters, and a concrete fix. Ordered by priority within each section. Check items off (or delete them) as they land — this file should stay true to the current state of the code, not become another stale doc.
+Living action list, started with the 2026-08-16 project review and last updated 2026-11-24 (after the archive redesign, PRs #72–#81). Each item has: what's wrong, where, why it matters, and a concrete fix. Ordered by priority within each section. Check items off (or delete them) as they land — this file should stay true to the current state of the code, not become another stale doc.
 
 Workflow for anything here that touches code: new branch → implement → **ask Nikita first if it needs an API key / env var / secret** → he tests locally → commit/push → merge. See `CLAUDE.md`.
 
@@ -12,12 +12,11 @@ Workflow for anything here that touches code: new branch → implement → **ask
 
 Order creation now goes through the `create-order` edge function: it re-fetches live prices from `products`, validates stock, decrements it atomically via the `create_order()` Postgres RPC, and computes the total server-side. The client's cart total is display-only.
 
-### 2. `contact-form` edge function is an open, unthrottled relay
+### 2. `contact-form` edge function — mostly closed
 
 **Where:** `supabase/functions/contact-form/index.ts`
-**What:** `Access-Control-Allow-Origin: "*"`, no rate limiting, no captcha, no length caps on `name`/`message`, and the input is interpolated directly into a Telegram message sent with `parse_mode: "Markdown"`.
-**Risk:** Anyone (not just from your site — any script anywhere) can spam your Telegram bot, and crafted input could break/inject Markdown formatting in the delivered message.
-**Fix:** Add a length cap on `name`/`message`, rate-limit by IP (Supabase edge functions can check `x-forwarded-for` or use Upstash/KV), and either escape Telegram Markdown special characters or switch to `parse_mode: "HTML"` with escaping. CORS restriction alone won't stop a determined attacker (they can call the function directly, bypassing browser CORS) but still blocks casual abuse from other sites.
+**Done:** length caps (name 100 / email 254 / message 2000), per-IP rate limit through the shared `lookup_attempts` table, Telegram Markdown escaped (`escapeMarkdown`).
+**Left:** `Access-Control-Allow-Origin: "*"`. Restrict it to the site origin(s) (`https://metallurg.vercel.app`, `http://localhost:5173`, later the custom domain). Small change, low risk; doesn't stop direct calls but blocks casual abuse from other sites.
 
 ### 3. ~~Three of four edge functions aren't in this repo~~ ✅ Done
 
@@ -35,11 +34,9 @@ Policies for `products`/`orders`/`reviews` plus `is_admin()` are now committed a
 
 Turns out `track-order` already rate-limits lookups (8 attempts / 10 min per IP, via the `lookup_attempts` table — discovered when vendoring it into the repo for #3). Order number entropy (~1.3 billion combinations) plus that rate limit is an acceptable guest-tracking tradeoff. No further action needed.
 
-### 6. No tests anywhere in the repo
+### 6. ~~No tests anywhere in the repo~~ ✅ Done
 
-**What:** Zero test files. CI (`ci.yml`) only runs typecheck/lint/format/build — nothing verifies actual logic.
-**Risk:** The checkout total math, order-number generation, and cart quantity clamping (`useCartStore.ts`) are exactly the kind of small pure functions that silently break during refactors.
-**Fix:** Start small — Vitest + unit tests for `computeTotal`, `generateOrderNumber` (alphabet/length/prefix), and `serializeCartItems`. Wire `npm test` into `ci.yml` once it exists. Don't aim for full coverage immediately; cover the money-and-PII-adjacent logic first.
+Vitest is set up (`npm test`, runs in `ci.yml`). Tests cover `computeTotal`, `generateOrderNumber`, `serializeCartItems`, cart quantity/stock logic and the tracking helpers in `src/utils/trackUtils.ts` (`src/utils/__tests__/`). Add a test alongside any change to that logic (see `CLAUDE.md`).
 
 ### 7. ~~No `.env.example`~~ ✅ Done
 
@@ -56,14 +53,15 @@ Turns out `track-order` already rate-limits lookups (8 attempts / 10 min per IP,
 
 ### 10. No security headers on deploy
 
-**Where:** `vercel.json` only has SPA rewrites, no headers.
-**Fix:** Add a `headers` block for `Content-Security-Policy` (at least `frame-ancestors 'none'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`. Low effort, closes off clickjacking/MIME-sniffing for free.
+**Where:** `vercel.json` has rewrites and one `Cache-Control` rule, no security headers.
+**Fix:** Add a `headers` block for `Content-Security-Policy` (at least `frame-ancestors 'none'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`. Low effort, closes off clickjacking/MIME-sniffing for free. A full CSP must allow the Supabase project, `tile.openstreetmap.org` (tracking map) and the `blob:`/`data:` images used by the review uploader.
 
 ---
 
 ## 🟢 Low — Nice to Have
 
 - ~~`GateGuard` / `useGateStore` dead code~~ ✅ Removed in 2026-10 cleanup (along with `Aurora`, `NetworkNodesMap`, `iphone`, `App.css`).
+- `.notfound-glitch` CSS (~60 lines in `index.css`) is unused since the 404 got the video hero; delete it in the next cleanup.
 - `package.json` version is stuck at `0.0.0` — bump it or drop the field if you're not tracking releases.
 - `README.md` was stale template boilerplate — now replaced with project-specific content. `.github/copilot-instructions.md` was deleted (was unused GitHub Copilot scaffolding template).
 - `ProductDetails.tsx` (357 lines) and `CheckoutModal.tsx` (317 lines) are getting large; consider splitting presentational sub-sections out as the feature set grows further, not urgent today.
@@ -71,8 +69,44 @@ Turns out `track-order` already rate-limits lookups (8 attempts / 10 min per IP,
 
 ---
 
+## 🧩 After the redesign — open follow-ups
+
+The archive redesign (design file "METALLURG™ — Archive Redesign", PRs #72–#81) is merged for every customer page. What it left open:
+
+- **Privacy & Terms page.** Waiting for the lawyer's answers (ФОП details, personal-data wording, consumer-law terms). Needs a route, `ROUTE_META` entry and `<Seo />`, a footer link, and a checkbox/notice in checkout and the review form. Don't publish ФОП details until Nikita decides what goes on the site.
+- **Status timestamps.** `TrackModal` shows one time stamp per order (`created_at`). Per-step times (paid, shipped, delivered) need a `status_history` (or `*_at` columns) written when the admin changes the status.
+- **Reviews per product.** Reviews are tied to an order, and `ARCHIVE_REVIEWS` (`src/lib/constants/archiveReviews.ts`) are hardcoded. Showing reviews on the product page needs `product_id` filled reliably (one review per order line, or a picker in `ReviewModal`) and the archive reviews mapped to product slugs.
+- **Review photos are crops of Instagram stories.** Fine for now. Replace with the customers' original photos if they send them.
+- **`_reviews/` is gitignored** (customers' handles and chats). Keep it out of commits.
+- **Leftover Switzerland mentions.** Zürich is gone from the copy and the zones are `Ukraine` / `International`, but the checkout country placeholder (`CheckoutModal`, "Switzerland"), the protocol text ("across Ukraine and Switzerland"), the About timeline and the CHF currency still mention it. Fine if Swiss customers stay a target; otherwise swap the wording.
+- **Hardcoded exchange rates** (`useCurrencyStore`: CHF 1/50, EUR 1/45). They drift. Either update them by hand now and then or fetch a rate daily (cron + table).
+- **Bundle size.** The production build warns about large chunks (`model-viewer`, leaflet, `@react-pdf` is already lazy). Lazy-load `WelcomeGate` and the tracking map when there's time.
+- **Custom domain.** When it's bought: `VITE_SITE_URL`, `public/robots.txt`, the URLs in `index.html`, Search Console property, CORS list in #2.
+- **Admin side** still has the old look; redesign it last.
+
+---
+
+## 📨 Telegram — bot and widgets
+
+Repo: `tgBot-metallurg` (Python, separate from this one). Ideas collected in 2026-11:
+
+**Bot polish**
+
+- Avatar, description, short description and `/start` text in the brand voice (`// ACCESS_GRANTED`, WORD_WORD labels, `/` separators, no emoji walls).
+- Menu button and commands list (`/track`, `/faq`, `/contact`) set with `setMyCommands`.
+- Order-status messages from the bot use the same labels as the site (`STATUS_LABELS`).
+
+**Widgets (Bot API 10.4, Nov 2026).** Small HTML/JS views inside a message; state ≤ 1 KB, bundle ≤ 4 KB compressed, private chats only, no network from the widget, payments in TON only. Methods: `sendWidget`, `editMessageWidgetData`, `answerWidgetQuery`.
+
+1. **Live order tracker.** Today the bot already links a chat to an order (deep link `t.me/metallurgTm_bot?start=MTL-XXXXXX` from the confirmation screen → `orders.customer_chat_id`) and sends a new message on every status/TTN change (`notified_state`, 60 s loop). The widget version sends one tracker message (`sendWidget`) and updates it in place (`editMessageWidgetData`) — the same pipeline as `TrackModal`. Needs one more column, `orders.customer_widget_message_id`, and keeps a short plain message for each change so the customer still gets a notification.
+2. **Drop countdown with NOTIFY_ME.** A widget counting down to a drop; the button calls `answerWidgetQuery`, the bot stores the subscriber and messages them when the drop opens. Needs a `drops` table (or a `drop_at` on products) and a cron.
+3. **Auction bids (later).** Current bid + bid buttons inside the message. Depends on accounts/auctions on the site; payments can't go through the widget (TON only), so the widget only places bids and the payment stays manual.
+
+---
+
 ## Already done well (don't regress these)
 
 - Order codes were already hardened once (commit `e6552a9`, "fixed edge functions in supa / authorization required / mtl code more strong") — the 6-char/33-alphabet scheme and edge function auth header were a deliberate fix, not an oversight.
 - ESLint + Prettier + husky + lint-staged + commitlint are all wired correctly and enforced pre-commit. `supabase/` is excluded from ESLint via `globalIgnores` to prevent Deno import errors hanging the pre-commit hook.
-- CI already typechecks, lints, format-checks, and builds on every PR to `main`.
+- CI typechecks, lints, format-checks, runs the unit tests and builds on every PR to `main`.
+- Fonts are self-hosted (`@fontsource/*`), so local and production render the same type. Don't go back to Google Fonts links.
