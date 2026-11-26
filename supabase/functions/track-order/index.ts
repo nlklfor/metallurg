@@ -1,11 +1,8 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { corsHeaders as buildCors } from "../_shared/cors.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+const CORS_ALLOW_HEADERS = "Content-Type, Authorization";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -34,6 +31,7 @@ async function isRateLimited(identifier: string): Promise<boolean> {
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = buildCors(req, CORS_ALLOW_HEADERS);
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: corsHeaders });
   }

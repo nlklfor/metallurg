@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { corsHeaders as buildCors } from "../_shared/cors.ts";
 
 // Only TTNs that belong to one of our orders are looked up, so this function
 // can't be used as an open proxy onto our Nova Poshta API key. (A per-IP rate
@@ -12,11 +13,7 @@ const supabase = createClient(
 const NP_API_URL = "https://api.novaposhta.ua/v2.0/json/";
 const NOVA_POSHTA_API_KEY = Deno.env.get("NOVA_POSHTA_API_KEY") ?? "";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+const CORS_ALLOW_HEADERS = "Content-Type, Authorization";
 
 const STATUS_MAP: Record<string, string> = {
   "1": "Shipment created",
@@ -54,6 +51,7 @@ async function geocodeCity(city: string): Promise<{ lat: number; lng: number } |
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = buildCors(req, CORS_ALLOW_HEADERS);
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: corsHeaders });
   }

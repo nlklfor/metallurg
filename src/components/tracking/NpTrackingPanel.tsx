@@ -133,7 +133,7 @@ function Row({ k, v }: { k: string; v: React.ReactNode }) {
 
 function Panel({ data, recipient }: { data: NpTrackingData; recipient: string }) {
   const branch: [number, number] | null =
-    data.lat !== null && data.lng !== null ? [data.lat, data.lng] : null;
+    data.lat != null && data.lng != null ? [data.lat, data.lng] : null;
   const from = findCity(data.city_sender);
   const to = findCity(data.city_recipient);
   const hasMap = !!branch || !!to;

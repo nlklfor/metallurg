@@ -4,6 +4,7 @@ import { render } from "npm:@react-email/render@^2";
 import React from "npm:react@^19";
 import { Resend } from "npm:resend@^6";
 import { ContactReceiptEmail } from "../_shared/emails/ContactReceiptEmail.tsx";
+import { corsHeaders as buildCors } from "../_shared/cors.ts";
 
 const BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN")!;
 const CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID")!;
@@ -19,11 +20,7 @@ const supabase = createClient(
 // email is skipped but the form (Telegram) still works.
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+const CORS_ALLOW_HEADERS = "authorization, x-client-info, apikey, content-type";
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_ATTEMPTS = 5;
@@ -58,6 +55,7 @@ function escapeMarkdown(text: string): string {
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = buildCors(req, CORS_ALLOW_HEADERS);
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }

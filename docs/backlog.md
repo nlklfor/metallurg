@@ -12,11 +12,9 @@ Workflow for anything here that touches code: new branch → implement → **ask
 
 Order creation now goes through the `create-order` edge function: it re-fetches live prices from `products`, validates stock, decrements it atomically via the `create_order()` Postgres RPC, and computes the total server-side. The client's cart total is display-only.
 
-### 2. `contact-form` edge function — mostly closed
+### 2. ~~`contact-form` edge function is an open relay~~ ✅ Done
 
-**Where:** `supabase/functions/contact-form/index.ts`
-**Done:** length caps (name 100 / email 254 / message 2000), per-IP rate limit through the shared `lookup_attempts` table, Telegram Markdown escaped (`escapeMarkdown`).
-**Left:** `Access-Control-Allow-Origin: "*"`. Restrict it to the site origin(s) (`https://metallurg.vercel.app`, `http://localhost:5173`, later the custom domain). Small change, low risk; doesn't stop direct calls but blocks casual abuse from other sites.
+Length caps (name 100 / email 254 / message 2000), per-IP rate limit through `lookup_attempts`, Telegram Markdown escaped, and since 2026-11 CORS limited to the site's origins (`supabase/functions/_shared/cors.ts`, used by every public function). Extra origins (custom domain, a Vercel preview) go in the `ALLOWED_ORIGINS` edge-function secret, comma-separated. `nova-poshta-ttn` (admin panel) keeps `*`; it checks `is_admin()` itself.
 
 ### 3. ~~Three of four edge functions aren't in this repo~~ ✅ Done
 
@@ -51,17 +49,16 @@ Vitest is set up (`npm test`, runs in `ci.yml`). Tests cover `computeTotal`, `ge
 **Where:** `src/lib/constants/order.ts` — has a `// TODO: SPLIT THE CONSTANTS...` comment at the bottom already acknowledging this.
 **Fix:** Split into `constants/shipping.ts` (zones, routes), `constants/status.ts` (labels/colors), `constants/api.ts` (edge function URLs, ties into #8).
 
-### 10. No security headers on deploy
+### 10. ~~No security headers on deploy~~ ✅ Done
 
-**Where:** `vercel.json` has rewrites and one `Cache-Control` rule, no security headers.
-**Fix:** Add a `headers` block for `Content-Security-Policy` (at least `frame-ancestors 'none'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`. Low effort, closes off clickjacking/MIME-sniffing for free. A full CSP must allow the Supabase project, `tile.openstreetmap.org` (tracking map) and the `blob:`/`data:` images used by the review uploader.
+`vercel.json` sends a Content-Security-Policy (self + the Supabase project + OSM tiles; `wasm-unsafe-eval` for the receipt PDF; `frame-ancestors 'none'`), `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` and `Permissions-Policy` on every path. A new external service (analytics, a CDN image host, a payment widget) must be added to the CSP or the browser blocks it — check the console on the Vercel preview.
 
 ---
 
 ## 🟢 Low — Nice to Have
 
 - ~~`GateGuard` / `useGateStore` dead code~~ ✅ Removed in 2026-10 cleanup (along with `Aurora`, `NetworkNodesMap`, `iphone`, `App.css`).
-- `.notfound-glitch` CSS (~60 lines in `index.css`) is unused since the 404 got the video hero; delete it in the next cleanup.
+- ~~Unused CSS~~ ✅ old gate and 404 glitch styles (~620 lines) removed from `index.css` in 2026-11.
 - `package.json` version is stuck at `0.0.0` — bump it or drop the field if you're not tracking releases.
 - `README.md` was stale template boilerplate — now replaced with project-specific content. `.github/copilot-instructions.md` was deleted (was unused GitHub Copilot scaffolding template).
 - `ProductDetails.tsx` (357 lines) and `CheckoutModal.tsx` (317 lines) are getting large; consider splitting presentational sub-sections out as the feature set grows further, not urgent today.
@@ -80,8 +77,8 @@ The archive redesign (design file "METALLURG™ — Archive Redesign", PRs #72�
 - **`_reviews/` is gitignored** (customers' handles and chats). Keep it out of commits.
 - **Leftover Switzerland mentions.** Zürich is gone from the copy and the zones are `Ukraine` / `International`, but the checkout country placeholder (`CheckoutModal`, "Switzerland"), the protocol text ("across Ukraine and Switzerland"), the About timeline and the CHF currency still mention it. Fine if Swiss customers stay a target; otherwise swap the wording.
 - **Hardcoded exchange rates** (`useCurrencyStore`: CHF 1/50, EUR 1/45). They drift. Either update them by hand now and then or fetch a rate daily (cron + table).
-- **Bundle size.** The production build warns about large chunks (`model-viewer`, leaflet, `@react-pdf` is already lazy). Lazy-load `WelcomeGate` and the tracking map when there's time.
-- **Custom domain.** When it's bought: `VITE_SITE_URL`, `public/robots.txt`, the URLs in `index.html`, Search Console property, CORS list in #2.
+- ~~**Bundle size.**~~ ✅ Every page except the landing is its own chunk (prefetched after load); the gate's 3D logo and the tracking map load only when needed. Main bundle 1.9 MB → 0.6 MB (567 → 180 KB gzipped).
+- **Custom domain.** When it's bought: `VITE_SITE_URL`, `public/robots.txt`, the URLs in `index.html`, Search Console property, `ALLOWED_ORIGINS` secret (#2).
 - **Admin side** still has the old look; redesign it last.
 
 ---
