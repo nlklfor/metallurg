@@ -134,7 +134,8 @@ Currency: all prices are stored/entered in UAH. `useCurrencyStore` + `convertPri
 - **Linting/formatting:** ESLint (`eslint.config.js` — flat config, `typescript-eslint` recommended + `react-hooks` + `react-refresh`), Prettier (`.prettierrc`/`.prettierignore`), enforced pre-commit via `husky` + `lint-staged` (`npx lint-staged` on `pre-commit`).
 - **Commit convention:** `commitlint.config.js` extends `@commitlint/config-conventional` — commits must be `type: message` (feat/fix/style/refactor/etc.), enforced via husky's `commit-msg` hook (implied by the config's presence).
 - **CI (`.github/workflows/ci.yml`):** on push/PR to `main`/`develop` — `npm ci` → `tsc --noEmit` → `npm run lint` → `prettier --check .` → `npm test` → `npm run build` (build step injects `VITE_SUPABASE_URL`/`VITE_SUPABASE_KEY`/`EDGE_FUNCTION_URL` from repo secrets).
-- **Deploy:** Vercel (`vercel.json` — sitemap + bot rewrites, then SPA rewrite to `index.html`). Edge functions and migrations are deployed to Supabase separately.
+- **Deploy:** Vercel (`vercel.json` — sitemap + bot rewrites, SPA rewrite to `index.html`, security headers + CSP on every path). Edge functions and migrations are deployed to Supabase separately; the public functions share `supabase/functions/_shared/cors.ts` (allowed origins + `ALLOWED_ORIGINS` secret).
+- **Code splitting:** `AnimatedRoutes.tsx` lazy-loads every page except the landing and prefetches them when the browser is idle; `TrackModal` lazy-loads the Leaflet map, `CheckoutModal` the PDF receipt.
 - **Git flow:** `develop` → `main` via PRs (see commit history — multiple `Merge pull request #N from nlklfor/develop`). See `CLAUDE.md` for the branch/ask-before-secrets/local-test-before-merge rule going forward.
 
 ## 9. Known architectural gaps (cross-reference `backlog.md`)

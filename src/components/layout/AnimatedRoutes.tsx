@@ -1,19 +1,66 @@
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence } from "motion/react";
 import App from "@/App.tsx";
-import WelcomeGate from "@/pages/WelcomeGate.tsx";
-import Shop from "@/pages/Shop";
-import Contact from "@/pages/Contact";
-import Orders from "@/pages/Orders";
-import ProductDetails from "@/pages/ProductDetails.tsx";
-import Cart from "@/pages/Cart.tsx";
-import About from "@/pages/About.tsx";
-import Protocol from "@/pages/Protocol.tsx";
-import NotFound from "@/pages/NotFound.tsx";
 import PageTransition from "@/components/layout/PageTransition";
+
+// The landing page ships in the main bundle; every other page is its own
+// chunk. The gate (3D logo, ~1 MB of three.js) is only loaded on /gate.
+const loadShop = () => import("@/pages/Shop");
+const loadProduct = () => import("@/pages/ProductDetails.tsx");
+const loadCart = () => import("@/pages/Cart.tsx");
+const loadOrders = () => import("@/pages/Orders");
+const loadContact = () => import("@/pages/Contact");
+const loadAbout = () => import("@/pages/About.tsx");
+const loadProtocol = () => import("@/pages/Protocol.tsx");
+const loadNotFound = () => import("@/pages/NotFound.tsx");
+
+const WelcomeGate = lazy(() => import("@/pages/WelcomeGate.tsx"));
+const Shop = lazy(loadShop);
+const ProductDetails = lazy(loadProduct);
+const Cart = lazy(loadCart);
+const Orders = lazy(loadOrders);
+const Contact = lazy(loadContact);
+const About = lazy(loadAbout);
+const Protocol = lazy(loadProtocol);
+const NotFound = lazy(loadNotFound);
+
+/** Once the first page is up, fetch the other page chunks in the background so
+ *  navigating doesn't wait for the network. (The gate is left out.) */
+function usePrefetchPages() {
+  useEffect(() => {
+    const run = () => {
+      for (const load of [
+        loadShop,
+        loadProduct,
+        loadCart,
+        loadOrders,
+        loadContact,
+        loadAbout,
+        loadProtocol,
+        loadNotFound,
+      ]) {
+        load().catch(() => {});
+      }
+    };
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    if (w.requestIdleCallback) w.requestIdleCallback(run);
+    else setTimeout(run, 2000);
+  }, []);
+}
+
+/** Page wrapper: transition + a blank full-height placeholder while the chunk loads. */
+function Page({ children }: { children: ReactNode }) {
+  return (
+    <PageTransition>
+      <Suspense fallback={<div className="min-h-[100dvh]" />}>{children}</Suspense>
+    </PageTransition>
+  );
+}
 
 export default function AnimatedRoutes() {
   const location = useLocation();
+  usePrefetchPages();
 
   // Each new page starts at the top: scroll once the old page has left.
   return (
@@ -25,82 +72,82 @@ export default function AnimatedRoutes() {
         <Route
           path="/"
           element={
-            <PageTransition>
+            <Page>
               <App />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/gate/mtl-ch-ua"
           element={
-            <PageTransition>
+            <Page>
               <WelcomeGate />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/inventory"
           element={
-            <PageTransition>
+            <Page>
               <Shop />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/contact"
           element={
-            <PageTransition>
+            <Page>
               <Contact />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/about"
           element={
-            <PageTransition>
+            <Page>
               <About />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/orders"
           element={
-            <PageTransition>
+            <Page>
               <Orders />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/loadout"
           element={
-            <PageTransition>
+            <Page>
               <Cart />
-            </PageTransition>
+            </Page>
           }
         />
         <Route path="/cart" element={<Navigate to="/loadout" replace />} />
         <Route
           path="/product/:slug"
           element={
-            <PageTransition>
+            <Page>
               <ProductDetails />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="/protocol"
           element={
-            <PageTransition>
+            <Page>
               <Protocol />
-            </PageTransition>
+            </Page>
           }
         />
         <Route
           path="*"
           element={
-            <PageTransition>
+            <Page>
               <NotFound />
-            </PageTransition>
+            </Page>
           }
         />
       </Routes>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useTrackOrder, type TrackError } from "@/hooks/useTrackOrder";
 import { INTERNATIONAL_ROUTE, LOCAL_ROUTE, STATUS_LABELS } from "@/lib/constants/index";
@@ -7,7 +7,6 @@ import { DURATION, EASE_MTL } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { useCurrencyStore, formatPrice } from "@/stores/useCurrencyStore";
 import Pipeline from "@/components/tracking/TrackStep";
-import NpTrackingPanel from "@/components/tracking/NpTrackingPanel";
 import type { Order, TrackOrderModalProps } from "@/interfaces";
 import {
   formatStamp,
@@ -16,6 +15,15 @@ import {
   readRecentOrders,
   type RecentOrder,
 } from "@/utils/trackUtils";
+
+// Leaflet (the route map) is only needed once an order has a TTN: own chunk.
+const NpTrackingPanel = lazy(() => import("@/components/tracking/NpTrackingPanel"));
+
+const NpFallback = () => (
+  <p className="border border-zinc-800 px-4 py-5 text-[11px] tracking-[0.15em] text-zinc-500">
+    // FETCHING_NP_STATUS<span className="animate-blink-cursor text-white">█</span>
+  </p>
+);
 
 // Track modal (design file: Track-D / Track-M).
 
@@ -300,7 +308,9 @@ export default function TrackOrderModal({ isOpen, onClose, initialCode }: TrackO
       )}
 
       {showNp && ttn ? (
-        <NpTrackingPanel ttn={ttn} customerName={order.customer_name} />
+        <Suspense fallback={<NpFallback />}>
+          <NpTrackingPanel ttn={ttn} customerName={order.customer_name} />
+        </Suspense>
       ) : (
         <OrderSummary order={order} />
       )}
